@@ -1,4 +1,4 @@
-package;
+package backend.data;
 
 import flixel.FlxG;
 
@@ -16,6 +16,10 @@ typedef SongMetaDataRAW =
 	var volume:Float;
 	var icon:String;
 	var difficulties:Array<String>;
+	var charter:String;
+	var artist:String;
+	var version:Int;
+	var generatedBy:String;
 }
 
 class SongMetaData
