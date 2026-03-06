@@ -1,0 +1,17 @@
+{
+    "songDisplayName": "Bopeebo",
+    "previewBPM": 100,
+    "previewWindow": {
+      "startTime": 0,
+      "endTime": 6000.66
+    },
+    "volume": 1.0,
+    "icon": "dad",
+    "difficulties": [
+      "hard"
+    ],
+    "charter": "BackendOverdrive",
+    "artist": "NullPointerException",
+    "version": 9000,
+    "generatedBy": "FlxG.assets.getJson(path) x999999"
+  }

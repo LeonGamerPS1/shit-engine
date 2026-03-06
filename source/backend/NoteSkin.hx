@@ -22,6 +22,8 @@ class NoteSkin
 		['left', 'up', 'down', 'left', 'down', 'right'] // 6K
 	];
 
+	public static var noteColors:Array<String> = ['purple', 'blue', 'green', 'red'];
+
 	public static var noteScaleMults:Array<Float> = [
 		1, // 1K
 		1, // 2K

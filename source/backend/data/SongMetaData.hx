@@ -29,7 +29,8 @@ class SongMetaData
 	public function new(path:String, skipError:Bool = false)
 	{
 		var raw:SongMetaDataRAW = null;
-		raw = FlxG.assets.getJson(path);
+		if (path != null)
+			raw = FlxG.assets.getJson(path);
 
 		if (raw == null && !skipError)
 			throw "Failed to load SongMetaData at: " + path;
