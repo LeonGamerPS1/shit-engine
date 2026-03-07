@@ -39,6 +39,7 @@ class Strumline extends FlxGroup
 			strums.add(strum);
 		}
 	}
+
 	public function generateNotes(noteSet:Array<SongNoteData>)
 	{
 		if (noteSet == null || noteSet.length < 1)
@@ -108,6 +109,7 @@ class Strumline extends FlxGroup
 
 	public dynamic function updateNote(note:Note)
 	{
+		note.update(FlxG.elapsed);
 		var strum = strums.members[note.noteData.l % strums.length];
 		note.x = strum.x + (strum.width * 0.5 - note.width * 0.5);
 		final distance = (note.noteData.tms - Conductor.time) * (0.45 * speed * note.multSpeed) * (strum.flipScroll ? -1 : 1);
@@ -123,29 +125,29 @@ class Strumline extends FlxGroup
 		}
 
 		var center = strum.y + (160 * 0.7 * 0.5);
+		note.flipY = note.isSustainNote && strum.flipScroll;
 		if (strum.flipScroll)
 		{
-			note.flipY = true;
 			if ((note.parentNote != null && note.parentNote.hit)
-				&& note.y - note.offset.y * note.scale.y + note.height >= center
+				&& note.y + note.height >= center
 				&& (isBot || (note.hit || (note.prevNote.hit && !note.canBeHit))))
 			{
 				var swagRect = new FlxRect(0, 0, note.frameWidth, note.frameHeight);
 				swagRect.height = (center - note.y) / note.scale.y;
 				swagRect.y = note.frameHeight - swagRect.height;
-				note.clipRect = swagRect.round();
+				note.clipRect = swagRect;
 			}
 		}
 		else
 		{
 			if ((note.parentNote != null && note.parentNote.hit)
-				&& note.y + note.offset.y * note.scale.y <= center
+				&& note.y <= center
 				&& (isBot || (note.hit || (note.prevNote.hit && !note.canBeHit))))
 			{
 				var swagRect = new FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);
 				swagRect.y = (center - note.y) / note.scale.y;
 				swagRect.height -= swagRect.y;
-				note.clipRect = swagRect.round();
+				note.clipRect = swagRect;
 			}
 		}
 

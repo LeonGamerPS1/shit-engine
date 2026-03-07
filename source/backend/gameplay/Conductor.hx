@@ -5,6 +5,8 @@ import lime.app.Event;
 
 class Conductor
 {
+	public static var safeFrames:Int = 10;
+	public static var sfz:Float = (safeFrames / 60) * 1000; // is calculated in create(), is safeFrames in milliseconds
 	public static var timeChanges:Array<SongTmPoint> = [];
 
 	public static var time(default, set):Float;
@@ -17,9 +19,9 @@ class Conductor
 	public static var curBeat:Float = 0;
 	public static var curSection:Float = 0;
 
-    public static var onStep:Event<Float->Void> = new Event<Float->Void>();
-    public static var onBeat:Event<Float->Void> = new Event<Float->Void>();
-    public static var onMeasure:Event<Float->Void> = new Event<Float->Void>();
+	public static var onStep:Event<Float->Void> = new Event<Float->Void>();
+	public static var onBeat:Event<Float->Void> = new Event<Float->Void>();
+	public static var onMeasure:Event<Float->Void> = new Event<Float->Void>();
 
 	static function set_time(value:Float):Float
 	{
@@ -29,33 +31,33 @@ class Conductor
 
 	public static function update(time:Float)
 	{
-        var flo = Math.floor;
+		var flo = Math.floor;
 		timeChanges.sort((tm:SongTmPoint, tm2:SongTmPoint) ->
 		{
 			return Math.floor(tm.time - tm2.time);
 		});
 
-        var lastStep = curStep;
-        updateStep();
-        if(flo(curStep) != flo(lastStep))
-            onStep.dispatch(flo(curStep));
+		var lastStep = curStep;
+		updateStep();
+		if (flo(curStep) != flo(lastStep))
+			onStep.dispatch(flo(curStep));
 
-        var lastBeat = curBeat;
-        updateBeat();
-        if(flo(curBeat) != flo(lastBeat))
-            onBeat.dispatch(flo(curBeat));
+		var lastBeat = curBeat;
+		updateBeat();
+		if (flo(curBeat) != flo(lastBeat))
+			onBeat.dispatch(flo(curBeat));
 
-        var lastSec = curSection;
-        updateSec();
-        if(flo(curSection) != flo(lastSec))
-            onMeasure.dispatch(flo(curSection));
+		var lastSec = curSection;
+		updateSec();
+		if (flo(curSection) != flo(lastSec))
+			onMeasure.dispatch(flo(curSection));
 	}
 
 	static function set_bpm(value:Float):Float
 	{
 		bpm = value;
 		beatLength = (60 / bpm) * 1000;
-		stepLength = (beatLength/4);
+		stepLength = (beatLength / 4);
 		measureLength = (beatLength * 4);
 
 		return bpm = value;
@@ -97,8 +99,6 @@ class Conductor
 	public static function updateStep()
 	{
 		var songTime:Float = time - offset;
-		
-		
 
 		// calculate step relative to that change
 		curStep = (songTime - offset) / stepLength;

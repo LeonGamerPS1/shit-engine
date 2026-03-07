@@ -15,9 +15,12 @@ class Note extends FlxSprite
 	public var hit:Bool = false;
 	public var isSustainNote:Bool = false;
 	public var isEndNote:Bool = false;
-	public var canBeHit:Bool = false;
 	public var parentNote:Note;
 	public var prevNote:Note;
+
+	public var canBeHit(get, null):Bool;
+	public var earlyHitMult:Float = 1;
+	public var lateHitMult:Float = 1;
 
 	public function new(dir:SongNoteData, strumline:Strumline, isSusNote:Bool = false, isEndNote:Bool = false)
 	{
@@ -29,6 +32,8 @@ class Note extends FlxSprite
 		shader = (rgbswap = new RGBSwap()).shader;
 
 		reload(strumline != null ? strumline.skin : 'default');
+		if (isSustainNote)
+			earlyHitMult *= 0.5;
 	}
 
 	public var lastSkin = "";
@@ -50,18 +55,21 @@ class Note extends FlxSprite
 		animation.addByPrefix("end", '${color} hold end0', 24, true);
 		scale.set(tempskin.scale, tempskin.scale);
 
-
 		antialiasing = tempskin.antialiasing;
 		playAnim("arrow", false);
 		if (isSustainNote)
 			playAnim(!isEndNote ? 'hold' : 'end');
+
 		updateHitbox();
 		alpha = isSustainNote ? 0.6 : 1;
-		if(isSustainNote && !isEndNote) {
+		if (isSustainNote && !isEndNote)
+		{
 			scale.y *= Conductor.stepLength / 100 * 1.026 * strumline.speed;
 			updateHitbox();
 		}
 	}
+
+	var hue:Float = 0;
 
 	override function update(d:Float)
 	{
@@ -85,5 +93,12 @@ class Note extends FlxSprite
 		shader = null;
 		rgbswap = null;
 		super.destroy();
+	}
+
+	function get_canBeHit():Bool
+	{
+		return ((noteData.tms > Conductor.time - Conductor.offset - (Conductor.sfz * lateHitMult)
+			&& noteData.tms < Conductor.time - Conductor.offset + (Conductor.sfz * earlyHitMult)))
+			&& !strumline.isBot;
 	}
 }
