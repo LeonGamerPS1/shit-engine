@@ -105,8 +105,8 @@ class SongChartData
 			bpm: data.bpm,
 			characters: {
 				instPath: "Inst",
-				playerVocals: ["Voices"],
-				enemyVocals: [],
+				enemyVocals: ["Voices"],
+				playerVocals: [],
 				dad: data.player2,
 				gf: data.player3,
 				boyfriend: data.player1

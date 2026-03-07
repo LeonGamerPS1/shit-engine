@@ -18,6 +18,7 @@ class Strum extends FlxSprite
 		super();
 		this.dir = dir;
 		reload(skin, k);
+		shader = (rgbswap = new RGBSwap()).shader;
 	}
 
 	public var lastSkin = "";
@@ -35,8 +36,8 @@ class Strum extends FlxSprite
 		frames = Paths.getSparrowAtlas('noteskins/${tempskin.name}/${tempskin.image}');
 		animation.addByPrefix("static", 'arrow static', 24, true);
 		var direction:String = NoteSkin.strumDirections[keys - 1][dir];
-		animation.addByPrefix("confirm", direction + ' confirm');
-		animation.addByPrefix("press", direction + ' press');
+		animation.addByPrefix("confirm", direction + ' confirm', 24, false);
+		animation.addByPrefix("press", direction + ' press', 24, false);
 		scale.set(tempskin.scale, tempskin.scale);
 		updateHitbox();
 

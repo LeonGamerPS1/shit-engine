@@ -26,6 +26,7 @@ class Note extends FlxSprite
 		this.noteData = dir;
 		this.isEndNote = isEndNote;
 		this.isSustainNote = isSusNote;
+		shader = (rgbswap = new RGBSwap()).shader;
 
 		reload(strumline != null ? strumline.skin : 'default');
 	}
@@ -57,7 +58,7 @@ class Note extends FlxSprite
 		updateHitbox();
 		alpha = isSustainNote ? 0.6 : 1;
 		if(isSustainNote && !isEndNote) {
-			scale.y *=  Conductor.stepLength / 100 * 1.2 * strumline.speed;
+			scale.y *= Conductor.stepLength / 100 * 1.026 * strumline.speed;
 			updateHitbox();
 		}
 	}
