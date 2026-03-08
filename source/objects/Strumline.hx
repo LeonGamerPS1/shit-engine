@@ -3,6 +3,7 @@ package objects;
 import backend.NoteSkin;
 import backend.data.SongChartData.SongNoteData;
 import flixel.math.FlxRect;
+import flixel.util.FlxSignal.FlxTypedSignal;
 
 class Strumline extends FlxGroup
 {
@@ -12,8 +13,11 @@ class Strumline extends FlxGroup
 
 	public var unspawnedNotes:Array<Note> = [];
 	public var skin:String = "default";
-	public var zone:Float = 2500;
+	public var zone:Float = 1500;
 	public var speed:Float;
+
+	public var onHitNote:FlxTypedSignal<Note->Void> = new FlxTypedSignal<Note->Void>();
+	public var onMissNote:FlxTypedSignal<Note->Null<Int>->Void> = new FlxTypedSignal<Note->Null<Int>->Void>();
 
 	public function new(pf:Playfield, skin:String = "default", keys:Int = 4)
 	{
@@ -65,7 +69,7 @@ class Strumline extends FlxGroup
 				{
 					var sData = Reflect.copy(noteData);
 					sData.tms += Conductor.stepLength * segmentID;
-					sData.tms += Conductor.stepLength / 2;
+					sData.tms += Conductor.stepLength;
 					var isEnd = (segmentID) == Math.floor(cock) - 1;
 					var noteHold:Note = new Note(sData, this, true, isEnd);
 					unspawnedNotes.push(noteHold);
@@ -98,13 +102,94 @@ class Strumline extends FlxGroup
 			{
 				var note:Note = unspawnedNotes[0];
 				notes.insert(0, note);
-				notes.sort(FlxSort.byY);
+				notes.sort(sortNotesByTimeHelper, FlxSort.DESCENDING);
 				unspawnedNotes.remove(note);
 			}
 		}
-		notes.sort(FlxSort.byY);
+		notes.sort(sortNotesByTimeHelper, FlxSort.DESCENDING);
+		if (!isBot)
+			inputSystemStuff();
 		notes.forEachAlive(updateNote);
 		super.update(elapsed);
+	}
+
+	public var pressedShit = [-1];
+	public var hitNotes:Array<Note> = [];
+
+	public function inputSystemStuff()
+	{
+		pressedShit.resize(0);
+		hitNotes.resize(0);
+		final holding = [
+			inputSystem.pressed('note_left'),
+			inputSystem.pressed('note_down'),
+			inputSystem.pressed('note_up'),
+			inputSystem.pressed('note_right')
+		];
+		final released = [
+			inputSystem.justReleased('note_left'),
+			inputSystem.justReleased('note_down'),
+			inputSystem.justReleased('note_up'),
+			inputSystem.justReleased('note_right')
+		];
+		final pressed = [
+			inputSystem.justPressed('note_left'),
+			inputSystem.justPressed('note_down'),
+			inputSystem.justPressed('note_up'),
+			inputSystem.justPressed('note_right')
+		];
+
+		if (holding.contains(true))
+		{
+			notes.forEachAlive((n:Note) ->
+			{
+				if (n.canBeHit && !isBot && !n.hit)
+				{
+					hitNotes.push(n);
+					pressedShit.push(n.noteData.l % strums.length);
+				}
+			});
+
+			if (hitNotes.length > 0)
+			{
+				for (note in hitNotes)
+				{
+					var i = note.noteData.l % strums.length;
+					var pressed = pressed[i];
+					var holding = holding[i];
+
+					if (!note.isSustainNote && pressed)
+						hitNote(note);
+					if (note.isSustainNote && (note.parentNote.hit || note.prevNote.hit) && holding)
+						hitNote(note);
+				}
+			}
+		}
+		for (i in 0...pressed.length)
+		{
+			var strum = strums.members[i % strums.length];
+			var pressed = pressed[i];
+			var holding = holding[i];
+			if (pressed && strum.animation.name != 'confirm')
+				strum.playAnim('press', true);
+			else if (!holding)
+				strum.playAnim('static', false, true);
+
+			if (hitNotes.length > 0 && !pressedShit.contains(strum.dir) && pressed)
+				onMissNote.dispatch(null, strum.dir);
+		}
+	}
+
+	public function hitNote(note:Note)
+	{
+		var strum = strums.members[note.noteData.l % strums.length];
+		strum.playAnim("confirm", true);
+		note.hit = true;
+		onHitNote.dispatch(note);
+		if (isBot)
+			strum.rT = 0.15;
+		if (!note.isSustainNote)
+			killNote(note);
 	}
 
 	public dynamic function updateNote(note:Note)
@@ -115,14 +200,7 @@ class Strumline extends FlxGroup
 		final distance = (note.noteData.tms - Conductor.time) * (0.45 * speed * note.multSpeed) * (strum.flipScroll ? -1 : 1);
 		note.y = strum.y + distance;
 		if (!note.hit && isBot && note.noteData.tms <= Conductor.time)
-		{
-			strum.playAnim("confirm", true);
-			note.hit = true;
-
-			strum.rT = 0.15;
-			if (!note.isSustainNote)
-				killNote(note);
-		}
+			hitNote(note);
 
 		var center = strum.y + (160 * 0.7 * 0.5);
 		note.flipY = note.isSustainNote && strum.flipScroll;
@@ -141,7 +219,7 @@ class Strumline extends FlxGroup
 		else
 		{
 			if ((note.parentNote != null && note.parentNote.hit)
-				&& note.y <= center
+				&& note.y + note.offset.y * note.scale.y <= center
 				&& (isBot || (note.hit || (note.prevNote.hit && !note.canBeHit))))
 			{
 				var swagRect = new FlxRect(0, 0, note.width / note.scale.x, note.height / note.scale.y);
@@ -153,7 +231,18 @@ class Strumline extends FlxGroup
 
 		if (note.noteData.tms <= Conductor.time - (350 / note.multSpeed / speed))
 		{
+			if (!isBot && !note.hit)
+			{
+				onMissNote.dispatch(note, null);
+			}
 			killNote(note);
 		}
 	}
+
+	inline public static function sortNotesByTimeHelper(Order:Int, Obj1:Note, Obj2:Note)
+		return FlxSort.byValues(Order, Obj1.noteData.tms, Obj2.noteData.tms);
+
+	public function beatHit() {}
+
+	public function stepHit() {}
 }

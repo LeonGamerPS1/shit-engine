@@ -18,7 +18,6 @@ class Strum extends FlxSprite
 		super();
 		this.dir = dir;
 		reload(skin, k);
-		shader = (rgbswap = new RGBSwap()).shader;
 	}
 
 	public var lastSkin = "";

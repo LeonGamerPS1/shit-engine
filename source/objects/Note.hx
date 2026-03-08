@@ -29,11 +29,13 @@ class Note extends FlxSprite
 		this.noteData = dir;
 		this.isEndNote = isEndNote;
 		this.isSustainNote = isSusNote;
-		shader = (rgbswap = new RGBSwap()).shader;
+
 
 		reload(strumline != null ? strumline.skin : 'default');
-		if (isSustainNote)
+		if (!isSustainNote)
 			earlyHitMult *= 0.5;
+		else 
+			earlyHitMult = 0.7;
 	}
 
 	public var lastSkin = "";
