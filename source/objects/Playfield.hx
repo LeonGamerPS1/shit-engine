@@ -101,21 +101,21 @@ class Playfield extends FlxGroup
 		add(scoreTxtBG);
 		add(scoreTxt);
 
-		var kadeEngineWatermark = new FlxText(4, FlxG.height - 17, 0, song.meta.data.songDisplayName + "-" + (song.diff) + " | SE " + Main.version, 16);
-		kadeEngineWatermark.setFormat(Paths.getFont("vcr"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		kadeEngineWatermark.scrollFactor.set();
-		kadeEngineWatermark.antialiasing = scoreTxt.antialiasing = true;
+		var shitWatermark = new FlxText(4, FlxG.height - 17, 0, song.meta.data.songDisplayName + "-" + (song.diff) + " | SE " + Main.version, 16);
+		shitWatermark.setFormat(Paths.getFont("vcr"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		shitWatermark.scrollFactor.set();
+		shitWatermark.antialiasing = scoreTxt.antialiasing = true;
 
-		var kadeEngineWatermarkBG = new FlxSprite(kadeEngineWatermark.x, kadeEngineWatermark.y);
-		kadeEngineWatermarkBG.makeGraphic(1, 1);
-		kadeEngineWatermarkBG.color = FlxColor.BLACK;
-		kadeEngineWatermarkBG.alpha = 0.7;
-		kadeEngineWatermarkBG.setGraphicSize(kadeEngineWatermark.width + 5, kadeEngineWatermark.height + 5);
-		kadeEngineWatermarkBG.updateHitbox();
-		kadeEngineWatermarkBG.x = kadeEngineWatermark.x - 2.5;
-		kadeEngineWatermarkBG.y = kadeEngineWatermark.y - 5;
-		add(kadeEngineWatermarkBG);
-		add(kadeEngineWatermark);
+		var shitWatermarkBG = new FlxSprite(shitWatermark.x, shitWatermark.y);
+		shitWatermarkBG.makeGraphic(1, 1);
+		shitWatermarkBG.color = FlxColor.BLACK;
+		shitWatermarkBG.alpha = 0.7;
+		shitWatermarkBG.setGraphicSize(shitWatermark.width + 5, shitWatermark.height + 5);
+		shitWatermarkBG.updateHitbox();
+		shitWatermarkBG.x = shitWatermark.x - 2.5;
+		shitWatermarkBG.y = shitWatermark.y - 5;
+		add(shitWatermarkBG);
+		add(shitWatermark);
 
 		noteSplashes = new FlxTypedGroup<NoteSplash>();
 		add(noteSplashes);

@@ -6,8 +6,8 @@ import openfl.display.Sprite;
 
 class Main extends Sprite
 {
-	// Year-Month-Day
-	public static var version:String = "INDEV";
+	// ReleaseName-Month-Year
+	public static var version:String = "INDEV-03-2026";
 	public function new()
 	{
 
