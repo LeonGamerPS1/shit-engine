@@ -2,9 +2,12 @@ package states;
 
 import backend.data.SongChartData;
 import backend.gameplay.SongLoader;
+import flixel.math.FlxPoint;
 import flixel.sound.FlxSoundGroup;
 import haxe.Timer;
+import objects.Note;
 import objects.Playfield;
+import objects.gameplay.Character;
 
 class PlayState extends FlxState
 {
@@ -16,11 +19,33 @@ class PlayState extends FlxState
 	public var enemyVocals:FlxSoundGroup;
 	public var playerVocals:FlxSoundGroup;
 
+	public var camGame(get, null):FlxCamera;
+	public var camHUD:FlxCamera;
+
+	// enemy
+	public var dadLayer:FlxGroup;
+	public var dadPosition:FlxPoint = FlxPoint.get(100, 100);
+
+	// gf
+	public var gfLayer:FlxGroup;
+	public var gfPosition:FlxPoint = FlxPoint.get(400, 130);
+
+	// player
+	public var boyfriendLayer:FlxGroup;
+	public var boyfriendPosition:FlxPoint = FlxPoint.get(770, 100);
+
+	public var dad:Character;
+	public var gf:Character;
+	public var bf:Character;
+
 	override public function create()
 	{
+		camHUD = new FlxCamera();
+		FlxG.cameras.add(camHUD, false);
+
 		Conductor.timeChanges.resize(0);
 		super.create();
-		song = SongLoader.loadSong("bopeebo");
+		song = SongLoader.loadSong("milf");
 		Conductor.bpm = song.data.bpm;
 		Conductor.time = -(Conductor.beatLength * 5);
 
@@ -47,8 +72,59 @@ class PlayState extends FlxState
 			playerVocals.add(flxsound);
 		}
 		add(playfield = new Playfield(song));
+		playfield.cameras = [camHUD];
+		camGame.bgColor = 0xFF676767;
+		for (strumLines in [playfield.dadStrumline, playfield.bfStrumline])
+		{
+			strumLines.onHitNote.add(hitNote);
+		}
+		Conductor.onMeasure.add((e) ->
+		{
+			sectionHit();
+		});
+
+		gfLayer = new FlxGroup();
+		dadLayer = new FlxGroup();
+		boyfriendLayer = new FlxGroup();
+
+		add(gfLayer);
+		add(dadLayer);
+		add(boyfriendLayer);
+
+		dad = new Character(0, 0, song.data.characters.dad);
+		dad.setPosition(dadPosition.x, dadPosition.y);
+		dad.setPosition(dad.x + dad.json.pos_offset[0], dad.y + dad.json.pos_offset[1]);
+
+		gf = new Character(0, 0, song.data.characters.gf);
+		gf.setPosition(gfPosition.x, gfPosition.y);
+		gf.setPosition(gf.x + gf.json.pos_offset[0], gf.y + gf.json.pos_offset[1]);
+
+		bf = new Character(0, 0, song.data.characters.boyfriend, true);
+		bf.setPosition(boyfriendPosition.x, boyfriendPosition.y);
+		bf.setPosition(bf.x + bf.json.pos_offset[0], bf.y + bf.json.pos_offset[1]);
+
+		gfLayer.add(gf);
+		dadLayer.add(dad);
+		boyfriendLayer.add(bf);
+
+		playfield.dadStrumline.char = dad;
+		playfield.bfStrumline.char = bf;
 
 		startCallback();
+		super.create();
+	}
+
+	public function get_camGame()
+	{
+		return FlxG.camera;
+	}
+
+	public function hitNote(n:Note)
+	{
+		if (!n.strumline.isBot)
+			playerVolume = 1;
+		else
+			enemyVolume = 1;
 	}
 
 	public var playerVolume:Float = 1;
@@ -86,10 +162,23 @@ class PlayState extends FlxState
 		startCountdown();
 	}
 
+	public var camBopMult:Float = 1;
+	public var hudBopMult:Float = 1;
+	public var defaultZoomHUD:Float = 1;
+	public var defaultZoomGame:Float = 1;
+
+	public function sectionHit()
+	{
+		FlxG.camera.zoom += 0.015 * camBopMult;
+		camHUD.zoom += 0.03 * hudBopMult;
+	}
+
 	public function startSong()
 	{
 		startedSong = true;
 		inst.play();
+		playfield.progressBar.setRange(0,inst.length);
+		FlxTween.tween(playfield.progressBar,{alpha:1},Conductor.beatLength/1000);
 		for (shit in playerVocals.sounds.concat(enemyVocals.sounds))
 			shit.play();
 	}
@@ -106,8 +195,10 @@ class PlayState extends FlxState
 
 	override public function update(elapsed:Float)
 	{
-		enemyVocals.volume = enemyVolume * FlxG.sound.volume;
-		playerVocals.volume = playerVolume * FlxG.sound.volume;
+		FlxG.camera.zoom = FlxMath.lerp(defaultZoomGame, FlxG.camera.zoom, 0.95);
+		camHUD.zoom = FlxMath.lerp(defaultZoomHUD, camHUD.zoom, 0.95);
+		enemyVocals.volume = enemyVolume;
+		playerVocals.volume = playerVolume;
 
 		if (startedCountdown && !startedSong)
 		{

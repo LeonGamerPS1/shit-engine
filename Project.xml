@@ -36,6 +36,8 @@
 	<source path="source" />
 	<assets path="assets" />
 
+	<assets path ="secret" rename="assets" if="secret_assets"/>
+
 	<!-- _______________________________ Libraries ______________________________ -->
 
 	<haxelib name="flixel" />

@@ -22,6 +22,11 @@ class Note extends FlxSprite
 	public var earlyHitMult:Float = 1;
 	public var lateHitMult:Float = 1;
 
+	public var children:Array<Note> = [];
+	public var lane(get, null):Int;
+	public var offsetY:Float = 0;
+	public static var swag:Float = (160 * 0.7);
+
 	public function new(dir:SongNoteData, strumline:Strumline, isSusNote:Bool = false, isEndNote:Bool = false)
 	{
 		super();
@@ -35,7 +40,7 @@ class Note extends FlxSprite
 		if (!isSustainNote)
 			earlyHitMult *= 0.5;
 		else 
-			earlyHitMult = 0.7;
+			earlyHitMult = 0;
 	}
 
 	public var lastSkin = "";
@@ -66,8 +71,10 @@ class Note extends FlxSprite
 		alpha = isSustainNote ? 0.6 : 1;
 		if (isSustainNote && !isEndNote)
 		{
-			scale.y *= Conductor.stepLength / 100 * 1.026 * strumline.speed;
+			scale.y = (63 / frameHeight) * 0.7;
+			scale.y *= Conductor.stepLength / 100 * 1.027 * strumline.speed;
 			updateHitbox();
+			earlyHitMult = 0;
 		}
 	}
 
@@ -102,5 +109,10 @@ class Note extends FlxSprite
 		return ((noteData.tms > Conductor.time - Conductor.offset - (Conductor.sfz * lateHitMult)
 			&& noteData.tms < Conductor.time - Conductor.offset + (Conductor.sfz * earlyHitMult)))
 			&& !strumline.isBot;
+	}
+
+
+	function get_lane():Int {
+		return noteData?.l % 4 ?? 0;
 	}
 }

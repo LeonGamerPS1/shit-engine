@@ -33,8 +33,9 @@ class Strum extends FlxSprite
 	public function applySkinRaw(tempskin:Sskindat, keys:Int = 4)
 	{
 		frames = Paths.getSparrowAtlas('noteskins/${tempskin.name}/${tempskin.image}');
-		animation.addByPrefix("static", 'arrow static', 24, true);
 		var direction:String = NoteSkin.strumDirections[keys - 1][dir];
+		animation.addByPrefix("static", 'arrow${direction.toUpperCase()}', 24, true);
+
 		animation.addByPrefix("confirm", direction + ' confirm', 24, false);
 		animation.addByPrefix("press", direction + ' press', 24, false);
 		scale.set(tempskin.scale, tempskin.scale);
@@ -44,6 +45,8 @@ class Strum extends FlxSprite
 		playAnim("static", false, true);
 	}
 
+	public var holding:Bool = false;
+	
 	override function update(d:Float)
 	{
 		super.update(d);
@@ -54,18 +57,17 @@ class Strum extends FlxSprite
 			if (rT < 0)
 			{
 				rT = 0;
-				playAnim('static', true, true);
+				playAnim('static', true);
 			}
 		}
 	}
 
-	static var angles = [-90, 180, 0, 90];
+
 
 	public var dir = 0;
 
 	public function playAnim(s:String, force:Bool = false, rotate:Bool = false)
 	{
-		angle = rotate ? angles[dir] : 0;
 		animation.play(s, force);
 		centerOffsets();
 		centerOrigin();

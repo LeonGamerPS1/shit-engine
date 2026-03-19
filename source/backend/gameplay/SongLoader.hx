@@ -34,6 +34,7 @@ class SongLoader
             var path = vocalBasePPath + '/$vc.ogg';
             FlxG.sound.cache(Paths.getPath(path));
         }
+		songDataOBJ.diff = songDifficulty;
 		return songDataOBJ;
 	}
 }

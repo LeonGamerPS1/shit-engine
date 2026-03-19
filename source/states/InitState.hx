@@ -1,6 +1,7 @@
 package states;
 
 import backend.input.Controls;
+import lime.app.Application;
 
 class InitState extends FlxState
 {
@@ -15,5 +16,8 @@ class InitState extends FlxState
 				ass.removeAll();
 		});
 		FlxG.switchState(() -> new PlayState());
+	
+
+		
 	}
 }

@@ -1,6 +1,7 @@
 package backend.data;
 
 import backend.data.SongMetaData.SongMetaDataRAW;
+import haxe.Json;
 import shaders.RGBSwap;
 
 typedef SongTmPoint =
@@ -79,6 +80,7 @@ class SongChartData
 	public var data:SongChartDataR;
 	public var meta:SongMetaData;
 	public var songFolder:String;
+	public var diff:String;
 
 	public function new(path:String, metaPath:String, skipError:Bool = false)
 	{
@@ -107,9 +109,9 @@ class SongChartData
 				instPath: "Inst",
 				enemyVocals: ["Voices"],
 				playerVocals: [],
-				dad: data.player2,
-				gf: data.player3,
-				boyfriend: data.player1
+				dad: data.player2 ?? 'dad',
+				gf: data.player3 ?? 'gf',
+				boyfriend: data.player1 ?? 'bf'
 			},
 			stickerPack: "default",
 			startPreview: 0,
@@ -136,6 +138,9 @@ class SongChartData
 				});
 			}
 		}
+		#if (sys && saveConversion) 
+		sys.io.File.saveContent('./conversions/${data.song.toLowerCase()}-converted.json', Json.stringify(someSongChartIG, null, '\t'));
+		#end
 		return someSongChartIG;
 	}
 
