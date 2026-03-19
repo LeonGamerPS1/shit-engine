@@ -204,8 +204,8 @@ class PlayState extends FlxState
 	{
 		FlxG.camera.zoom = FlxMath.lerp(defaultZoomGame, FlxG.camera.zoom, 0.95);
 		camHUD.zoom = FlxMath.lerp(defaultZoomHUD, camHUD.zoom, 0.95);
-		enemyVocals.volume = enemyVolume;
-		playerVocals.volume = playerVolume;
+		enemyVocals.volume = enemyVolume * inst.getActualVolume();
+		playerVocals.volume = playerVolume * inst.getActualVolume();
 
 		if (startedCountdown && !startedSong)
 		{
