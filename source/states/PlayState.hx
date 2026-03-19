@@ -38,6 +38,8 @@ class PlayState extends FlxState
 	public var gf:Character;
 	public var bf:Character;
 
+	public var camtracker:FlxObject = new FlxObject(0, 0, 1, 1);
+
 	override public function create()
 	{
 		camHUD = new FlxCamera();
@@ -110,6 +112,10 @@ class PlayState extends FlxState
 		playfield.dadStrumline.char = dad;
 		playfield.bfStrumline.char = bf;
 
+		camGame.follow(camtracker, LOCKON, 0.06);
+		defaultZoomGame = 0.8;
+		add(camtracker);
+
 		startCallback();
 		super.create();
 	}
@@ -121,6 +127,7 @@ class PlayState extends FlxState
 
 	public function hitNote(n:Note)
 	{
+		camtracker.setPosition(n.strumline.char.getGraphicMidpoint().x,n.strumline.char.getGraphicMidpoint().y);
 		if (!n.strumline.isBot)
 			playerVolume = 1;
 		else
@@ -177,8 +184,8 @@ class PlayState extends FlxState
 	{
 		startedSong = true;
 		inst.play();
-		playfield.progressBar.setRange(0,inst.length);
-		FlxTween.tween(playfield.progressBar,{alpha:1},Conductor.beatLength/1000);
+		playfield.progressBar.setRange(0, inst.length);
+		FlxTween.tween(playfield.progressBar, {alpha: 1}, Conductor.beatLength / 1000);
 		for (shit in playerVocals.sounds.concat(enemyVocals.sounds))
 			shit.play();
 	}

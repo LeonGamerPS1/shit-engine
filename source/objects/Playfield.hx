@@ -76,7 +76,7 @@ class Playfield extends FlxGroup
 		add(progressBarBG);
 
 		progressBar = new FlxBar(progressBarBG.x, progressBarBG.y, LEFT_TO_RIGHT, Std.int(progressBarBG.width), Std.int(progressBarBG.height), Conductor,
-			'time', -200*200, 0);
+			'time', -200 * 200, 0);
 		progressBar.createFilledBar(0xFF6D6D6D, 0xFF66FF33);
 		progressBar.alpha = 0;
 		progressBar.numDivisions = 1000;
@@ -236,10 +236,10 @@ class Playfield extends FlxGroup
 	override function update(elapsed:Float)
 	{
 		// clean this up later
-		
-		if(healthBarBG.alpha != healthBar.alpha)
+
+		if (healthBarBG.alpha != healthBar.alpha)
 			healthBarBG.alpha = healthBar.alpha;
-		if(progressBarBG.alpha != progressBar.alpha)
+		if (progressBarBG.alpha != progressBar.alpha)
 			progressBarBG.alpha = progressBar.alpha;
 		FlxTween.cancelTweensOf(this, ["curHealth"]);
 		FlxTween.tween(this, {curHealth: health}, 0.2);
