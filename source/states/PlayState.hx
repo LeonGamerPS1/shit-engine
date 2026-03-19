@@ -45,7 +45,7 @@ class PlayState extends FlxState
 
 		Conductor.timeChanges.resize(0);
 		super.create();
-		song = SongLoader.loadSong("milf");
+		song = SongLoader.loadSong("bopeebo");
 		Conductor.bpm = song.data.bpm;
 		Conductor.time = -(Conductor.beatLength * 5);
 

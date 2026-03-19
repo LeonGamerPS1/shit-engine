@@ -35,6 +35,8 @@
 	<set name="BUILD_DIR" value="export/${buildFolder}" />
 	<source path="source" />
 	<assets path="assets" />
+	<assets path="README.md"/>
+	<assets path="LICENSE.md"/>
 
 	<assets path ="secret" rename="assets" if="secret_assets"/>
 
