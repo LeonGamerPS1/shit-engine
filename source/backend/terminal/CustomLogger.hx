@@ -83,7 +83,10 @@ class CustomLogger
 		#if sys
 		if (colorTextInput)
 		{
-			var coloredText = colorText(thingToBeLogged, getColorForStatus(status));
+			var firstPoop = '['+colorText(Date.now().toString(),AnsiColor.Magenta)+']';
+			var secondPart = '['+colorText(status,getColorForStatus(status))+']';
+			var lastPart = colorText('${posInfo?.fileName}:${posInfo?.methodName}(${posInfo?.lineNumber}) $str',getColorForStatus(status));
+			var coloredText = '$firstPoop $secondPart $lastPart';
 			Sys.println(coloredText);
 		}
 		else
@@ -99,7 +102,7 @@ class CustomLogger
 		switch (status.toLowerCase())
 		{
 			default:
-				return Cyan;
+				return Blue;
 			case 'info':
 				return Blue;
 			case "warning" | 'notice':

@@ -36,6 +36,8 @@ typedef SongChartDataR =
 	public var endPreview:Float;
 	public var notes:Array<SongNoteData>;
 	public var bpm:Float;
+	@:optional
+	public var events:Array<SongEventData>;
 }
 
 typedef SongNoteData =
@@ -57,6 +59,12 @@ typedef SwagSectionXMLBFXML =
 	var altAnim:Bool;
 }
 
+typedef SongEventData = {
+	var t:Int;
+	var v:Array<Dynamic>;
+	var n:String;
+} 
+
 typedef SwagSongPsych042 =
 {
 	var song:String;
@@ -73,6 +81,7 @@ typedef SwagSongPsych042 =
 	var arrowSkin:String;
 	var splashSkin:String;
 	var validScore:Bool;
+	var events:Array<Dynamic>;
 }
 
 class SongChartData
@@ -123,8 +132,19 @@ class SongChartData
 			stage: data.stage ?? 'stage',
 		};
 
+		var lastDaddy = null;
+		var bpm4:Float = (60 / someSongChartIG.bpm) * 4000;
+		var timelas = 0;
 		for (section in data.notes)
 		{
+			if(section.changeBPM && section.bpm != 0 && section.bpm > 0)
+				bpm4 = (60 / section.bpm) * 4000;
+			if(section.mustHitSection != lastDaddy) {
+				lastDaddy = section.mustHitSection;
+				someSongChartIG.events ??= [];
+				someSongChartIG.events.push({t:timelas,n: "focus on character",v:[!lastDaddy ? 'dad' : 'bf']});
+		
+			}
 			for (note in section.sectionNotes)
 			{
 				var isPlayerNote = section.mustHitSection;
@@ -137,8 +157,11 @@ class SongChartData
 					t: "normal"
 				});
 			}
+			timelas += Math.floor(bpm4);
 		}
 		#if (sys && saveConversion) 
+		if(!sys.FileSystem.exists('./conversions'))
+			sys.FileSystem.createDirectory('./conversions');
 		sys.io.File.saveContent('./conversions/${data.song.toLowerCase()}-converted.json', Json.stringify(someSongChartIG, null, '\t'));
 		#end
 		return someSongChartIG;

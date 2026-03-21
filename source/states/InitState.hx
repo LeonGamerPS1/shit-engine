@@ -16,8 +16,19 @@ class InitState extends FlxState
 				ass.removeAll();
 		});
 		FlxG.switchState(() -> new PlayState());
-	
 
-		
+		#if sys
+		Application.current.onExit.add((i) ->
+		{
+			var txt = "";
+			for (txt2 in CustomLogger.allTraces)
+			{
+				txt += '\n$txt2';
+			}
+			if (!sys.FileSystem.exists('./logs'))
+				sys.FileSystem.createDirectory("./logs");
+			sys.io.File.saveContent(("./logs/" + Date.now().toString()).replace(":",'-').replace(" ",'-'), txt);
+		}, false, 999);
+		#end
 	}
 }

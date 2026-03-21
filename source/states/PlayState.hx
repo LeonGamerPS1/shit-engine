@@ -116,9 +116,18 @@ class PlayState extends FlxState
 		defaultZoomGame = 0.8;
 		add(camtracker);
 
+		song.data.events ??= [];
+		for (event in song.data.events)
+		{
+			onEventLoad(event);
+			events.push(event);
+		}
+		events.sort((e, e2) -> return e.t - e2.t);
 		startCallback();
 		super.create();
 	}
+
+	public var events:Array<SongEventData> = [];
 
 	public function get_camGame()
 	{
@@ -127,11 +136,41 @@ class PlayState extends FlxState
 
 	public function hitNote(n:Note)
 	{
-		camtracker.setPosition(n.strumline.char.getGraphicMidpoint().x,n.strumline.char.getGraphicMidpoint().y);
 		if (!n.strumline.isBot)
 			playerVolume = 1;
 		else
 			enemyVolume = 1;
+	}
+
+	var autoFocus:Bool = true;
+
+	public function onEventLoad(event:SongEventData) {}
+
+	public function onEventTrigger(event:SongEventData) {}
+
+	public function getCharFromString(charname:String):Character
+	{
+		var customChar = null;
+		var char:Character = customChar;
+
+		if (char == null)
+		{
+			switch(charname) {
+				default:
+					char = gf;
+				case "dad":
+					char = dad;
+				case "bf":
+					char = bf;		
+			}
+
+		}
+		return char;
+	}
+
+	public function focusOnChar(char:Character)
+	{
+		camtracker.setPosition(char.getGraphicMidpoint().x, char.getGraphicMidpoint().y);
 	}
 
 	public var playerVolume:Float = 1;
@@ -225,6 +264,19 @@ class PlayState extends FlxState
 					continue;
 				if (Math.abs(Conductor.time - inst.time) > 10)
 					vocalSFX.time = Conductor.time;
+			}
+		}
+
+		if (events.length > 0)
+		{
+			var event = events[0];
+			if (event == null)
+				events.remove(event);
+			else if (event.t <= Conductor.time - Conductor.offset)
+			{
+				var index:Int = events.indexOf(event);
+				events.splice(index, 1);
+				onEventTrigger(event);
 			}
 		}
 
