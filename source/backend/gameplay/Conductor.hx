@@ -9,7 +9,7 @@ class Conductor
 	public static var sfz:Float = (safeFrames / 60) * 1000; // is calculated in create(), is safeFrames in milliseconds
 	public static var timeChanges:Array<SongTmPoint> = [];
 
-	public static var time(default, set):Float;
+	public static var time(default, set):Float = 0;
 	public static var bpm(default, set):Float = 100;
 	public static var beatLength = (bpm / 60) * 1000;
 	public static var stepLength = (beatLength * 0.25);

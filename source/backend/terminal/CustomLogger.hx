@@ -102,7 +102,7 @@ class CustomLogger
 		switch (status.toLowerCase())
 		{
 			default:
-				return Blue;
+				return Empty;
 			case 'info':
 				return Blue;
 			case "warning" | 'notice':
@@ -114,6 +114,8 @@ class CustomLogger
 
 	static function colorText(text:String, color:AnsiColor):String
 	{
+		if(color == Empty)
+			return text;
 		return color.code() + text + AnsiColor.White.code(); // reset to default after
 	}
 }

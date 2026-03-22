@@ -11,6 +11,8 @@
       "t": 0,
       "v": ["dad"]
     },
+    {"n":"set camera zoom","t":0,"v":["game",0.9,false]},
+    {"n":"change character","t":-1,"v":["bf","dad"]},
     {
       "n": "focus on character",
       "t": 2400,

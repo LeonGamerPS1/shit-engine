@@ -1,0 +1,18 @@
+
+
+func onEventTrigger(event) {
+  if(event.n == 'set camera zoom') {
+    var type = event.v[0] ?? 'game'
+    var zoom = event.v[1] ?? 1.0
+    var snap = event.v[2] ?? false
+    var cam = type == 'game' ? game.camGame : game.camHUD
+    if(snap)
+       cam.zoom = zoom
+    match(type) {
+        default => game.defaultZoomGame = zoom
+        case "hud" => game.defaultZoomHUD = zoom
+    }   
+    
+  }
+     
+}

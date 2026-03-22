@@ -4,6 +4,7 @@ import animate.FlxAnimateFrames;
 import flixel.graphics.frames.FlxFramesCollection;
 import flixel.math.FlxMatrix;
 import openfl.media.Sound;
+import openfl.utils.AssetType;
 
 class Paths
 {
@@ -62,6 +63,15 @@ class Paths
 		graphic.persist = true;
 		cachedImages.set(path, graphic);
 		return graphic;
+	}
+
+
+	public static function listDirectory(startPath:String,type:AssetType = null):Array<String> {
+		var dir = OpenFLAssets.list(type).filter((e)->{
+			return e.startsWith(startPath);
+		});
+
+		return dir;
 	}
 
 	public static function getSound(path:String, stream:Bool = false, soundType:SoundExtension = #if flash MP3 #else OGG #end):Sound

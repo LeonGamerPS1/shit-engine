@@ -7,6 +7,7 @@ enum abstract AnsiColor(Int) from Int to Int {
     var Green = 32;
     var Yellow = 33;
     var Blue = 34;
+    var Empty = 666;
     var Magenta = 35;
     var Cyan = 36;
     var White = 37;

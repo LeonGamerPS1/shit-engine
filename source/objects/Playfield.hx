@@ -17,6 +17,7 @@ class Playfield extends FlxGroup
 	// timeBar
 	public var progressBarBG:FlxSprite;
 	public var progressBar:FlxBar;
+	public var time:FlxText;
 
 	public var health:Float = 1;
 
@@ -116,6 +117,14 @@ class Playfield extends FlxGroup
 		shitWatermarkBG.y = shitWatermark.y - 5;
 		add(shitWatermarkBG);
 		add(shitWatermark);
+
+			 time = new FlxText(4, FlxG.height - 17, 0, song.meta.data.songDisplayName + "-" + (song.diff) + " | SE " + Main.version, 16);
+		time.setFormat(Paths.getFont("vcr"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
+		time.scrollFactor.set();
+		time.antialiasing = scoreTxt.antialiasing = true;
+		time.screenCenter(X);
+		time.y = progressBar.y + (progressBar.height / 2 - time.height / 2);
+		add(time);
 
 		noteSplashes = new FlxTypedGroup<NoteSplash>();
 		add(noteSplashes);
@@ -236,7 +245,9 @@ class Playfield extends FlxGroup
 	override function update(elapsed:Float)
 	{
 		// clean this up later
-
+	
+		time.text = FlxStringUtil.formatTime(Conductor.time / 1000);
+		time.screenCenter(X);
 		if (healthBarBG.alpha != healthBar.alpha)
 			healthBarBG.alpha = healthBar.alpha;
 		if (progressBarBG.alpha != progressBar.alpha)

@@ -9,3 +9,4 @@
 - UnholyWanderer04 - the evil unholyh...
 - FunkinCrew - Made All of the images sounds. etc FNF assets. available and the Game itself, thank you!
 - MaybeMaru - FlixelAnimate - flixel-animate library, huge thanks to you I can make the game run faster lol
+- @Kitsumizy - [NxScript](https://github.com/Kitsumizy/NxScript) 

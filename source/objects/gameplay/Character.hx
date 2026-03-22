@@ -127,11 +127,13 @@ class Character extends FlxAnimate
 
 	public function playAnim(anim:String, ?force:Bool = true)
 	{
+
+	
 		if (animExists(anim))
 		{
 			(isAnimate ? this.anim : animation).play(anim, force);
 			if (offset != null && animOffsets.exists(anim))
-				offset.set(animOffsets.get(anim)[0], animOffsets.get(anim)[1]);
+				offset.set(animOffsets.get(anim)[0] , animOffsets.get(anim)[1]);
 		}
 		// trace(animOffsets);
 	}

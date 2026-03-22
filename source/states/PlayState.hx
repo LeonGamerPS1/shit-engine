@@ -2,9 +2,11 @@ package states;
 
 import backend.data.SongChartData;
 import backend.gameplay.SongLoader;
+import backend.scripting.NxScriptM;
 import flixel.math.FlxPoint;
 import flixel.sound.FlxSoundGroup;
 import haxe.Timer;
+import nx.script.NativeProxy;
 import objects.Note;
 import objects.Playfield;
 import objects.gameplay.Character;
@@ -79,6 +81,7 @@ class PlayState extends FlxState
 		for (strumLines in [playfield.dadStrumline, playfield.bfStrumline])
 		{
 			strumLines.onHitNote.add(hitNote);
+			strumLines.onMissNote.add(missNote);
 		}
 		Conductor.onMeasure.add((e) ->
 		{
@@ -124,7 +127,45 @@ class PlayState extends FlxState
 		}
 		events.sort((e, e2) -> return e.t - e2.t);
 		startCallback();
+		loadNXScripts(Paths.listDirectory('assets/data/scripts', TEXT));
 		super.create();
+	}
+
+	public var scripts:Map<String, NxScriptM> = [];
+
+	function loadNXScripts(paths:Array<String>)
+	{
+		for (hm in paths)
+			loadNXScript(hm);
+	}
+
+	function loadNXScript(hm:String)
+	{
+		var script = scripts.get(hm);
+		if (script != null)
+			scripts.remove(hm);
+		script?.dispose();
+
+		script = new NxScriptM(hm, hm);
+		scripts.set(hm, script);
+		script.call('new');
+	}
+
+	public function call(fn:String, ?fv:Array<Dynamic>):Dynamic
+	{
+		var value:Dynamic = null;
+
+		for (script in scripts.keyValueIterator())
+		{
+			var result = script.value.call(fn, fv);
+
+			if (result != null)
+			{
+				value = result;
+			}
+		}
+
+		return value;
 	}
 
 	public var events:Array<SongEventData> = [];
@@ -136,17 +177,33 @@ class PlayState extends FlxState
 
 	public function hitNote(n:Note)
 	{
+		call('onNoteHit',[n]);
 		if (!n.strumline.isBot)
 			playerVolume = 1;
 		else
 			enemyVolume = 1;
 	}
 
+	public function missNote(n:Note,?dir:Int)
+	{
+		call('onNoteMiss',[n]);
+		if (!n.strumline.isBot)
+			playerVolume = 0;
+	
+	}
+
+
 	var autoFocus:Bool = true;
 
-	public function onEventLoad(event:SongEventData) {}
+	public function onEventLoad(event:SongEventData)
+	{
+		call("onEventLoad", [event]);
+	}
 
-	public function onEventTrigger(event:SongEventData) {}
+	public function onEventTrigger(event:SongEventData)
+	{
+		call("onEventTrigger", [event]);
+	}
 
 	public function getCharFromString(charname:String):Character
 	{
@@ -155,15 +212,15 @@ class PlayState extends FlxState
 
 		if (char == null)
 		{
-			switch(charname) {
-				default:
+			switch (charname)
+			{
+				case "gf":
 					char = gf;
 				case "dad":
 					char = dad;
 				case "bf":
-					char = bf;		
+					char = bf;
 			}
-
 		}
 		return char;
 	}
@@ -281,5 +338,7 @@ class PlayState extends FlxState
 		}
 
 		super.update(elapsed);
+
+
 	}
 }
