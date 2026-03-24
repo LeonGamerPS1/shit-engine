@@ -144,7 +144,7 @@ class Playfield extends FlxGroup
 	var scoreTxt:FlxText;
 	var scoreTxtBG:FlxSprite;
 
-	public function missNote(n:Note, dir:Int)
+	public function missNote(n:Note, dir:Int,strumline)
 	{
 		health -= 0.20;
 		songScore -= 350;

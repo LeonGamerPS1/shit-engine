@@ -15,7 +15,7 @@ class InitState extends FlxState
 			for (ass in [c.onBeat, c.onMeasure, c.onStep])
 				ass.removeAll();
 		});
-		FlxG.switchState(() -> new PlayState());
+	
 
 		#if sys
 		Application.current.onExit.add((i) ->
@@ -30,5 +30,6 @@ class InitState extends FlxState
 			sys.io.File.saveContent(("./logs/" + Date.now().toString()).replace(":",'-').replace(" ",'-'), txt);
 		}, false, 999);
 		#end
+		FlxG.switchState(() -> new PlayState());
 	}
 }

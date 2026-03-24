@@ -1,6 +1,8 @@
 package states;
 
 import backend.data.SongChartData;
+import backend.data.SongStageData.StageJSON;
+import backend.data.SongStageData;
 import backend.gameplay.SongLoader;
 import backend.scripting.NxScriptM;
 import flixel.math.FlxPoint;
@@ -42,14 +44,23 @@ class PlayState extends FlxState
 
 	public var camtracker:FlxObject = new FlxObject(0, 0, 1, 1);
 
+	public var stageJSON:StageJSON;
+
 	override public function create()
 	{
 		camHUD = new FlxCamera();
 		FlxG.cameras.add(camHUD, false);
+		loadNXScripts(Paths.listDirectory('assets/data/scripts', TEXT));
 
 		Conductor.timeChanges.resize(0);
 		super.create();
 		song = SongLoader.loadSong("bopeebo");
+		stageJSON = SongStageData.getStageJSON(song.data.stage);
+		boyfriendPosition.set(stageJSON.bfPos[0], stageJSON.bfPos[1]);
+		dadPosition.set(stageJSON.dadPos[0], stageJSON.dadPos[1]);
+		gfPosition.set(stageJSON.gfPos[0], stageJSON.gfPos[1]);
+		defaultZoomGame = stageJSON.zoom;
+
 		Conductor.bpm = song.data.bpm;
 		Conductor.time = -(Conductor.beatLength * 5);
 
@@ -87,7 +98,9 @@ class PlayState extends FlxState
 		{
 			sectionHit();
 		});
-
+		loadNXScript('assets/data/stages/${song.data.stage}.nx');
+		call('onStageLoad', [stageJSON, song.data.stage]);
+		call('onCreate');
 		gfLayer = new FlxGroup();
 		dadLayer = new FlxGroup();
 		boyfriendLayer = new FlxGroup();
@@ -127,7 +140,8 @@ class PlayState extends FlxState
 		}
 		events.sort((e, e2) -> return e.t - e2.t);
 		startCallback();
-		loadNXScripts(Paths.listDirectory('assets/data/scripts', TEXT));
+
+		call('onCreatePost');
 		super.create();
 	}
 
@@ -145,7 +159,8 @@ class PlayState extends FlxState
 		if (script != null)
 			scripts.remove(hm);
 		script?.dispose();
-
+		if(!OpenFLAssets.exists(hm))
+			return;
 		script = new NxScriptM(hm, hm);
 		scripts.set(hm, script);
 		script.call('new');
@@ -177,32 +192,48 @@ class PlayState extends FlxState
 
 	public function hitNote(n:Note)
 	{
-		call('onNoteHit',[n]);
+		call('onNoteHit', [n]);
 		if (!n.strumline.isBot)
 			playerVolume = 1;
 		else
 			enemyVolume = 1;
 	}
 
-	public function missNote(n:Note,?dir:Int)
+	public function missNote(n:Note, ?dir:Int, strumline)
 	{
-		call('onNoteMiss',[n]);
-		if (!n.strumline.isBot)
+		call('onNoteMiss', [n, dir, strumline]);
+		if (strumline.isBot)
 			playerVolume = 0;
-	
 	}
-
 
 	var autoFocus:Bool = true;
 
 	public function onEventLoad(event:SongEventData)
 	{
 		call("onEventLoad", [event]);
+		if (event.n == 'change character')
+		{
+			var charname = event.v[1];
+			var chartoreplace = event.v[0];
+			var charOBJ = getCharFromString(chartoreplace);
+			var oldchar = charOBJ.curCharacter;
+			charOBJ.loadJson(charname ?? charOBJ.curCharacter);
+			charOBJ.loadJson(oldchar);
+		}
 	}
 
 	public function onEventTrigger(event:SongEventData)
 	{
 		call("onEventTrigger", [event]);
+		if (event.n == 'change character')
+		{
+			var charname = event.v[0];
+			var chartoreplace = event.v[1];
+			var charOBJ = getCharFromString(chartoreplace);
+			charOBJ.loadJson(charname ?? charOBJ.curCharacter);
+			var pos = charOBJ.player ? boyfriendPosition : dadPosition;
+			charOBJ.setPosition(pos.x + charOBJ.json.pos_offset[0], pos.y + charOBJ.json.pos_offset[1]);
+		}
 	}
 
 	public function getCharFromString(charname:String):Character
@@ -302,6 +333,7 @@ class PlayState extends FlxState
 		camHUD.zoom = FlxMath.lerp(defaultZoomHUD, camHUD.zoom, 0.95);
 		enemyVocals.volume = enemyVolume * inst.getActualVolume();
 		playerVocals.volume = playerVolume * inst.getActualVolume();
+		inst.volume = FlxG.sound.volume > 0 ? 1 : 0;
 
 		if (startedCountdown && !startedSong)
 		{
@@ -338,7 +370,5 @@ class PlayState extends FlxState
 		}
 
 		super.update(elapsed);
-
-
 	}
 }

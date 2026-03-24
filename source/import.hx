@@ -13,6 +13,9 @@ import flixel.system.FlxAssets.FlxShader;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
 import flixel.util.*;
+import objects.FunkinSprite;
+import objects.OffsetSprite;
 import openfl.Assets as OpenFLAssets;
 
 using StringTools;
+

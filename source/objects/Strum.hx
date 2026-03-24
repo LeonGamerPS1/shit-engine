@@ -12,12 +12,15 @@ class Strum extends FlxSprite
 
 	public var rT = .0;
 	public var rgbswap:RGBSwap;
+	public var cover:HoldCover;
 
 	public function new(skin = "default", dir:Int = 0, k = 4)
 	{
 		super();
 		this.dir = dir;
 		reload(skin, k);
+		rgbswap = Note.getSwapShaderForLane(dir);
+
 	}
 
 	public var lastSkin = "";
@@ -71,6 +74,7 @@ class Strum extends FlxSprite
 		animation.play(s, force);
 		centerOffsets();
 		centerOrigin();
+		shader = s == 'confirm' ? rgbswap.shader : null;
 	}
 
 	public var staticshader:FlxShader;

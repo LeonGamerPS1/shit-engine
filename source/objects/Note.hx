@@ -25,7 +25,10 @@ class Note extends FlxSprite
 	public var children:Array<Note> = [];
 	public var lane(get, null):Int;
 	public var offsetY:Float = 0;
+
 	public static var swag:Float = (160 * 0.7);
+
+	public static var noteShaders = [for (i in 0...4) new RGBSwap()];
 
 	public function new(dir:SongNoteData, strumline:Strumline, isSusNote:Bool = false, isEndNote:Bool = false)
 	{
@@ -34,12 +37,13 @@ class Note extends FlxSprite
 		this.noteData = dir;
 		this.isEndNote = isEndNote;
 		this.isSustainNote = isSusNote;
-
+		rgbswap = getSwapShaderForLane(lane);
+		shader = rgbswap.shader;
 
 		reload(strumline != null ? strumline.skin : 'default');
 		if (!isSustainNote)
 			earlyHitMult *= 0.5;
-		else 
+		else
 			earlyHitMult = 0;
 	}
 
@@ -111,8 +115,15 @@ class Note extends FlxSprite
 			&& !strumline.isBot;
 	}
 
-
-	function get_lane():Int {
+	function get_lane():Int
+	{
 		return noteData?.l % 4 ?? 0;
+	}
+
+	public static function getSwapShaderForLane(lane:Int):RGBSwap
+	{
+		if (Note.noteShaders[lane] == null)
+			Note.noteShaders[lane] = new RGBSwap();
+		return Note.noteShaders[lane];
 	}
 }

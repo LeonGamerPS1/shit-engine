@@ -19,7 +19,7 @@ class Strumline extends FlxGroup
 	public var char:Character;
 
 	public var onHitNote:FlxTypedSignal<Note->Void> = new FlxTypedSignal<Note->Void>();
-	public var onMissNote:FlxTypedSignal<Note->Null<Int>->Void> = new FlxTypedSignal<Note->Null<Int>->Void>();
+	public var onMissNote:FlxTypedSignal<Note->Null<Int>->Strumline->Void> = new FlxTypedSignal<Note->Null<Int>->Strumline->Void>();
 
 	public function new(pf:Playfield, skin:String = "default", keys:Int = 4)
 	{
@@ -41,8 +41,10 @@ class Strumline extends FlxGroup
 		for (i in 0...keys)
 		{
 			var strum:Strum = new Strum(skin, i, keys);
-			strum.x = Note.swag  * i;
+			strum.cover = new HoldCover(strum);
+			strum.x = Note.swag * i;
 			strums.add(strum);
+			add(strum.cover);
 		}
 	}
 
@@ -186,7 +188,7 @@ class Strumline extends FlxGroup
 				strum.playAnim('static', false, true);
 
 			if (hitNotes.length > 0 && !pressedShit.contains(strum.dir) && pressed)
-				onMissNote.dispatch(null, strum.dir);
+				onMissNote.dispatch(null, strum.dir, this);
 		}
 	}
 
@@ -197,6 +199,14 @@ class Strumline extends FlxGroup
 		note.hit = true;
 		onHitNote.dispatch(note);
 		char?.hitNote(note);
+		if (strum.cover != null)
+		{
+			strum.cover.visible = note.noteData.lms > 0 || note.isSustainNote;
+			if (note.noteData.lms > 0 && !note.isSustainNote)
+				strum.cover.playAnim('start');
+			if (note.isEndNote)
+				strum.cover.playAnim('end');
+		}
 		if (isBot)
 			strum.rT = strum.animation.curAnim.numFrames / strum.animation.curAnim.frameRate;
 		if (!note.isSustainNote)
@@ -216,6 +226,7 @@ class Strumline extends FlxGroup
 
 		var center = strum.y + Note.swag * 0.5;
 		note.flipY = note.isSustainNote && strum.flipScroll;
+		note.strumline = this;
 		if (strum.flipScroll)
 		{
 			if ((note.parentNote != null && note.parentNote.hit)
@@ -246,13 +257,12 @@ class Strumline extends FlxGroup
 		if (note.noteData.tms <= Conductor.time - (350 / note.multSpeed / speed))
 		{
 			if (!isBot && !note.hit)
-			{
-				onMissNote.dispatch(note, null);
-			}
+				onMissNote.dispatch(note, note.lane, this);
+
 			for (child in note.children)
 			{
 				if (!guitarHeroSustains && !isBot)
-					onMissNote.dispatch(note, null);
+					onMissNote.dispatch(child, child.lane, this);
 				killNote(child);
 			}
 			killNote(note);
