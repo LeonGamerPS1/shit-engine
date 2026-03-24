@@ -5,7 +5,7 @@ import backend.data.SongChartData.SongNoteData;
 import flixel.input.keyboard.FlxKey;
 import shaders.RGBSwap;
 
-class Note extends FlxSprite
+class Note extends FunkinSprite
 {
 	public var strumline:Strumline;
 
@@ -91,9 +91,9 @@ class Note extends FlxSprite
 
 	public var dir:SongNoteData;
 
-	public function playAnim(s:String, force:Bool = false)
+	public override function playAnim(animName:String, force = false, reversed = false, frame = 0)
 	{
-		animation.play(s, force);
+		animController.play(animName, force, reversed, frame);
 		centerOffsets();
 		centerOrigin();
 	}

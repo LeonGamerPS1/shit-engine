@@ -1,10 +1,9 @@
 package objects;
 
 import backend.NoteSkin;
-import flixel.input.keyboard.FlxKey;
 import shaders.RGBSwap;
 
-class Strum extends FlxSprite
+class Strum extends FlxAnimate
 {
 	public var flipScroll = false;
 
@@ -20,7 +19,6 @@ class Strum extends FlxSprite
 		this.dir = dir;
 		reload(skin, k);
 		rgbswap = Note.getSwapShaderForLane(dir);
-
 	}
 
 	public var lastSkin = "";
@@ -49,7 +47,7 @@ class Strum extends FlxSprite
 	}
 
 	public var holding:Bool = false;
-	
+
 	override function update(d:Float)
 	{
 		super.update(d);
@@ -64,8 +62,6 @@ class Strum extends FlxSprite
 			}
 		}
 	}
-
-
 
 	public var dir = 0;
 
@@ -82,7 +78,7 @@ class Strum extends FlxSprite
 	override function destroy()
 	{
 		tempskin = null;
-		shader  = null;
+		shader = null;
 		rgbswap = null;
 		super.destroy();
 	}

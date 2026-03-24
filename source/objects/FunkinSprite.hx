@@ -11,7 +11,7 @@ enum AtlasType
 
 class FunkinSprite extends OffsetSprite
 {
-	public function new(x:Float, y:Float, ?graphic:FlxGraphicAsset)
+	public function new(x:Float = 0, y:Float = 0, ?graphic:FlxGraphicAsset)
 	{
 		super(x, y, graphic);
 		useRenderTexture = true; // glup glup glup
