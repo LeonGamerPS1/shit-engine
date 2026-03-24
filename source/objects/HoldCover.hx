@@ -63,8 +63,8 @@ class HoldCover extends FunkinSprite
 	override function update(elapsed:Float)
 	{
 		setPosition(strum.x + 3 - (width) + strum.width / 4, (strum.y + 12) - (height));
-        x += xx;
-        y += yy;
+        x += offsetx;
+        y += offsety;
 		super.update(elapsed);
 	}
 }
