@@ -13,8 +13,9 @@ class HoldCover extends FunkinSprite
 
 	var strum:Strum;
 
-    var xx = 0;
-    var yy = 0;
+    var offsetx = 0;
+    var offsety = 0;
+
 	function doShit(strum:Strum)
 	{
 		this.strum = strum;
@@ -42,7 +43,7 @@ class HoldCover extends FunkinSprite
 
 	public override function playAnim(animName:String, force = false, reversed = false, frame = 0)
 	{
-        xx = yy = 0;
+        offsety = offsetx = 0;
 		super.playAnim(animName, force, reversed, frame);
 		if (animation.curAnim?.curFrame == 0)
 		{
@@ -50,12 +51,12 @@ class HoldCover extends FunkinSprite
 			centerOrigin();
 		}
         if(animName == 'end') {
-            xx += 50;
-            yy += 43;
+            offsetx += 50;
+            offsety += 43;
         }
         if(animName == 'start') {
-            xx -= 15;
-            yy -= 10;
+            offsetx -= 15;
+            offsety -= 10;
         }
 	}
 
