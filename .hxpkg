@@ -1,0 +1,51 @@
+[
+	{
+		"profile": "default",
+		"pkgs": [
+			{
+				"name": "hxcpp",
+				"link": "https://github.com/haxefoundation/hxcpp"
+			},
+			{
+				"name": "lime",
+				"version": "8.1.2"
+			},
+			{
+				"name": "openfl",
+				"version": "9.4.2"
+			},
+			{
+				"name": "flixel",
+				"link": "https://github.com/ShitEngineFoundation/flixel"
+			},
+			{
+				"name": "flixel-tools"
+			},
+			{
+				"name": "flixel-addons"
+			},
+			{
+				"name": "tjson"
+			},
+			{
+				"name": "hxjsonast"
+			},
+			{
+				"name": "nxscript",
+				"link": "https://github.com/senioritaelizabeth/NxScript.git"
+			},
+			{
+				"name": "hxcpp-debug-server"
+			},
+			{
+				"name": "flixel-animate",
+				"link": "https://github.com/MaybeMaru/flixel-animate.git",
+				"branch": "experimental"
+			},
+			{
+				"name": "prismcli",
+				"link": "https://github.com/CCobaltDev/PrismCLI"
+			}
+		]
+	}
+]
