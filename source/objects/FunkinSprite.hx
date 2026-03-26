@@ -23,6 +23,7 @@ class FunkinSprite extends OffsetSprite
 			animation.addByPrefix(name, prefix, frameRate, looped, flipX, flipY);
 		else
 			anim.addBySymbol(name, prefix, frameRate, looped, flipX, flipY);
+		return this;
 	}
 
 	public function addAnimIndices(Name:String, Prefix:String, Indices:Array<Int>, ?Postfix:String, ?FrameRate:Float = 24, ?Looped:Bool = false,
@@ -32,6 +33,7 @@ class FunkinSprite extends OffsetSprite
 			animation.addByIndices(Name, Prefix, Indices, Postfix, FrameRate, Looped, flipX, flipY);
 		else
 			anim.addBySymbolIndices(Name, Prefix, Indices, FrameRate, Looped, flipX, flipY);
+		return this;
 	}
 
 	public function loadAtlas(atlasName:String, type:AtlasType)
@@ -54,5 +56,6 @@ class FunkinSprite extends OffsetSprite
 	public function loadImage(key:String)
 	{
 		loadGraphic(Paths.getGraphic(key));
+		return this;
 	}
 }
