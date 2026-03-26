@@ -1,0 +1,8 @@
+func onStageLoad(s,s) {
+    var bg = new FunkinSprite(-600,-200)
+
+    bg.loadImage('stages/stage/stageback')
+        trace(555555555555555555555555555555)
+    bg.scrollFactor.set(0.9,0.9)
+    game.add(bg)
+}

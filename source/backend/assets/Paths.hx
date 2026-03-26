@@ -87,11 +87,13 @@ class Paths
 		return graphic;
 	}
 
-	public static function listDirectory(startPath:String, type:AssetType = null):Array<String>
+	public static var defaultListExludes = ['assets/data/scripts/stages'];
+	public static function listDirectory(startPath:String, type:AssetType = null,?excludes:Array<String>):Array<String>
 	{
+		excludes ??= defaultListExludes;
 		var dir = OpenFLAssets.list(type).filter((e) ->
 		{
-			return e.startsWith(startPath);
+			return e.startsWith(startPath) && !excludes.contains(startPath);
 		});
 
 		return dir;

@@ -101,8 +101,9 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 			sectionHit();
 		});
 		loadNXScript('assets/data/stages/${song.data.stage}.nx');
-		call('onStageLoad', [stageJSON, song.data.stage]);
 		call('onCreate');
+		call('onStageLoad', [stageJSON, song.data.stage]);
+	
 		gfLayer = new FlxGroup();
 		dadLayer = new FlxGroup();
 		boyfriendLayer = new FlxGroup();
