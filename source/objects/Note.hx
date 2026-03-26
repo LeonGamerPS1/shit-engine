@@ -72,7 +72,7 @@ class Note extends FunkinSprite
 			playAnim(!isEndNote ? 'hold' : 'end');
 
 		updateHitbox();
-		alpha = isSustainNote ? 0.6 : 1;
+		alpha = isSustainNote && !SaveData.currentSettings.opaqueSustains ? 0.6 : 1;
 		if (isSustainNote && !isEndNote)
 		{
 			scale.y = (63 / frameHeight) * 0.7;

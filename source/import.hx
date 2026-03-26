@@ -1,8 +1,8 @@
-import flixel.ui.FlxBar;
 import animate.FlxAnimate;
 import backend.assets.Paths;
 import backend.gameplay.Conductor;
 import backend.input.Controls.inputSystem;
+import backend.settings.SaveData;
 import backend.terminal.CustomLogger;
 import flixel.*;
 import flixel.graphics.FlxGraphic;
@@ -14,6 +14,7 @@ import flixel.sound.FlxSound;
 import flixel.system.FlxAssets.FlxShader;
 import flixel.text.FlxText;
 import flixel.tweens.FlxTween;
+import flixel.ui.FlxBar;
 import flixel.util.*;
 import objects.FunkinSprite;
 import objects.OffsetSprite;
