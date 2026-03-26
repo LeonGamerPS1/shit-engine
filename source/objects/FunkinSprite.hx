@@ -50,4 +50,9 @@ class FunkinSprite extends OffsetSprite
 			frame = frames.frames[animation.frameIndex];
 		return r;
 	}
+
+	public function loadImage(key:String)
+	{
+		loadGraphic(Paths.getGraphic(key));
+	}
 }
