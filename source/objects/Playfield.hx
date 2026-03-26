@@ -2,6 +2,7 @@ package objects;
 
 import backend.data.SongChartData;
 import flixel.ui.FlxBar;
+import objects.ui.HealthIcon;
 
 class Playfield extends FlxGroup
 {
