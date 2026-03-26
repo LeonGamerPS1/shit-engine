@@ -1,8 +1,27 @@
 func onStageLoad(s,s) {
     var bg = new FunkinSprite(-600,-200)
-
-    bg.loadImage('stages/stage/stageback')
-        trace(555555555555555555555555555555)
+    bg.loadImage("stages/stage/stageback")
     bg.scrollFactor.set(0.9,0.9)
+    bg.active = false
     game.add(bg)
+
+    var bgFront = new FunkinSprite(-650,600)
+    bgFront.loadImage("stages/stage/stagefront")
+    bgFront.scrollFactor.set(0.9,0.9)
+    bgFront.scale.set(0.9,0.9)
+    bgFront.active = false 
+    bgFront.updateHitbox()
+    bgFront.antialiasing = true
+    game.add(bgFront)
+}
+
+func onCreatePost() {
+    var curtains = new FunkinSprite(-500,-300)
+    curtains.loadImage("stages/stage/stagecurtains")
+    curtains.scrollFactor.set(1.3,1.3)
+    curtains.antialiasing = true
+    curtains.active = false
+    curtains.scale.set(0.9,0.9)
+    curtains.updateHitbox()
+    game.add(curtains)
 }

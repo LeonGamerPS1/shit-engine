@@ -1,0 +1,53 @@
+package backend.settings;
+
+
+import lime.app.Application;
+
+@:structInit
+class OptionSaveData
+{
+	// gameplay
+	public var holdCovers:Bool = false;
+    public var opaqueSustains:Bool = false;
+    public var downScroll:Bool = false;
+
+}
+
+class SaveData
+{
+	static public var defaultSettings:OptionSaveData = {};
+	static public var currentSettings:OptionSaveData = {};
+
+	public static function setVal(name:String, val:Dynamic)
+	{
+		try
+		{
+			Reflect.setProperty(currentSettings, name, val);
+		}
+		catch (e:Dynamic)
+		{
+			Application.current.window.alert(Std.string(e), 'Error');
+		}
+		FlxG.save.flush();
+	}
+
+	public static function init()
+	{
+		Application.current.onExit.add((_) ->
+		{
+			for (field in Reflect.fields(currentSettings))
+			{
+				Reflect.setField(FlxG.save.data, field, Reflect.getProperty(currentSettings, field));
+			}
+			FlxG.save.flush();
+		}, false, 999);
+
+		for (field in Reflect.fields(defaultSettings))
+		{
+			if (Reflect.hasField(FlxG.save.data, field))
+				setVal(field, Reflect.getProperty(FlxG.save.data, field));
+			else
+				Reflect.setField(FlxG.save.data, field, Reflect.getProperty(defaultSettings, field));
+		}
+	}
+}

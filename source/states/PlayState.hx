@@ -132,7 +132,6 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		playfield.bfStrumline.char = bf;
 
 		camGame.follow(camtracker, LOCKON, 0.06);
-		defaultZoomGame = 0.8;
 		add(camtracker);
 
 		song.data.events ??= [];

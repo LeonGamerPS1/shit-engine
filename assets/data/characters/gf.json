@@ -9,7 +9,7 @@
 	"flipX": false,
 
 	"cam_offset": [0, 0],
-	"pos_offset": [0, 0],
+	"pos_offset": [-100, 0],
 
 	"animations": [
 		{

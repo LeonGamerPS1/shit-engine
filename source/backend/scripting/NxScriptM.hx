@@ -23,7 +23,7 @@ class NxScriptM
 		NxStd.registerAll(interp.vm);
 		setVariable('game', FlxG.state);
 		setVariable('FlxSprite', VNativeObject(FlxSprite), false);
-		setVariable('FunkinSprite', VNativeObject(FlxSprite), false);
+		setVariable('FunkinSprite', VNativeObject(FunkinSprite), false);
 		setVariable('FlxG', VNativeObject(FlxSprite), false);
 
 		interp.runFile(path);
