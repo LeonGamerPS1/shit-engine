@@ -2,9 +2,6 @@ package states.menus;
 
 import states.gameplay.LoadingScreen;
 
-
-
-
 class MainMenuState extends flixel.addons.transition.FlxTransitionableState
 {
 	public static var items:Array<String> = ["playstate", "story_mode", "freeplay", "credits", "options"];
@@ -103,12 +100,11 @@ class MainMenuState extends flixel.addons.transition.FlxTransitionableState
 				FlxG.camera.shake(0.01, 0.3);
 				FlxG.sound.play(Paths.getSound("sounds/cancelMenu"));
 			case "playstate":
-				FlxG.switchState(new LoadingScreen('bopeebo','hard'));
-			//case "freeplay":
-				//FlxG.switchState(new FreeplayState()); - later
-			//case "options":
-			//	FlxG.camera.fade();
-				//FlxG.switchState(new OptionsState());
+				FlxG.switchState(new LoadingScreen('bopeebo', 'hard'));
+			// case "freeplay":
+			// FlxG.switchState(new FreeplayState()); - later
+			case "options":
+				FlxG.switchState(new OptionsState());
 		}
 	}
 }

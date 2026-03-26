@@ -10,6 +10,7 @@ class HoldCover extends FunkinSprite
 		loadAtlas("holdCover", SPARROW);
 		doShit(s);
 		active = visible = exists = SaveData.currentSettings.holdCovers;
+		playAnim('end');
 	}
 
 	var strum:Strum;

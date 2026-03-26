@@ -96,7 +96,6 @@ class Alphabet extends FlxSpriteGroup
 		lastSprite = null;
 
 		var lastX = x;
-		x = 0;
 		_finalText = newText;
 		text = newText;
 		if (newTypingSpeed != -1)
