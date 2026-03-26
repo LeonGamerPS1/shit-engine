@@ -3,6 +3,7 @@ package backend.assets;
 import animate.FlxAnimateFrames;
 import flixel.graphics.frames.FlxFramesCollection;
 import flixel.math.FlxMatrix;
+import haxe.MainLoop;
 import openfl.media.Sound;
 import openfl.utils.AssetType;
 
@@ -43,6 +44,26 @@ class Paths
 			return null;
 
 		var bitmap = OpenFLAssets.getBitmapData(path);
+		#if (target.threaded)
+		MainLoop.runInMainThread(() ->
+		{
+			@:privateAccess
+			if (bitmap.image != null)
+			{
+				bitmap.lock();
+				if (bitmap.__texture == null)
+				{
+					bitmap.image.premultiplied = true;
+					bitmap.getTexture(FlxG.stage.context3D);
+				}
+				bitmap.getSurface();
+				bitmap.disposeImage();
+				bitmap.image.data = null;
+				bitmap.image = null;
+				bitmap.readable = true;
+			}
+		});
+		#else
 		@:privateAccess
 		if (bitmap.image != null)
 		{
@@ -58,6 +79,7 @@ class Paths
 			bitmap.image = null;
 			bitmap.readable = true;
 		}
+		#end
 
 		var graphic = FlxGraphic.fromBitmapData(bitmap, false, path, false);
 		graphic.persist = true;
@@ -65,9 +87,10 @@ class Paths
 		return graphic;
 	}
 
-
-	public static function listDirectory(startPath:String,type:AssetType = null):Array<String> {
-		var dir = OpenFLAssets.list(type).filter((e)->{
+	public static function listDirectory(startPath:String, type:AssetType = null):Array<String>
+	{
+		var dir = OpenFLAssets.list(type).filter((e) ->
+		{
 			return e.startsWith(startPath);
 		});
 

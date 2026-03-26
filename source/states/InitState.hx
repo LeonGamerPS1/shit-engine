@@ -1,9 +1,15 @@
 package states;
 
 import backend.input.Controls;
+import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileCircle;
+import flixel.addons.transition.FlxTransitionableState;
+import flixel.addons.transition.TransitionData;
+import flixel.math.FlxPoint;
+import flixel.math.FlxRect;
 import lime.app.Application;
+import states.menus.TitleState;
 
-class InitState extends FlxState
+class InitState extends flixel.addons.transition.FlxTransitionableState
 {
 	override function create()
 	{
@@ -30,6 +36,20 @@ class InitState extends FlxState
 			sys.io.File.saveContent(("./logs/" + Date.now().toString()).replace(":",'-').replace(" ",'-'), txt);
 		}, false, 999);
 		#end
-		FlxG.switchState(() -> new PlayState());
+		var dia = FlxGraphic.fromClass(GraphicTransTileCircle);
+		FlxTransitionableState.defaultTransIn = new TransitionData(FADE, FlxColor.BLACK, 0.5, FlxPoint.get(0, -1), {
+			asset: dia,
+			width: 32,
+			height: 32,
+			frameRate: 122
+		}, FlxRect.get(0, 0, FlxG.width, FlxG.height), TOP);
+		FlxTransitionableState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.5, FlxPoint.get(0, 1), {
+			asset: dia,
+			width: 32,
+			height: 32,
+			frameRate: 122
+		}, FlxRect.get(0, 0, FlxG.width, FlxG.height), TOP);
+		FlxG.switchState(new states.menus.TitleState());
+		FlxG.switchState(() -> new TitleState());
 	}
 }

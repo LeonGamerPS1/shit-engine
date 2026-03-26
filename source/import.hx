@@ -1,3 +1,4 @@
+import flixel.ui.FlxBar;
 import animate.FlxAnimate;
 import backend.assets.Paths;
 import backend.gameplay.Conductor;

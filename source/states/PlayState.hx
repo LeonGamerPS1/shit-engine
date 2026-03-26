@@ -13,11 +13,11 @@ import objects.Note;
 import objects.Playfield;
 import objects.gameplay.Character;
 
-class PlayState extends FlxState
+class PlayState extends flixel.addons.transition.FlxTransitionableState
 {
 	public var playfield:Playfield;
 
-	public var song:SongChartData;
+	public static var song:SongChartData;
 	public var inst:FlxSound;
 
 	public var enemyVocals:FlxSoundGroup;
@@ -46,15 +46,17 @@ class PlayState extends FlxState
 
 	public var stageJSON:StageJSON;
 
+	
 	override public function create()
 	{
+		FlxG.sound.music.stop();
 		camHUD = new FlxCamera();
 		FlxG.cameras.add(camHUD, false);
 		loadNXScripts(Paths.listDirectory('assets/data/scripts', TEXT));
 
 		Conductor.timeChanges.resize(0);
 		super.create();
-		song = SongLoader.loadSong("bopeebo");
+		song ??= SongLoader.loadSong("bopeebo");
 		stageJSON = SongStageData.getStageJSON(song.data.stage);
 		boyfriendPosition.set(stageJSON.bfPos[0], stageJSON.bfPos[1]);
 		dadPosition.set(stageJSON.dadPos[0], stageJSON.dadPos[1]);
