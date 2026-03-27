@@ -14,6 +14,7 @@ import shaders.RGBSwap;
 	var ATLASSPARROW = "SPARROW";
 	var ATLASBTA = "FLXANIMATE";
 	var custom = "custom";
+	var SOUNDc = "sound_paths_cache";
 }
 
 typedef CacheType =
@@ -54,6 +55,7 @@ class LoadingScreen extends flixel.addons.transition.FlxTransitionableState
 			addShitToCache({assetType: SOUND, assetPath: path});
 		}
 		addShitToCache({assetType: SOUND, assetPath: 'assets/$songFolder/audio/' + song.data.characters.instPath + '.ogg'});
+		addShitToCache({assetType: SOUNDc, assetPath: 'sounds/hitsound'});
 		addShitToCache({
 			assetType: custom,
 			assetPath: null,
@@ -104,13 +106,7 @@ class LoadingScreen extends flixel.addons.transition.FlxTransitionableState
 			for (i in 0...shiToCache.length)
 			{
 				var thing = shiToCache[i];
-				switch (thing.assetType)
-				{
-					default:
-					case SOUND:
-						FlxG.sound.cache(thing.assetPath);
-						trace(thing.assetPath);
-				}
+				doShit(thing);
 				thingsComplete = i;
 			}
 		});
@@ -118,16 +114,24 @@ class LoadingScreen extends flixel.addons.transition.FlxTransitionableState
 		for (i in 0...shiToCache.length)
 		{
 			var thing = shiToCache[i];
-			switch (thing.assetType)
-			{
-				default:
-				case SOUND:
-					FlxG.sound.cache(thing.assetPath);
-					trace(thing.assetPath);
-			}
+			doShit(thing);
 			thingsComplete = i;
 		}
 		#end
+	}
+
+	function doShit(thing:CacheType)
+	{
+		trace(thing.assetPath);
+		switch (thing.assetType)
+		{
+			default:
+			case SOUND:
+				FlxG.sound.cache(thing.assetPath);
+			case SOUNDc:
+				Paths.getSound(thing.assetPath);	
+
+		}
 	}
 
 	public override function update(elapsed:Float)

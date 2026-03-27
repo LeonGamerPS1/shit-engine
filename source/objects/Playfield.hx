@@ -43,6 +43,7 @@ class Playfield extends FlxGroup
 		}
 
 		dadStrumline.isBot = true;
+		dadStrumline.visible = SaveData.currentSettings.opponentStrums;
 		dadStrumline.strums.setPosition(100, 50);
 		bfStrumline.strums.setPosition(100 + (FlxG.width / 2), 50);
 		bfStrumline.speed = dadStrumline.speed = song.data.speed;
@@ -119,13 +120,16 @@ class Playfield extends FlxGroup
 		add(shitWatermarkBG);
 		add(shitWatermark);
 
-			 time = new FlxText(4, FlxG.height - 17, 0, song.meta.data.songDisplayName + "-" + (song.diff) + " | SE " + Main.version, 16);
+		time = new FlxText(4, FlxG.height - 17, 0, song.meta.data.songDisplayName + "-" + (song.diff) + " | SE " + Main.version, 16);
 		time.setFormat(Paths.getFont("vcr"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
-		time.scrollFactor.set();
 		time.antialiasing = scoreTxt.antialiasing = true;
 		time.screenCenter(X);
 		time.y = progressBar.y + (progressBar.height / 2 - time.height / 2);
 		add(time);
+
+		for (member in members)
+			if (!(member is Strumline) && SaveData.currentSettings.hideHUD)
+				member.kill();
 
 		noteSplashes = new FlxTypedGroup<NoteSplash>();
 		add(noteSplashes);
@@ -145,7 +149,7 @@ class Playfield extends FlxGroup
 	var scoreTxt:FlxText;
 	var scoreTxtBG:FlxSprite;
 
-	public function missNote(n:Note, dir:Int,strumline)
+	public function missNote(n:Note, dir:Int, strumline)
 	{
 		health -= 0.20;
 		songScore -= 350;
@@ -230,8 +234,8 @@ class Playfield extends FlxGroup
 		dadStrumline?.beatHit();
 		bfStrumline?.beatHit();
 
-		iconP1.scale.set(1.2, 1.2);
-		iconP2.scale.set(1.2, 1.2);
+		iconP1.scale.set(1.1, 1.1);
+		iconP2.scale.set(1.1, 1.2);
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
@@ -246,7 +250,7 @@ class Playfield extends FlxGroup
 	override function update(elapsed:Float)
 	{
 		// clean this up later
-	
+
 		time.text = FlxStringUtil.formatTime(Conductor.time / 1000);
 		time.screenCenter(X);
 		if (healthBarBG.alpha != healthBar.alpha)

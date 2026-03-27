@@ -49,6 +49,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 	
 	override public function create()
 	{
+		
 		FlxG.sound.music.stop();
 		camHUD = new FlxCamera();
 		FlxG.cameras.add(camHUD, false);
@@ -195,8 +196,11 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 	public function hitNote(n:Note)
 	{
 		call('onNoteHit', [n]);
-		if (!n.strumline.isBot)
+		if (!n.strumline.isBot) {
 			playerVolume = 1;
+			if(SaveData.currentSettings.hitSounds)
+				FlxG.sound.play(Paths.getSound('sounds/hitsound'));
+			}
 		else
 			enemyVolume = 1;
 	}
