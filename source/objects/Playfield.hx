@@ -30,6 +30,7 @@ class Playfield extends FlxGroup
 	public function new(song:SongChartData, skin:String = "default", keys:Int = 4)
 	{
 		super();
+		final strumY = SaveData.currentSettings.downScroll ? FlxG.height - 150 : 50;
 		Conductor.offset = song.data.offset ?? 0;
 		Conductor.bpm = song.data.bpm;
 		dadStrumline = cast(add(new Strumline(this, skin, keys)));
@@ -44,8 +45,8 @@ class Playfield extends FlxGroup
 
 		dadStrumline.isBot = true;
 		dadStrumline.visible = SaveData.currentSettings.opponentStrums;
-		dadStrumline.strums.setPosition(100, 50);
-		bfStrumline.strums.setPosition(100 + (FlxG.width / 2), 50);
+		dadStrumline.strums.setPosition(100, strumY);
+		bfStrumline.strums.setPosition(100 + (FlxG.width / 2), strumY);
 		bfStrumline.speed = dadStrumline.speed = song.data.speed;
 		currentSong = song;
 
