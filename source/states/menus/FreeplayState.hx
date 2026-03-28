@@ -71,9 +71,9 @@ class FreeplayState extends FlxTransitionableState
 
     override function update(dT:Float) {
         if(inputSystem.UI_DOWN_P)
-            changeSelection(-1);
-        else if(inputSystem.UI_UP_P)
             changeSelection(1);
+        else if(inputSystem.UI_UP_P)
+            changeSelection(-1);
         super.update(dT);
     }
 }
