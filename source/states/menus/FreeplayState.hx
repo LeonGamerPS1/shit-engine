@@ -1,7 +1,9 @@
 package states.menus;
 
 import backend.data.WeekJsonData;
+import backend.gameplay.SongLoader;
 import objects.ui.HealthIcon;
+import states.gameplay.LoadingScreen;
 
 class FreeplayAlphabet extends Alphabet
 {
@@ -13,6 +15,7 @@ class FreeplayAlphabet extends Alphabet
 	{
 		super(0, 0, songName.toUpperCase(), true);
 		this.week = week;
+		song = songName;
 		var index:Int = week.songs.indexOf(songName);
 		icon = new HealthIcon(week.icons[index]);
 		icon.sprTracker = this;
@@ -66,14 +69,29 @@ class FreeplayState extends FlxTransitionableState
 		itemIndex = FlxMath.wrap(itemIndex + add, 0, items.length - 1);
 		item = items.members[itemIndex];
 		item.alpha = 1;
-        FlxG.sound.play(Paths.getSound('sounds/scrollMenu'));
+		FlxG.sound.play(Paths.getSound('sounds/scrollMenu'));
 	}
 
-    override function update(dT:Float) {
-        if(inputSystem.UI_DOWN_P)
-            changeSelection(1);
-        else if(inputSystem.UI_UP_P)
-            changeSelection(-1);
-        super.update(dT);
-    }
+	override function update(dT:Float)
+	{
+		if (inputSystem.UI_DOWN_P)
+			changeSelection(1);
+		else if (inputSystem.UI_UP_P)
+			changeSelection(-1);
+		if (inputSystem.ACCEPT)
+		{
+			try
+			{
+				FlxG.switchState(new LoadingScreen(item.song));
+			}
+			catch(e:Dynamic) 
+				FlxG.resetState();
+		}
+		for (i in 0...items.length)
+		{
+			var item = items.members[i];
+			item.targetY = i - itemIndex;
+		}
+		super.update(dT);
+	}
 }
