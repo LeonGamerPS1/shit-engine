@@ -82,7 +82,7 @@ class FreeplayState extends FlxTransitionableState
 		{
 			try
 			{
-				FlxG.switchState(new LoadingScreen(item.song));
+				FlxG.switchState(new LoadingScreen(item.song,null));
 			}
 			catch(e:Dynamic) 
 				FlxG.resetState();
