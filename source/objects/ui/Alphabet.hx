@@ -389,7 +389,7 @@ class Alphabet extends FlxSpriteGroup
 	}
 }
 
-class AlphaCharacter extends FlxSprite
+class AlphaCharacter extends FunkinSprite
 {
 	public static var alphabet:String = "abcdefghijklmnopqrstuvwxyz";
 
@@ -415,14 +415,14 @@ class AlphaCharacter extends FlxSprite
 
 	public function createBoldLetter(letter:String)
 	{
-		animation.addByPrefix(letter, letter.toUpperCase() + " bold", 24);
+		animation.addByPrefix(letter, letter.toUpperCase() + " bold", 24, true);
 		animation.play(letter);
 		updateHitbox();
 	}
 
 	public function createBoldNumber(letter:String):Void
 	{
-		animation.addByPrefix(letter, "bold" + letter, 24);
+		animation.addByPrefix(letter, "bold" + letter, 24, true);
 		animation.play(letter);
 		updateHitbox();
 	}

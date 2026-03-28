@@ -60,6 +60,9 @@
 
 	<!--Remove the legacy health system-->
 	<haxedef name="FLX_NO_HEALTH" />
+
+
+	<architecture name="x86" exclude="x64" if="bit32" />
 	
 	<!--Enable the Flixel core recording system-->
 	<!--<haxedef name="FLX_RECORD" />-->
@@ -72,7 +75,7 @@
 
 	<!--Optimise inputs, be careful you will get null errors if you don't use conditionals in your game-->
 	<haxedef name="FLX_NO_MOUSE" if="mobile" />
-	<haxedef name="FLX_NO_KEYBOARD" if="mobile" />
+
 	<haxedef name="FLX_NO_TOUCH" if="desktop" />
 	<!--<haxedef name="FLX_NO_GAMEPAD" />-->
 
