@@ -11,7 +11,7 @@ class FreeplayAlphabet extends Alphabet
 
 	public function new(songName:String, week:WeekJson)
 	{
-		super(0, 0, songName.toUpperCase(),true);
+		super(0, 0, songName.toUpperCase(), true);
 		this.week = week;
 		var index:Int = week.songs.indexOf(songName);
 		icon = new HealthIcon(week.icons[index]);
@@ -48,11 +48,32 @@ class FreeplayState extends FlxTransitionableState
 			for (song in week.songs)
 			{
 				var songOBJ = new FreeplayAlphabet(song, week);
+				songOBJ.alpha = 0.7;
 				items.add(songOBJ);
 				songOBJ.targetY = items.length - 1;
 				add(songOBJ.icon);
 			}
 		}
 		weeks = null;
+		changeSelection();
 	}
+
+	function changeSelection(add:Int = 0)
+	{
+		item = items.members[itemIndex];
+		item.alpha = 0.7;
+
+		itemIndex = FlxMath.wrap(itemIndex + add, 0, items.length - 1);
+		item = items.members[itemIndex];
+		item.alpha = 1;
+        FlxG.sound.play(Paths.getSound('sounds/scrollMenu'));
+	}
+
+    override function update(dT:Float) {
+        if(inputSystem.UI_DOWN_P)
+            changeSelection(-1);
+        else if(inputSystem.UI_UP_P)
+            changeSelection(1);
+        super.update(dT);
+    }
 }
