@@ -65,7 +65,7 @@ class Playfield extends FlxGroup
 		Conductor.onBeat.add(beatHit);
 		Conductor.onStep.add(stepHit);
 
-		healthBarBG = new FlxSprite(0, FlxG.height * 0.9 + 1).loadGraphic(Paths.getGraphic('healthBar'));
+		healthBarBG = new FlxSprite(0, !SaveData.currentSettings.downScroll ? FlxG.height * 0.9 + 1 : 135).loadGraphic(Paths.getGraphic('healthBar'));
 		healthBarBG.screenCenter(X);
 		add(healthBarBG);
 
@@ -132,6 +132,7 @@ class Playfield extends FlxGroup
 			if (!(member is Strumline) && SaveData.currentSettings.hideHUD)
 				member.kill();
 
+		
 		noteSplashes = new FlxTypedGroup<NoteSplash>();
 		add(noteSplashes);
 	}

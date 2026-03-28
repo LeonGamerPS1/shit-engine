@@ -33,12 +33,12 @@ class NoteSplash extends FlxSprite
 		animation.addByPrefix('note3-1', 'note impact 2 red', 24, false);
 
 		animation.play('note' + (strumNote.dir) % 4 + '-' + FlxG.random.int(0, 1), true);
-		animation.curAnim.frameRate =24+ FlxG.random.int(-5, 5);
+		animation.curAnim.frameRate = 24 + FlxG.random.int(-5, 5);
+		scale.set(2, 2);
 		updateHitbox();
-        centerOffsets();
-        centerOrigin();
-        setPosition(strumNote.x + (strumNote.width * 0.5 - width * 0.5), strumNote.y + (strumNote.height * 0.5 - height * 0.5));
-	
+		centerOffsets();
+		centerOrigin();
+		setPosition(strumNote.x + (strumNote.width * 0.5 - width * 0.5), strumNote.y + (strumNote.height * 0.5 - height * 0.5));
 	}
 
 	override function update(elapsed:Float)
