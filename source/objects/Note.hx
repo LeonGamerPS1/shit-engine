@@ -38,7 +38,7 @@ class Note extends FunkinSprite
 		this.isEndNote = isEndNote;
 		this.isSustainNote = isSusNote;
 		rgbswap = getSwapShaderForLane(lane);
-		shader = rgbswap.shader;
+		//shader = rgbswap.shader;
 
 		reload(strumline != null ? strumline.skin : 'default');
 		if (!isSustainNote)

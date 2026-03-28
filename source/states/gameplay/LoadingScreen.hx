@@ -47,14 +47,7 @@ class LoadingScreen extends flixel.addons.transition.FlxTransitionableState
 	public override function create()
 	{
 		var songFolder = song.songFolder;
-		var vocalBasePPath = '$songFolder/audio';
-		var vcsToCache = song.data.characters.enemyVocals.concat(song.data.characters.playerVocals);
-		for (vc in vcsToCache)
-		{
-			var path = 'assets/' + vocalBasePPath + '/$vc.ogg';
-			addShitToCache({assetType: SOUND, assetPath: path});
-		}
-		addShitToCache({assetType: SOUND, assetPath: 'assets/$songFolder/audio/' + song.data.characters.instPath + '.ogg'});
+		
 		addShitToCache({assetType: SOUNDc, assetPath: 'sounds/hitsound'});
 		addShitToCache({
 			assetType: custom,
@@ -100,24 +93,13 @@ class LoadingScreen extends flixel.addons.transition.FlxTransitionableState
 		// healthBar
 		insert(members.indexOf(healthBarBG), healthBar);
 
-		#if (target.threaded)
-		thread = Thread.create(() ->
-		{
-			for (i in 0...shiToCache.length)
-			{
-				var thing = shiToCache[i];
-				doShit(thing);
-				thingsComplete = i;
-			}
-		});
-		#else
 		for (i in 0...shiToCache.length)
 		{
 			var thing = shiToCache[i];
 			doShit(thing);
 			thingsComplete = i;
 		}
-		#end
+	
 	}
 
 	function doShit(thing:CacheType)

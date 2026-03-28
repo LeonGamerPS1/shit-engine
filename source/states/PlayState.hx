@@ -18,6 +18,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 	public var playfield:Playfield;
 
 	public static var song:SongChartData;
+
 	public var inst:FlxSound;
 
 	public var enemyVocals:FlxSoundGroup;
@@ -46,10 +47,8 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 
 	public var stageJSON:StageJSON;
 
-	
 	override public function create()
 	{
-		
 		FlxG.sound.music.stop();
 		camHUD = new FlxCamera();
 		FlxG.cameras.add(camHUD, false);
@@ -68,25 +67,25 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		Conductor.time = -(Conductor.beatLength * 5);
 
 		var songFolder = song.songFolder;
-		var instPath = '$songFolder/audio/${song.data.characters.instPath}.ogg';
+		var instPath = '$songFolder/audio/${song.data.characters.instPath}';
 		inst = FlxG.sound.list.add(new FlxSound());
-		inst.load(FlxG.sound.cache(Paths.getPath(instPath)));
+		inst.load(Paths.getSound(instPath,true));
 
 		enemyVocals = new FlxSoundGroup();
 		playerVocals = new FlxSoundGroup();
 
 		for (vocalEnemy in song.data.characters.enemyVocals)
 		{
-			var vocalPath = '$songFolder/audio/${vocalEnemy}.ogg';
+			var vocalPath = '$songFolder/audio/${vocalEnemy}';
 			var flxsound:FlxSound = new FlxSound();
-			flxsound.load(FlxG.sound.cache(Paths.getPath(vocalPath)));
+			flxsound.load(Paths.getSound(vocalPath),true);
 			enemyVocals.add(flxsound);
 		}
 		for (playerVocal in song.data.characters.playerVocals)
 		{
-			var vocalPath = '$songFolder/audio/${playerVocal}.ogg';
+			var vocalPath = '$songFolder/audio/${playerVocal}';
 			var flxsound:FlxSound = new FlxSound();
-			flxsound.load(FlxG.sound.cache(Paths.getPath(vocalPath)));
+			flxsound.load(Paths.getSound(vocalPath),true);
 			playerVocals.add(flxsound);
 		}
 		add(playfield = new Playfield(song));
@@ -104,7 +103,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		loadNXScript('assets/data/stages/${song.data.stage}.nx');
 		call('onCreate');
 		call('onStageLoad', [stageJSON, song.data.stage]);
-	
+
 		gfLayer = new FlxGroup();
 		dadLayer = new FlxGroup();
 		boyfriendLayer = new FlxGroup();
@@ -162,7 +161,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		if (script != null)
 			scripts.remove(hm);
 		script?.dispose();
-		if(!OpenFLAssets.exists(hm))
+		if (!OpenFLAssets.exists(hm))
 			return;
 		script = new NxScriptM(hm, hm);
 		scripts.set(hm, script);
@@ -196,11 +195,12 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 	public function hitNote(n:Note)
 	{
 		call('onNoteHit', [n]);
-		if (!n.strumline.isBot) {
+		if (!n.strumline.isBot)
+		{
 			playerVolume = 1;
-			if(SaveData.currentSettings.hitSounds)
+			if (SaveData.currentSettings.hitSounds)
 				FlxG.sound.play(Paths.getSound('sounds/hitsound'));
-			}
+		}
 		else
 			enemyVolume = 1;
 	}
@@ -264,7 +264,18 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 
 	public function focusOnChar(char:Character)
 	{
-		camtracker.setPosition(char.getGraphicMidpoint().x, char.getGraphicMidpoint().y);
+		if (char.player)
+		{
+			camtracker.setPosition(char.getMidpoint().x - 100, char.getMidpoint().y - 100);
+			camtracker.x -= char.json.cam_offset[0];
+			camtracker.y += char.json.cam_offset[1];
+		}
+		else
+		{
+			camtracker.setPosition(char.getMidpoint().x + 160, char.getMidpoint().y - 100);
+			camtracker.x += char.json.cam_offset[0];
+			camtracker.y += char.json.cam_offset[1];
+		}
 	}
 
 	public var playerVolume:Float = 1;

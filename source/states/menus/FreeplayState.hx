@@ -2,6 +2,8 @@ package states.menus;
 
 import backend.data.WeekJsonData;
 import backend.gameplay.SongLoader;
+import flixel.effects.FlxFlicker;
+import lime.app.Application;
 import objects.ui.HealthIcon;
 import states.gameplay.LoadingScreen;
 
@@ -72,20 +74,33 @@ class FreeplayState extends FlxTransitionableState
 		FlxG.sound.play(Paths.getSound('sounds/scrollMenu'));
 	}
 
+	var selected = false;
+
 	override function update(dT:Float)
 	{
-		if (inputSystem.UI_DOWN_P)
-			changeSelection(1);
-		else if (inputSystem.UI_UP_P)
-			changeSelection(-1);
-		if (inputSystem.ACCEPT)
+		if (!selected)
 		{
-			try
+			if (inputSystem.UI_DOWN_P)
+				changeSelection(1);
+			else if (inputSystem.UI_UP_P)
+				changeSelection(-1);
+			if (inputSystem.ACCEPT)
 			{
-				FlxG.switchState(new LoadingScreen(item.song,null));
+				FlxG.sound.play(Paths.getSound('sounds/confirmMenu'));
+				FlxFlicker.flicker(item,1,0.07);
+				new FlxTimer().start(1, (?t) ->
+				{
+					try
+					{
+						FlxG.switchState(new LoadingScreen(item.song, null));
+					}
+					catch (e:Dynamic)
+					{
+						FlxG.log.error(e);
+						Application.current.window.alert(e, 'error');
+					}
+				});
 			}
-			catch(e:Dynamic) 
-				FlxG.resetState();
 		}
 		for (i in 0...items.length)
 		{

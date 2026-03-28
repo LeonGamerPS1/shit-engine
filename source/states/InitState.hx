@@ -22,6 +22,7 @@ class InitState extends flixel.addons.transition.FlxTransitionableState
 			var c = Conductor;
 			for (ass in [c.onBeat, c.onMeasure, c.onStep])
 				ass.removeAll();
+			Paths.clear();
 		});
 	
 

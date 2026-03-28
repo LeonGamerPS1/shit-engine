@@ -6,6 +6,7 @@ import flixel.math.FlxMatrix;
 import haxe.MainLoop;
 import openfl.media.Sound;
 import openfl.utils.AssetType;
+import states.PlayState;
 
 class Paths
 {
@@ -44,47 +45,20 @@ class Paths
 			return null;
 
 		var bitmap = OpenFLAssets.getBitmapData(path);
-		#if (target.threaded)
-		MainLoop.runInMainThread(() ->
-		{
-			@:privateAccess
-			if (bitmap.image != null)
-			{
-				bitmap.lock();
-				if (bitmap.__texture == null)
-				{
-					bitmap.image.premultiplied = true;
-					bitmap.getTexture(FlxG.stage.context3D);
-				}
-				bitmap.getSurface();
-				bitmap.disposeImage();
-				bitmap.image.data = null;
-				bitmap.image = null;
-				bitmap.readable = true;
-			}
-		});
-		#else
-		@:privateAccess
-		if (bitmap.image != null)
-		{
-			bitmap.lock();
-			if (bitmap.__texture == null)
-			{
-				bitmap.image.premultiplied = true;
-				bitmap.getTexture(FlxG.stage.context3D);
-			}
-			bitmap.getSurface();
-			bitmap.disposeImage();
-			bitmap.image.data = null;
-			bitmap.image = null;
-			bitmap.readable = true;
-		}
-		#end
+		
+		bitmap.disposeImage();
+		
 
 		var graphic = FlxGraphic.fromBitmapData(bitmap, false, path, false);
 		graphic.persist = true;
 		cachedImages.set(path, graphic);
 		return graphic;
+	}
+
+	public static function clear() {
+		if(FlxG.state is PlayState) 
+			return;
+		clearGraphics();
 	}
 
 	public static var defaultListExludes = ['assets/data/scripts/stages'];

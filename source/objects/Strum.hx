@@ -70,7 +70,7 @@ class Strum extends FlxAnimate
 		animation.play(s, force);
 		centerOffsets();
 		centerOrigin();
-		shader = s == 'confirm' ? rgbswap.shader : null;
+		//shader = s == 'confirm' ? rgbswap.shader : null;
 	}
 
 	public var staticshader:FlxShader;
