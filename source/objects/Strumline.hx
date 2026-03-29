@@ -73,7 +73,7 @@ class Strumline extends FlxGroup
 				for (segmentID in 0...Math.floor(cock))
 				{
 					var sData = Reflect.copy(noteData);
-					sData.tms += (Conductor.stepLength * segmentID) + (Conductor.stepLength) + 10;
+					sData.tms += (Conductor.stepLength * segmentID) + (Conductor.stepLength / 2) + 10;
 					var isEnd = (segmentID) == Math.floor(cock) - 1;
 					var noteHold:Note = new Note(sData, this, true, isEnd);
 					note.children.push(noteHold);
@@ -220,8 +220,11 @@ class Strumline extends FlxGroup
 		note.x = strum.x + (strum.width * 0.5 - note.width * 0.5);
 		final distance = (note.noteData.tms - Conductor.time) * (0.45 * speed * note.multSpeed) * (strum.flipScroll ? -1 : 1);
 		note.y = strum.y + distance + note.offsetY;
-		if(strum.flipScroll && note.isSustainNote)
+		if (strum.flipScroll && note.isSustainNote)
+		{
 			note.y -= note.height;
+			note.y += Note.swag - 10;
+		}
 
 		if (!note.hit && isBot && note.noteData.tms <= Conductor.time)
 			hitNote(note);

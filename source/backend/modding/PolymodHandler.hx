@@ -35,6 +35,9 @@ class PolymodHandler
 		rules.addType('hxs', TextFileFormat.PLAINTEXT);
 		rules.addType('hxc', TextFileFormat.PLAINTEXT);
 		rules.addType('hx', TextFileFormat.PLAINTEXT);
+		rules.addType('nx', TextFileFormat.PLAINTEXT);
+		rules.addType('frag', TextFileFormat.PLAINTEXT);
+		rules.addType('vert', TextFileFormat.PLAINTEXT);
 		return rules;
 	}
 }

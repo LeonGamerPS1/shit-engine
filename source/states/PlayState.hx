@@ -53,8 +53,9 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		FlxG.sound.music.stop();
 		camHUD = new FlxCamera();
 		FlxG.cameras.add(camHUD, false);
-		loadNXScripts(Paths.listDirectory('assets/$songFolder/scripts', TEXT));
-		loadNXScripts(Paths.listDirectory('assets/data/scripts', TEXT));
+		trace('assets/$songFolder/scripts');
+		loadNXScripts(Paths.listDirectory('assets/$songFolder/scripts'));
+		loadNXScripts(Paths.listDirectory('assets/data/scripts'));
 
 		Conductor.timeChanges.resize(0);
 		super.create();
@@ -368,6 +369,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 
 	override public function update(elapsed:Float)
 	{
+		call('onUpdatePre', [elapsed]);
 		FlxG.camera.zoom = FlxMath.lerp(defaultZoomGame, FlxG.camera.zoom, 0.95);
 		camHUD.zoom = FlxMath.lerp(defaultZoomHUD, camHUD.zoom, 0.95);
 		enemyVocals.volume = enemyVolume * inst.getActualVolume();
@@ -390,7 +392,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 			{
 				if (!vocalSFX.playing || !inst.playing)
 					continue;
-				if (Math.abs(Conductor.time - inst.time) > 10)
+				if (Math.abs(vocalSFX.time - inst.time) > 10)
 					vocalSFX.time = Conductor.time;
 			}
 		}
@@ -407,7 +409,8 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 				onEventTrigger(event);
 			}
 		}
-
+		call('onUpdate', [elapsed]);
 		super.update(elapsed);
+		call('onUpdatePost', [elapsed]);
 	}
 }
