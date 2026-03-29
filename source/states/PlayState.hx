@@ -101,6 +101,14 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		{
 			sectionHit();
 		});
+		Conductor.onBeat.add((e) ->
+		{
+			beatHit();
+		});
+		Conductor.onStep.add((e) ->
+		{
+			stepHit();
+		});
 		loadNXScript('assets/data/stages/${song.data.stage}.nx');
 		call('onCreate');
 		call('onStageLoad', [stageJSON, song.data.stage]);
@@ -325,6 +333,17 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 	{
 		FlxG.camera.zoom += 0.015 * camBopMult;
 		camHUD.zoom += 0.03 * hudBopMult;
+		call('sectionHit', [Math.floor(Conductor.curSection)]);
+	}
+
+	public function beatHit()
+	{
+		call('beatHit', [Math.floor(Conductor.curBeat)]);
+	}
+
+	public function stepHit()
+	{
+		call('stepHit', [Math.floor(Conductor.curStep)]);
 	}
 
 	public function startSong()
