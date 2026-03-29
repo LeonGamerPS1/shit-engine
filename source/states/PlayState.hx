@@ -49,9 +49,11 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 
 	override public function create()
 	{
+		final songFolder = song.songFolder;
 		FlxG.sound.music.stop();
 		camHUD = new FlxCamera();
 		FlxG.cameras.add(camHUD, false);
+		loadNXScripts(Paths.listDirectory('assets/$songFolder/scripts', TEXT));
 		loadNXScripts(Paths.listDirectory('assets/data/scripts', TEXT));
 
 		Conductor.timeChanges.resize(0);
@@ -66,10 +68,9 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		Conductor.bpm = song.data.bpm;
 		Conductor.time = -(Conductor.beatLength * 5);
 
-		var songFolder = song.songFolder;
 		var instPath = '$songFolder/audio/${song.data.characters.instPath}';
 		inst = FlxG.sound.list.add(new FlxSound());
-		inst.load(Paths.getSound(instPath,true));
+		inst.load(Paths.getSound(instPath, true));
 
 		enemyVocals = new FlxSoundGroup();
 		playerVocals = new FlxSoundGroup();
@@ -78,14 +79,14 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		{
 			var vocalPath = '$songFolder/audio/${vocalEnemy}';
 			var flxsound:FlxSound = new FlxSound();
-			flxsound.load(Paths.getSound(vocalPath),true);
+			flxsound.load(Paths.getSound(vocalPath), true);
 			enemyVocals.add(flxsound);
 		}
 		for (playerVocal in song.data.characters.playerVocals)
 		{
 			var vocalPath = '$songFolder/audio/${playerVocal}';
 			var flxsound:FlxSound = new FlxSound();
-			flxsound.load(Paths.getSound(vocalPath),true);
+			flxsound.load(Paths.getSound(vocalPath), true);
 			playerVocals.add(flxsound);
 		}
 		add(playfield = new Playfield(song));
