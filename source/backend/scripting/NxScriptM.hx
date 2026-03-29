@@ -5,6 +5,7 @@ import nx.bridge.NxStd;
 import nx.script.Bytecode.Value;
 import nx.script.Interpreter;
 import nx.script.SyntaxRules;
+import shaders.RuntimeShader;
 
 class NxScriptM
 {
@@ -25,6 +26,9 @@ class NxScriptM
 		setVariable('FlxSprite', VNativeObject(FlxSprite), false);
 		setVariable('FunkinSprite', VNativeObject(FunkinSprite), false);
 		setVariable('FlxG', VNativeObject(FlxSprite), false);
+		setFunction('createShader',(n:String,?glVersion:Int)->{
+			return new RuntimeShader(n);
+		});
 
 		interp.runFile(path);
 

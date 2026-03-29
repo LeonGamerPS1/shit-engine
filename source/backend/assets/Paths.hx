@@ -45,9 +45,8 @@ class Paths
 			return null;
 
 		var bitmap = OpenFLAssets.getBitmapData(path);
-		
+
 		bitmap.disposeImage();
-		
 
 		var graphic = FlxGraphic.fromBitmapData(bitmap, false, path, false);
 		graphic.persist = true;
@@ -55,14 +54,16 @@ class Paths
 		return graphic;
 	}
 
-	public static function clear() {
-		if(FlxG.state is PlayState) 
+	public static function clear()
+	{
+		if (FlxG.state is PlayState)
 			return;
 		clearGraphics();
 	}
 
 	public static var defaultListExludes = ['assets/data/scripts/stages'];
-	public static function listDirectory(startPath:String, type:AssetType = null,?excludes:Array<String>):Array<String>
+
+	public static function listDirectory(startPath:String, type:AssetType = null, ?excludes:Array<String>):Array<String>
 	{
 		excludes ??= defaultListExludes;
 		var dir = OpenFLAssets.list(type).filter((e) ->
@@ -80,7 +81,7 @@ class Paths
 		if (cachedSounds.exists(path))
 			return cachedSounds.get(path);
 
-		if (!OpenFLAssets.exists(path,SOUND))
+		if (!OpenFLAssets.exists(path, SOUND))
 			return getSound('sounds/beep', stream, OGG);
 
 		var sound:Sound = #if FLX_STREAM_SOUND stream ? FlxG.assets.streamSound(path) : #end
@@ -162,6 +163,34 @@ class Paths
 		}
 		stringList.sort(Reflect.compare);
 		return stringList;
+	}
+
+	public static function fragShader(shaderName:String)
+	{
+		var path = getPath('shaders/$shaderName.frag');
+		return path;
+	}
+
+	public static function vertShader(shaderName:String)
+	{
+		var path = getPath('shaders/$shaderName.vert');
+		return path;
+	}
+
+	public static function GetVertShader(shaderName:String):String
+	{
+		if (!SaveData.currentSettings.enableShaders)
+			return null;
+		var path = vertShader(shaderName);
+		return FlxG.assets.getText(path, false);
+	}
+
+	public static function GetFragShader(shaderName:String):String
+	{
+		if (!SaveData.currentSettings.enableShaders)
+			return null;
+		var path = fragShader(shaderName);
+		return FlxG.assets.getText(path, false);
 	}
 }
 
