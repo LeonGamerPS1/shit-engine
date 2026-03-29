@@ -9,6 +9,7 @@ typedef Sskindat =
 	var antialiasing:Bool;
 	var name:String;
 	@:optional var enableRGB:Bool;
+	@:optional var splashScale:Float;
 }
 
 class NoteSkin
@@ -32,9 +33,6 @@ class NoteSkin
 		0.97, // 5K
 		0.9 // 6K
 	];
-
-	
-
 
 	public static function getSkin(skin:String):Sskindat
 	{

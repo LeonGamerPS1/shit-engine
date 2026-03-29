@@ -35,6 +35,8 @@ class NoteSplash extends FlxSprite
 		animation.play('note' + (strumNote.dir) % 4 + '-' + FlxG.random.int(0, 1), true);
 		animation.curAnim.frameRate = 24 + FlxG.random.int(-5, 5);
 		scale.set(2, 2);
+		if(strumNote.tempskin.splashScale != null)
+			scale.set(strumNote.tempskin.splashScale,strumNote.tempskin.splashScale);
 		updateHitbox();
 		centerOffsets();
 		centerOrigin();

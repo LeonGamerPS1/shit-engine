@@ -1,0 +1,8 @@
+{
+  "scale": 6,
+  "splashScale":6,
+  "antialiasing": false,
+  "image": "NOTE_assets",
+  "splashImage": "NOTE_splashes",
+  "fallback": "default"
+}
