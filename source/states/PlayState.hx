@@ -143,6 +143,8 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		events.sort((e, e2) -> return e.t - e2.t);
 		startCallback();
 
+		focusOnChar(dad);
+		camGame.snapToTarget();
 		call('onCreatePost');
 		super.create();
 	}
@@ -198,7 +200,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		if (!n.strumline.isBot)
 		{
 			playerVolume = 1;
-			if (SaveData.currentSettings.hitSounds)
+			if (SaveData.currentSettings.hitSounds && !n.isSustainNote)
 				FlxG.sound.play(Paths.getSound('sounds/hitsound'));
 		}
 		else

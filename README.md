@@ -14,3 +14,4 @@
 - MaybeMaru - FlixelAnimate - flixel-animate library, huge thanks to you I can make the game run faster lol
 - @senioritaelizabeth - [NxScript](https://github.com/Kitsumizy/NxScript) 
 - @CCobaltDev - HXPKG haxelib
+- @Vortex2Oblivion - HXHardware haxelib

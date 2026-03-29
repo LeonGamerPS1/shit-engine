@@ -1,6 +1,7 @@
 package states;
 
 import backend.input.Controls;
+import backend.modding.PolymodHandler;
 import backend.settings.SaveData;
 import flixel.addons.transition.FlxTransitionSprite.GraphicTransTileCircle;
 import flixel.addons.transition.FlxTransitionableState;
@@ -15,6 +16,7 @@ class InitState extends flixel.addons.transition.FlxTransitionableState
 	override function create()
 	{
 		SaveData.init();
+		PolymodHandler.init();
 		Controls.init();
 		FlxG.cameras.useBufferLocking = true;
 		FlxG.signals.preStateSwitch.add(() ->

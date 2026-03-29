@@ -46,6 +46,7 @@
 	<haxelib name="flixel-animate"/>
 	<haxelib name="flixel-addons"/>
 	<haxelib name="nxscript"/>
+	<haxelib name="polymod"/>
 	<haxedev set='webgl' />
 	<!--In case you want to use the addons package-->
 	<!--<haxelib name="flixel-addons" />-->

@@ -73,11 +73,10 @@ class Strumline extends FlxGroup
 				for (segmentID in 0...Math.floor(cock))
 				{
 					var sData = Reflect.copy(noteData);
-					sData.tms += (Conductor.stepLength * segmentID) + 10;
+					sData.tms += (Conductor.stepLength * segmentID) + (Conductor.stepLength) + 10;
 					var isEnd = (segmentID) == Math.floor(cock) - 1;
 					var noteHold:Note = new Note(sData, this, true, isEnd);
 					note.children.push(noteHold);
-					noteHold.offsetY = note.height / 2;
 					unspawnedNotes.push(noteHold);
 					noteHold.setPosition(-5000, -5000);
 					noteHold.parentNote = note;

@@ -45,6 +45,31 @@
 			{
 				"name": "prismcli",
 				"link": "https://github.com/CCobaltDev/PrismCLI"
+			},
+			{
+				"name": "hxhardware",
+				"link": "https://github.com/Vortex2Oblivion/hxhardware"
+			},
+			{
+				"name": "polymod",
+				"link": "https://github.com/FunkinCrew/polymod",
+				"branch": "experimental"
+			},
+			{
+				"name": "thx.semver",
+				"link": "https://github.com/fponticelli/thx.semver"
+			},
+			{
+				"name": "jsonpatch",
+				"link": "https://github.com/EliteMasterEric/jsonpatch"
+			},
+			{
+				"name": "jsonpath",
+				"link": "https://github.com/EliteMasterEric/jsonpath"
+			},
+			{
+				"name": "thx.core",
+				"link": "https://github.com/fponticelli/thx.core"
 			}
 		]
 	}
