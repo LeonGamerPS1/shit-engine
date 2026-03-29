@@ -90,7 +90,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 			flxsound.load(Paths.getSound(vocalPath), true);
 			playerVocals.add(flxsound);
 		}
-		add(playfield = new Playfield(song));
+		add(playfield = new Playfield(song,song.data.noteStyle));
 		playfield.cameras = [camHUD];
 		camGame.bgColor = 0xFF676767;
 		for (strumLines in [playfield.dadStrumline, playfield.bfStrumline])
@@ -392,7 +392,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 			{
 				if (!vocalSFX.playing || !inst.playing)
 					continue;
-				if (Math.abs(vocalSFX.time - inst.time) > 10)
+				if (Math.abs(Conductor.time - vocalSFX.time) > 20)
 					vocalSFX.time = Conductor.time;
 			}
 		}
