@@ -1,9 +1,11 @@
 package states.menus;
+
 import flixel.addons.transition.FlxTransitionableState;
 import states.options.*;
+
 class OptionsState extends FlxTransitionableState
 {
-	var categories = ['visuals and ui','gameplay'];
+	var categories = ['visuals and ui', 'gameplay'];
 	var curSelected:Alphabet;
 	var itemIndex:Int = 0;
 	var itemGroup:FlxTypedGroup<Alphabet> = new FlxTypedGroup<Alphabet>();
@@ -18,9 +20,9 @@ class OptionsState extends FlxTransitionableState
 
 		for (catName in categories)
 		{
-			var text:Alphabet = new Alphabet(0, 55, catName, true,false);
+			var text:Alphabet = new Alphabet(0, 55, catName, true, false);
 			text.y += (100 * itemGroup.length);
-            text.x = -FlxG.width / 2;
+			text.x = -FlxG.width / 2;
 			text.antialiasing = true;
 			itemGroup.add(text);
 		}
@@ -57,8 +59,10 @@ class OptionsState extends FlxTransitionableState
 			FlxG.sound.play(Paths.getSound("sounds/confirmMenu"));
 			switch (categories[itemIndex])
 			{
-                default:
+				default:
 					FlxG.resetState();
+				case 'gameplay':
+					FlxG.switchState(new states.options.Gameplay());
 				case "visuals and ui":
 					FlxG.switchState(new states.options.UI_and_Looks());
 			}
