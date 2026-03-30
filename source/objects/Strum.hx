@@ -34,11 +34,12 @@ class Strum extends FlxAnimate
 	public function applySkinRaw(tempskin:Sskindat, keys:Int = 4)
 	{
 		frames = Paths.getSparrowAtlas('noteskins/${tempskin.name}/${tempskin.image}');
+		var fps = tempskin.fps ?? 24;
 		var direction:String = NoteSkin.strumDirections[keys - 1][dir];
-		animation.addByPrefix("static", 'arrow${direction.toUpperCase()}', 24, true);
+		animation.addByPrefix("static", 'arrow${direction.toUpperCase()}', fps, true);
 
-		animation.addByPrefix("confirm", direction + ' confirm', 24, false);
-		animation.addByPrefix("press", direction + ' press', 24, false);
+		animation.addByPrefix("confirm", direction + ' confirm', fps, false);
+		animation.addByPrefix("press", direction + ' press', fps, false);
 		scale.set(tempskin.scale, tempskin.scale);
 		updateHitbox();
 

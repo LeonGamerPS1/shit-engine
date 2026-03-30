@@ -4,5 +4,6 @@
   "antialiasing": false,
   "image": "NOTE_assets",
   "splashImage": "NOTE_splashes",
-  "fallback": "default"
+  "fallback": "default",
+  "fps":12
 }

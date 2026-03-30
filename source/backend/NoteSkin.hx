@@ -10,6 +10,7 @@ typedef Sskindat =
 	var name:String;
 	@:optional var enableRGB:Bool;
 	@:optional var splashScale:Float;
+	@:optional var fps:Int;
 }
 
 class NoteSkin

@@ -19,7 +19,7 @@ class InitState extends flixel.addons.transition.FlxTransitionableState
 		PolymodHandler.init();
 		Controls.init();
 		FlxG.cameras.useBufferLocking = true;
-		FlxG.signals.preStateSwitch.add(() ->
+		FlxG.signals.preStateCreate.add((s) ->
 		{
 			var c = Conductor;
 			for (ass in [c.onBeat, c.onMeasure, c.onStep])

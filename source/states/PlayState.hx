@@ -12,6 +12,7 @@ import nx.script.NativeProxy;
 import objects.Note;
 import objects.Playfield;
 import objects.gameplay.Character;
+import states.menus.MainMenuState;
 
 class PlayState extends flixel.addons.transition.FlxTransitionableState
 {
@@ -90,7 +91,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 			flxsound.load(Paths.getSound(vocalPath), true);
 			playerVocals.add(flxsound);
 		}
-		add(playfield = new Playfield(song,song.data.noteStyle));
+		add(playfield = new Playfield(song, song.data.noteStyle));
 		playfield.cameras = [camHUD];
 		camGame.bgColor = 0xFF676767;
 		for (strumLines in [playfield.dadStrumline, playfield.bfStrumline])
@@ -340,6 +341,13 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 	public function beatHit()
 	{
 		call('beatHit', [Math.floor(Conductor.curBeat)]);
+		for (vocalSFX in playerVocals.sounds.concat(enemyVocals.sounds))
+		{
+			if (!vocalSFX.playing || !inst.playing)
+				continue;
+			if (Math.abs(Conductor.time - vocalSFX.time) > 40)
+				vocalSFX.time = Conductor.time;
+		}
 	}
 
 	public function stepHit()
@@ -351,6 +359,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 	{
 		startedSong = true;
 		inst.play();
+		inst.onComplete = onEndSong;
 		playfield.progressBar.setRange(0, inst.length);
 		FlxTween.tween(playfield.progressBar, {alpha: 1}, Conductor.beatLength / 1000);
 		for (shit in playerVocals.sounds.concat(enemyVocals.sounds))
@@ -388,13 +397,6 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		else
 		{
 			Conductor.time = inst.time;
-			for (vocalSFX in playerVocals.sounds.concat(enemyVocals.sounds))
-			{
-				if (!vocalSFX.playing || !inst.playing)
-					continue;
-				if (Math.abs(Conductor.time - vocalSFX.time) > 20)
-					vocalSFX.time = Conductor.time;
-			}
 		}
 
 		if (events.length > 0)
@@ -412,5 +414,20 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		call('onUpdate', [elapsed]);
 		super.update(elapsed);
 		call('onUpdatePost', [elapsed]);
+	}
+
+	public function onEndSong()
+	{
+		var val = call('onEndSong');
+		if (val == 'stop')
+			return;
+		endSong();
+	}
+
+	public function endSong()
+	{
+		call('destroy');
+		call('endSong');
+		FlxG.switchState(new states.menus.FreeplayState());
 	}
 }

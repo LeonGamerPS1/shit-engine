@@ -28,6 +28,7 @@ class Paths
 			img = null;
 		}
 		cachedImages.clear();
+		 FlxG.bitmap.clearCache();
 	}
 
 	public static inline function getPath(path:String)

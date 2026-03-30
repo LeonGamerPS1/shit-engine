@@ -76,7 +76,7 @@ class Note extends FunkinSprite
 		if (isSustainNote && !isEndNote)
 		{
 			scale.y = (63 / frameHeight) * 0.7;
-			scale.y *= Conductor.stepLength / 100 * 1.027 * strumline.speed;
+			scale.y *= Conductor.stepLength / 100 * 1.026 * strumline.speed;
 			updateHitbox();
 			earlyHitMult = 0;
 		}
