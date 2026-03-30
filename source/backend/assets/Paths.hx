@@ -28,7 +28,17 @@ class Paths
 			img = null;
 		}
 		cachedImages.clear();
-		 FlxG.bitmap.clearCache();
+		for (atlas in cachedAtlases)
+			atlas.destroy();
+		cachedAtlases.clear();
+
+		for (sound=>sound2 in cachedSounds)
+		{
+			OpenFLAssets.cache.removeSound(sound);
+			FlxG.sound.
+		}
+		cachedAtlases.clear();
+		FlxG.bitmap.clearCache();
 	}
 
 	public static inline function getPath(path:String)
