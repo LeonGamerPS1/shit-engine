@@ -32,12 +32,6 @@ class Paths
 			atlas.destroy();
 		cachedAtlases.clear();
 
-		for (sound=>sound2 in cachedSounds)
-		{
-			OpenFLAssets.cache.removeSound(sound);
-			FlxG.sound.
-		}
-		cachedAtlases.clear();
 		FlxG.bitmap.clearCache();
 	}
 
@@ -70,6 +64,11 @@ class Paths
 		if (FlxG.state is PlayState)
 			return;
 		clearGraphics();
+		for (sound => sound2 in cachedSounds)
+		{
+			OpenFLAssets.cache.removeSound(sound);
+		}
+		cachedSounds.clear();
 	}
 
 	public static var defaultListExludes = ['assets/data/scripts/stages'];
