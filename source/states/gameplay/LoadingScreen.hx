@@ -104,7 +104,6 @@ class LoadingScreen extends flixel.addons.transition.FlxTransitionableState
 
 	function doShit(thing:CacheType)
 	{
-		trace(thing.assetPath);
 		switch (thing.assetType)
 		{
 			default:
@@ -119,8 +118,6 @@ class LoadingScreen extends flixel.addons.transition.FlxTransitionableState
 	public override function update(elapsed:Float)
 	{
 		thingsCompleteLerp = FlxMath.lerp(thingsComplete, thingsCompleteLerp, Math.exp(-elapsed * 10));
-		trace(shiToCache.length);
-		trace(thingsCompleteLerp);
 		if (Math.abs((shiToCache.length - 1) - thingsComplete) < 0.1)
 		{ // close enough
 			thingsCompleteLerp = thingsComplete; // snap to target

@@ -54,7 +54,6 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		FlxG.sound.music.stop();
 		camHUD = new FlxCamera();
 		FlxG.cameras.add(camHUD, false);
-		trace('assets/$songFolder/scripts');
 		loadNXScripts(Paths.listDirectory('assets/$songFolder/scripts'));
 		loadNXScripts(Paths.listDirectory('assets/data/scripts'));
 
@@ -371,7 +370,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		startedCountdown = true;
 		startTimer = new FlxTimer().start(Conductor.beatLength / 1000, (t) ->
 		{
-			trace(t.loopsLeft);
+
 		}, 4);
 		startTimer.active = true;
 	}

@@ -89,7 +89,6 @@ class Strumline extends FlxGroup
 			return Math.floor(n1.noteData.tms - n2.noteData.tms);
 		});
 		Conductor.bpm = oldbpm;
-		trace('generating notes. for dad? ${isBot}. Amount? around ${unspawnedNotes.length} Notes including holds.');
 	}
 
 	public function killNote(note:Note)

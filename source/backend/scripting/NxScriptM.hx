@@ -32,7 +32,7 @@ class NxScriptM
 
 		interp.runFile(path);
 
-		trace('loaded script $path');
+	
 	}
 
 	public function get(vari:String)
