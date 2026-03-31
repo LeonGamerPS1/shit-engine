@@ -23,17 +23,8 @@ class SongLoader
 
 		songDataOBJ = SongChartData.frompath(Paths.getPath('$songFolder/charts/$songDifficulty.json'), null, true);
 		songDataOBJ.meta = songMetaData;
-        // preload audios lol
-        var instPath = '$songFolder/audio/${songDataOBJ.data.characters.instPath}.ogg';
-        FlxG.sound.cache(Paths.getPath(instPath));
-        var vocalBasePPath = '$songFolder/audio';
-		songDataOBJ.songFolder = songFolder;
-        var vcsToCache = songDataOBJ.data.characters.enemyVocals.concat(songDataOBJ.data.characters.playerVocals);
-        for(vc in vcsToCache)
-        {
-            var path = vocalBasePPath + '/$vc.ogg';
-            FlxG.sound.cache(Paths.getPath(path));
-        }
+        // for  audios lol
+        songDataOBJ.songFolder = songFolder;
 		songDataOBJ.diff = songDifficulty;
 		return songDataOBJ;
 	}

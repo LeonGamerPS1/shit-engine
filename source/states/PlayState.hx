@@ -51,7 +51,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 	override public function create()
 	{
 		final songFolder = song.songFolder;
-		FlxG.sound.music.stop();
+		FlxG.sound.music?.stop();
 		camHUD = new FlxCamera();
 		FlxG.cameras.add(camHUD, false);
 		loadNXScripts(Paths.listDirectory('assets/$songFolder/scripts'));
@@ -71,7 +71,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 
 		var instPath = '$songFolder/audio/${song.data.characters.instPath}';
 		inst = FlxG.sound.list.add(new FlxSound());
-		inst.load(Paths.getSound(instPath, true));
+		inst.load(Paths.getSound(instPath, true),false);
 
 		enemyVocals = new FlxSoundGroup();
 		playerVocals = new FlxSoundGroup();
@@ -80,14 +80,14 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		{
 			var vocalPath = '$songFolder/audio/${vocalEnemy}';
 			var flxsound:FlxSound = new FlxSound();
-			flxsound.load(Paths.getSound(vocalPath), true);
+			flxsound.load(Paths.getSound(vocalPath,true), false);
 			enemyVocals.add(flxsound);
 		}
 		for (playerVocal in song.data.characters.playerVocals)
 		{
 			var vocalPath = '$songFolder/audio/${playerVocal}';
 			var flxsound:FlxSound = new FlxSound();
-			flxsound.load(Paths.getSound(vocalPath), true);
+			flxsound.load(Paths.getSound(vocalPath,true), false);
 			playerVocals.add(flxsound);
 		}
 		add(playfield = new Playfield(song, song.data.noteStyle));
@@ -342,7 +342,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		call('beatHit', [Math.floor(Conductor.curBeat)]);
 		for (vocalSFX in playerVocals.sounds.concat(enemyVocals.sounds))
 		{
-			if (!vocalSFX.playing || !inst.playing)
+			if (!vocalSFX.playing || !inst.playing || Math.floor(Conductor.curBeat) % 2 != 0)
 				continue;
 			if (Math.abs(Conductor.time - vocalSFX.time) > 40)
 				vocalSFX.time = Conductor.time;
