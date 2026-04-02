@@ -73,7 +73,7 @@ class Note extends FunkinSprite
 
 		updateHitbox();
 		alpha = isSustainNote && !SaveData.currentSettings.opaqueSustains ? 0.6 : 1;
-		if (isSustainNote && !isEndNote)
+		if (isSustainNote)
 		{
 			scale.y = (63 / frameHeight) * 0.7;
 			scale.y = ((Conductor.stepLength * 0.45 * (strumline?.speed ?? 1)) / frameHeight);

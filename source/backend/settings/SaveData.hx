@@ -15,6 +15,7 @@ class OptionSaveData
 	//gameplay
     public var downScroll:Bool = false;
 	public var enableShaders:Bool = true;
+	public var sustainsBehind:Bool = false;
 
 	// sfx
 	public var hitSounds:Bool = false;

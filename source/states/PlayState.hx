@@ -26,7 +26,9 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 	public var playerVocals:FlxSoundGroup;
 
 	public var camGame(get, null):FlxCamera;
+	public var camUnderlay:FlxCamera;
 	public var camHUD:FlxCamera;
+	public var camOverlay:FlxCamera;
 
 	// enemy
 	public var dadLayer:FlxGroup;
@@ -52,8 +54,12 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 	{
 		final songFolder = song.songFolder;
 		FlxG.sound.music?.stop();
+		camUnderlay = new FlxCamera();
+		FlxG.cameras.add(camUnderlay, false);
 		camHUD = new FlxCamera();
 		FlxG.cameras.add(camHUD, false);
+		camOverlay = new FlxCamera();
+		FlxG.cameras.add(camOverlay, false);
 		loadNXScripts(Paths.listDirectory('assets/$songFolder/scripts'));
 		loadNXScripts(Paths.listDirectory('assets/data/scripts'));
 
@@ -71,7 +77,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 
 		var instPath = '$songFolder/audio/${song.data.characters.instPath}';
 		inst = FlxG.sound.list.add(new FlxSound());
-		inst.load(Paths.getSound(instPath, true),false);
+		inst.load(Paths.getSound(instPath, true), false);
 
 		enemyVocals = new FlxSoundGroup();
 		playerVocals = new FlxSoundGroup();
@@ -80,14 +86,14 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		{
 			var vocalPath = '$songFolder/audio/${vocalEnemy}';
 			var flxsound:FlxSound = new FlxSound();
-			flxsound.load(Paths.getSound(vocalPath,true), false);
+			flxsound.load(Paths.getSound(vocalPath, true), false);
 			enemyVocals.add(flxsound);
 		}
 		for (playerVocal in song.data.characters.playerVocals)
 		{
 			var vocalPath = '$songFolder/audio/${playerVocal}';
 			var flxsound:FlxSound = new FlxSound();
-			flxsound.load(Paths.getSound(vocalPath,true), false);
+			flxsound.load(Paths.getSound(vocalPath, true), false);
 			playerVocals.add(flxsound);
 		}
 		add(playfield = new Playfield(song, song.data.noteStyle));
@@ -156,6 +162,11 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		focusOnChar(dad);
 		camGame.snapToTarget();
 		call('onCreatePost');
+
+		if(SaveData.currentSettings.sustainsBehind)
+			for(note in playfield.bfStrumline.unspawnedNotes.concat(playfield.dadStrumline.unspawnedNotes))
+				if(note.isSustainNote)
+					note.cameras = [camUnderlay];
 		super.create();
 	}
 
@@ -368,10 +379,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 	public function startCountdown()
 	{
 		startedCountdown = true;
-		startTimer = new FlxTimer().start(Conductor.beatLength / 1000, (t) ->
-		{
-
-		}, 4);
+		startTimer = new FlxTimer().start(Conductor.beatLength / 1000, (t) -> {}, 4);
 		startTimer.active = true;
 	}
 
@@ -380,6 +388,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		call('onUpdatePre', [elapsed]);
 		FlxG.camera.zoom = FlxMath.lerp(defaultZoomGame, FlxG.camera.zoom, 0.95);
 		camHUD.zoom = FlxMath.lerp(defaultZoomHUD, camHUD.zoom, 0.95);
+		camUnderlay.zoom = camHUD.zoom;
 		enemyVocals.volume = enemyVolume * inst.getActualVolume();
 		playerVocals.volume = playerVolume * inst.getActualVolume();
 		inst.volume = FlxG.sound.volume > 0 ? 1 : 0;
