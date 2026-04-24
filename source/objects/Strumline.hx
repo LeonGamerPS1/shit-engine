@@ -204,7 +204,14 @@ class Strumline extends FlxGroup
 			if (note.noteData.lms > 0 && !note.isSustainNote)
 				strum.cover.playAnim('start');
 			if (note.isEndNote)
-				strum.cover.playAnim('end');
+			{
+				if (!isBot) 
+					strum.cover.playAnim('end');
+				else
+					strum.cover.visible = false;
+				strum.playAnim(isBot ? 'static' : 'press');
+				note.visible = false;
+			}
 		}
 		if (isBot)
 			strum.rT = strum.animation.curAnim.numFrames / strum.animation.curAnim.frameRate;

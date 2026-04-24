@@ -84,10 +84,14 @@ class FreeplayState extends FlxTransitionableState
 				changeSelection(1);
 			else if (inputSystem.UI_UP_P)
 				changeSelection(-1);
-			if (inputSystem.ACCEPT)
+			else if (inputSystem.BACK)
+			{
+				FlxG.switchState(new MainMenuState());
+			}
+			else if (inputSystem.ACCEPT)
 			{
 				FlxG.sound.play(Paths.getSound('sounds/confirmMenu'));
-				FlxFlicker.flicker(item,1,0.07);
+				FlxFlicker.flicker(item, 1, 0.07);
 				new FlxTimer().start(1, (?t) ->
 				{
 					try

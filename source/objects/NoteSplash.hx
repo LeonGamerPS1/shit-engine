@@ -18,7 +18,6 @@ class NoteSplash extends FlxSprite
 	public function setupNoteSplash(strumNote:Strum)
 	{
 		setPosition(strumNote.x, strumNote.y);
-		alpha = 0.6;
 		frames = Paths.getSparrowAtlas('noteskins/${strumNote.lastSkin}/${strumNote.tempskin.splashImage}');
 		if (frames == null)
 			frames = Paths.getSparrowAtlas('noteskins/default/noteSplashes');

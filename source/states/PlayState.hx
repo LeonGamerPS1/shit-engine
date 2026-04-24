@@ -163,10 +163,12 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		camGame.snapToTarget();
 		call('onCreatePost');
 
-		if(SaveData.currentSettings.sustainsBehind)
-			for(note in playfield.bfStrumline.unspawnedNotes.concat(playfield.dadStrumline.unspawnedNotes))
-				if(note.isSustainNote)
+		if (SaveData.currentSettings.sustainsBehind)
+			for (note in playfield.bfStrumline.unspawnedNotes.concat(playfield.dadStrumline.unspawnedNotes))
+				if (note.isSustainNote)
 					note.cameras = [camUnderlay];
+		playfield.iconP1.changeIcon(bf.json.icon);
+		playfield.iconP2.changeIcon(dad.json.icon);
 		super.create();
 	}
 
@@ -248,6 +250,8 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 			var oldchar = charOBJ.curCharacter;
 			charOBJ.loadJson(charname ?? charOBJ.curCharacter);
 			charOBJ.loadJson(oldchar);
+			playfield.iconP1.changeIcon(bf.json.icon);
+			playfield.iconP2.changeIcon(dad.json.icon);
 		}
 	}
 

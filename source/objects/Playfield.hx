@@ -236,11 +236,15 @@ class Playfield extends FlxGroup
 		dadStrumline?.beatHit();
 		bfStrumline?.beatHit();
 
-		iconP1.scale.set(1.1, 1.1);
-		iconP2.scale.set(1.1, 1.2);
+		iconP1.scale.set(1.2, 1.2);
+		iconP2.scale.set(1.2, 1.2);
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
+		for(icon in [iconP1,iconP2]) {
+			FlxTween.cancelTweensOf(icon.scale);
+			FlxTween.tween(icon.scale,{x:1,y:1},0.2);
+		}
 	}
 
 	public function stepHit(step:Float)
@@ -262,10 +266,10 @@ class Playfield extends FlxGroup
 		FlxTween.cancelTweensOf(this, ["curHealth"]);
 		FlxTween.tween(this, {curHealth: health}, 0.2);
 		super.update(elapsed);
-		var scaleP1 = FlxMath.lerp(1, iconP1.scale.x, Math.exp(-elapsed * 8));
-		var scaleP2 = FlxMath.lerp(1, iconP2.scale.x, Math.exp(-elapsed * 8));
-		iconP1.scale.set(scaleP1, scaleP1);
-		iconP2.scale.set(scaleP2, scaleP2);
+		//var scaleP1 = FlxMath.lerp(1, iconP1.scale.x, Math.exp(-elapsed * 8));
+		//var scaleP2 = FlxMath.lerp(1, iconP2.scale.x, Math.exp(-elapsed * 8));
+		//iconP1.scale.set(scaleP1, scaleP1);
+		//iconP2.scale.set(scaleP2, scaleP2);
 
 		var scoreTextText = "Score:"
 			+ songScore
@@ -292,6 +296,8 @@ class Playfield extends FlxGroup
 
 		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
 		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
+			iconP1.y = healthBar.y - (iconP1.height / 2);
+				iconP2.y = healthBar.y - (iconP2.height / 2);
 
 		if (health > 2)
 			health = 2;
