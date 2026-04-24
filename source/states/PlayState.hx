@@ -86,14 +86,14 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		{
 			var vocalPath = '$songFolder/audio/${vocalEnemy}';
 			var flxsound:FlxSound = new FlxSound();
-			flxsound.load(Paths.getSound(vocalPath, true), false);
+			flxsound.load(Paths.getSound(vocalPath, false), false);
 			enemyVocals.add(flxsound);
 		}
 		for (playerVocal in song.data.characters.playerVocals)
 		{
 			var vocalPath = '$songFolder/audio/${playerVocal}';
 			var flxsound:FlxSound = new FlxSound();
-			flxsound.load(Paths.getSound(vocalPath, true), false);
+			flxsound.load(Paths.getSound(vocalPath, false), false);
 			playerVocals.add(flxsound);
 		}
 		add(playfield = new Playfield(song, song.data.noteStyle));
