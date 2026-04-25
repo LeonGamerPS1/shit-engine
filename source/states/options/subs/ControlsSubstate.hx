@@ -12,7 +12,7 @@ class ControlsSubstate extends FlxSubState
 	override public function create()
 	{
 		var bg:FlxSprite = new FlxSprite(0, 0);
-		bg.makeGraphic(1, 1, 0xFF000000);
+		bg.makeGraphic(1, 1, 0xFF949494);
 		bg.scale.set(FlxG.width, FlxG.height);
 		bg.updateHitbox();
 		bg.screenCenter();
@@ -21,10 +21,14 @@ class ControlsSubstate extends FlxSubState
 		bg.alpha = 0;
 		FlxTween.tween(bg, {alpha: 0.6}, 0.5);
 
-		alphabetshow = new Alphabet(0, 0, 'Control Scheme: <p>'.replace('p',curScheme));
+		alphabetshow = new Alphabet(0, 0, 'Control Scheme: <p>'.replace('p',curScheme),false);
 		alphabetshow.screenCenter();
 
 		add(alphabetshow);
+        var txt:FlxText = new FlxText();
+        txt.text = 'Press ACCEPT to confirm, and left + right arrow keys to scroll through options';
+        txt.size = 20;
+        add(txt);
 	}
 
 	public static function applyControlSchemeToKeyboard(scheme:String = 'ARROW KEYS + WASD')
@@ -79,11 +83,11 @@ class ControlsSubstate extends FlxSubState
 		if (index < 0)
 			index = length;
 		else if (index > length)
-			index = length;
+			index = 0;
 		curScheme = options[index];
 		alphabetshow.destroy();
 		remove(alphabetshow, true);
-		alphabetshow = new Alphabet(0, 0, 'Control Scheme: <p>'.replace('p',curScheme));
+		alphabetshow = new Alphabet(0, 0, 'Control Scheme: <p>'.replace('p',curScheme) + '\n',true);
 		alphabetshow.screenCenter();
     	FlxG.sound.play(Paths.getSound('sounds/scrollMenu'));
 		add(alphabetshow);
