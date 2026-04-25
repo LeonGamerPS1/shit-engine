@@ -21,14 +21,15 @@ class ControlsSubstate extends FlxSubState
 		bg.alpha = 0;
 		FlxTween.tween(bg, {alpha: 0.6}, 0.5);
 
-		alphabetshow = new Alphabet(0, 0, 'Control Scheme: <p>'.replace('p',curScheme),false);
+		alphabetshow = new Alphabet(0, 0, 'Control Scheme: <p>'.replace('p', curScheme), false);
 		alphabetshow.screenCenter();
 
 		add(alphabetshow);
-        var txt:FlxText = new FlxText();
-        txt.text = 'Press ACCEPT to confirm, and left + right arrow keys to scroll through options';
-        txt.size = 20;
-        add(txt);
+		var txt:FlxText = new FlxText();
+		txt.text = 'Press ACCEPT to confirm, and left + right arrow keys to scroll through options';
+		txt.size = 20;
+		add(txt);
+		FlxTween.tween(Main.debugCounter, {alpha: 0}, 0.5);
 	}
 
 	public static function applyControlSchemeToKeyboard(scheme:String = 'ARROW KEYS + WASD')
@@ -51,8 +52,14 @@ class ControlsSubstate extends FlxSubState
 		}
 		for (key in schemeMap.keyValueIterator())
 			SaveData.currentSettings.keyBinds.set(key.key, key.value);
-        SaveData.currentSettings.currentScheme = scheme;
+		SaveData.currentSettings.currentScheme = scheme;
 		schemeMap = null;
+	}
+
+	override function close()
+	{
+		FlxTween.tween(Main.debugCounter, {alpha: 1}, 0.5);
+		super.close();
 	}
 
 	override function update(elapsed:Float)
@@ -87,9 +94,9 @@ class ControlsSubstate extends FlxSubState
 		curScheme = options[index];
 		alphabetshow.destroy();
 		remove(alphabetshow, true);
-		alphabetshow = new Alphabet(0, 0, 'Control Scheme: <p>'.replace('p',curScheme) + '\n',true);
+		alphabetshow = new Alphabet(0, 0, 'Control Scheme: <p>'.replace('p', curScheme) + '\n');
 		alphabetshow.screenCenter();
-    	FlxG.sound.play(Paths.getSound('sounds/scrollMenu'));
+		FlxG.sound.play(Paths.getSound('sounds/scrollMenu'));
 		add(alphabetshow);
 	}
 }

@@ -24,7 +24,7 @@ import openfl.Lib;
 @:fileXml('tags="haxe,release"')
 @:noDebug
 #end
-typedef SizeType = #if cpp Single #else Float #end
+typedef SizeType = #if cpp Single #else Float #end;
 
 class FPS extends TextField
 {
@@ -114,14 +114,14 @@ class Main extends Sprite
 	public static var isDebug(default, null):Bool = #if debug true #else false #end;
 	// ReleaseName-Month-Year-releasecount
 	public static var version:String = "ALPHA-04-2026-r3";
-
+	public static var debugCounter:FPS;
 	public function new()
 	{
 		CustomLogger.init();
 
 		super();
 		addChild(new FlxGame(0, 0, states.InitState,120,120));
-		addChild(new FPS(10, 10, 0xFFFFFFFF));
+		addChild(debugCounter = new FPS(10, 10, 0xFFFFFFFF));
 		FlxG.signals.focusGained.add(() ->
 		{
 			FlxG.sound.resume();
