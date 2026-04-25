@@ -21,7 +21,7 @@ class ControlsSubstate extends FlxSubState
 		bg.alpha = 0;
 		FlxTween.tween(bg, {alpha: 0.6}, 0.5);
 
-		alphabetshow = new Alphabet(0, 0, 'Control Scheme: <ARROW KEYS + WASD>');
+		alphabetshow = new Alphabet(0, 0, 'Control Scheme: <p>'.replace('p',curScheme));
 		alphabetshow.screenCenter();
 
 		add(alphabetshow);
@@ -47,6 +47,7 @@ class ControlsSubstate extends FlxSubState
 		}
 		for (key in schemeMap.keyValueIterator())
 			SaveData.currentSettings.keyBinds.set(key.key, key.value);
+        SaveData.currentSettings.currentScheme = scheme;
 		schemeMap = null;
 	}
 
