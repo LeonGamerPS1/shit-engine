@@ -1,5 +1,6 @@
 package states;
 
+import backend.gameplay.HighScore;
 import backend.input.Controls;
 import backend.modding.PolymodHandler;
 import backend.settings.SaveData;
@@ -9,6 +10,7 @@ import flixel.addons.transition.TransitionData;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
 import lime.app.Application;
+import modchart.backend.standalone.Adapter;
 import states.menus.TitleState;
 
 class InitState extends flixel.addons.transition.FlxTransitionableState
@@ -16,8 +18,12 @@ class InitState extends flixel.addons.transition.FlxTransitionableState
 	override function create()
 	{
 		SaveData.init();
+		HighScore.init();
+
+
 		PolymodHandler.init();
 		Controls.init();
+		Adapter.instance = new backend.graphics.ModchartBackend();
 		FlxG.cameras.useBufferLocking = true;
 		FlxG.signals.preStateCreate.add((s) ->
 		{

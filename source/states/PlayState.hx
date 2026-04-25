@@ -86,18 +86,19 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		{
 			var vocalPath = '$songFolder/audio/${vocalEnemy}';
 			var flxsound:FlxSound = new FlxSound();
-			flxsound.load(Paths.getSound(vocalPath, false), false);
+			flxsound.load(Paths.getSound(vocalPath, true), false);
 			enemyVocals.add(flxsound);
 		}
 		for (playerVocal in song.data.characters.playerVocals)
 		{
 			var vocalPath = '$songFolder/audio/${playerVocal}';
 			var flxsound:FlxSound = new FlxSound();
-			flxsound.load(Paths.getSound(vocalPath, false), false);
+			flxsound.load(Paths.getSound(vocalPath, true), false);
 			playerVocals.add(flxsound);
 		}
 		add(playfield = new Playfield(song, song.data.noteStyle));
-		playfield.cameras = [camHUD];
+		playfield.cameras = playfield.modchartingCameras = [camHUD];
+		//playfield.modchartingCamera = camHUD;
 		camGame.bgColor = 0xFF676767;
 		for (strumLines in [playfield.dadStrumline, playfield.bfStrumline])
 		{
@@ -359,8 +360,8 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		{
 			if (!vocalSFX.playing || !inst.playing || Math.floor(Conductor.curBeat) % 2 != 0)
 				continue;
-			if (Math.abs(Conductor.time - vocalSFX.time) > 40)
-				vocalSFX.time = Conductor.time;
+			if (Math.abs(inst.time - vocalSFX.time) > 200)
+				vocalSFX.time = inst.time;
 		}
 	}
 

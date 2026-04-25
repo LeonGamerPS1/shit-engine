@@ -42,6 +42,7 @@ class Strumline extends FlxGroup
 		{
 			var strum:Strum = new Strum(skin, i, keys);
 			strum.cover = new HoldCover(strum);
+			strum.strumline = this;
 			strum.flipScroll = SaveData.currentSettings.downScroll;
 			strum.x = Note.swag * i;
 			strums.add(strum);
@@ -73,7 +74,7 @@ class Strumline extends FlxGroup
 				for (segmentID in 0...Math.floor(cock))
 				{
 					var sData = Reflect.copy(noteData);
-					sData.tms += (Conductor.stepLength * segmentID) + (Conductor.stepLength / 2) + 10;
+					sData.tms += (Conductor.stepLength * segmentID)  + 10;
 					var isEnd = (segmentID) == Math.floor(cock) - 1;
 					var noteHold:Note = new Note(sData, this, true, isEnd);
 					note.children.push(noteHold);
@@ -209,8 +210,7 @@ class Strumline extends FlxGroup
 					strum.cover.playAnim('end');
 				else
 					strum.cover.visible = false;
-				strum.playAnim(isBot ? 'static' : 'press');
-				note.visible = false;
+				strum.playAnim(isBot ? 'confirm' : 'press');
 			}
 		}
 		if (isBot)

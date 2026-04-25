@@ -5,7 +5,7 @@ import states.options.*;
 
 class OptionsState extends FlxTransitionableState
 {
-	var categories = ['visuals and ui', 'gameplay'];
+	var categories = ['visuals and ui', 'gameplay', 'controls'];
 	var curSelected:Alphabet;
 	var itemIndex:Int = 0;
 	var itemGroup:FlxTypedGroup<Alphabet> = new FlxTypedGroup<Alphabet>();
@@ -63,6 +63,8 @@ class OptionsState extends FlxTransitionableState
 					FlxG.resetState();
 				case 'gameplay':
 					FlxG.switchState(new states.options.Gameplay());
+				case 'controls':
+					openSubState(new states.options.subs.ControlsSubstate());
 				case "visuals and ui":
 					FlxG.switchState(new states.options.UI_and_Looks());
 			}

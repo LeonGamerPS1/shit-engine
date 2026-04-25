@@ -432,19 +432,19 @@ class AlphaCharacter extends FunkinSprite
 		switch (letter)
 		{
 			case '.':
-				animation.addByPrefix(letter, 'PERIOD bold', 24);
+				animation.addByPrefix(letter, 'PERIOD bold', 24, true);
 			case "'":
-				animation.addByPrefix(letter, 'APOSTRAPHIE bold', 24);
+				animation.addByPrefix(letter, 'APOSTRAPHIE bold', 24, true);
 			case "?":
-				animation.addByPrefix(letter, 'QUESTION MARK bold', 24);
+				animation.addByPrefix(letter, 'QUESTION MARK bold', 24, true);
 			case "!":
-				animation.addByPrefix(letter, 'EXCLAMATION POINT bold', 24);
+				animation.addByPrefix(letter, 'EXCLAMATION POINT bold', 24, true);
 			case "(":
-				animation.addByPrefix(letter, 'bold (', 24);
+				animation.addByPrefix(letter, 'bold (', 24, true);
 			case ")":
-				animation.addByPrefix(letter, 'bold )', 24);
+				animation.addByPrefix(letter, 'bold )', 24, true);
 			default:
-				animation.addByPrefix(letter, 'bold ' + letter, 24);
+				animation.addByPrefix(letter, 'bold ' + letter, 24, true);
 		}
 		animation.play(letter);
 		updateHitbox();

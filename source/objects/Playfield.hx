@@ -2,12 +2,15 @@ package objects;
 
 import backend.data.SongChartData;
 import flixel.ui.FlxBar;
+import modchart.Manager;
 import objects.ui.HealthIcon;
 
-class Playfield extends FlxGroup
+class Playfield extends FlxGroup implements backend.graphics.ModchartBackend.IModchartInstance
 {
 	public var dadStrumline:Strumline;
 	public var bfStrumline:Strumline;
+	public var modchartingCameras:Array<FlxCamera> = [FlxG.camera];
+	public var speed:Float = 1;
 
 	public var currentSong:SongChartData;
 
@@ -27,14 +30,21 @@ class Playfield extends FlxGroup
 	public var iconP1:HealthIcon;
 	public var iconP2:HealthIcon;
 
+	public var modchartSystem:Manager;
+
 	public function new(song:SongChartData, skin:String = "default", keys:Int = 4)
 	{
+		backend.graphics.ModchartBackend.instance = this;
+		speed = song.data.speed;
 		super();
 		final strumY = SaveData.currentSettings.downScroll ? FlxG.height - 150 : 50;
 		Conductor.offset = song.data.offset ?? 0;
 		Conductor.bpm = song.data.bpm;
 		dadStrumline = cast(add(new Strumline(this, skin, keys)));
 		bfStrumline = cast(add(new Strumline(this, skin, keys)));
+
+		modchartSystem = new Manager();
+		add(modchartSystem);
 		trace(Conductor.stepLength);
 
 		for (sL in [dadStrumline, bfStrumline])
@@ -92,9 +102,9 @@ class Playfield extends FlxGroup
 
 		iconP2 = new HealthIcon("dad", false);
 		iconP2.y = healthBar.y - (iconP2.height / 2);
-		add(iconP1);
-		add(iconP2);
 
+		add(iconP2);
+		add(iconP1);
 		scoreTxt = new FlxText(healthBarBG.x + healthBarBG.width / 2 - 150, healthBarBG.y + 50, 0, "", 20);
 		scoreTxt.setFormat(Paths.getFont("vcr"), 16, FlxColor.WHITE, RIGHT, FlxTextBorderStyle.OUTLINE, FlxColor.BLACK);
 
@@ -129,10 +139,9 @@ class Playfield extends FlxGroup
 		add(time);
 
 		for (member in members)
-			if (!(member is Strumline) && SaveData.currentSettings.hideHUD)
+			if (!(member is Strumline) && member != modchartSystem && SaveData.currentSettings.hideHUD)
 				member.kill();
 
-		
 		noteSplashes = new FlxTypedGroup<NoteSplash>();
 		add(noteSplashes);
 	}
@@ -241,9 +250,10 @@ class Playfield extends FlxGroup
 
 		iconP1.updateHitbox();
 		iconP2.updateHitbox();
-		for(icon in [iconP1,iconP2]) {
+		for (icon in [iconP1, iconP2])
+		{
 			FlxTween.cancelTweensOf(icon.scale);
-			FlxTween.tween(icon.scale,{x:1,y:1},0.2);
+			FlxTween.tween(icon.scale, {x: 1, y: 1}, 0.2);
 		}
 	}
 
@@ -266,10 +276,10 @@ class Playfield extends FlxGroup
 		FlxTween.cancelTweensOf(this, ["curHealth"]);
 		FlxTween.tween(this, {curHealth: health}, 0.2);
 		super.update(elapsed);
-		//var scaleP1 = FlxMath.lerp(1, iconP1.scale.x, Math.exp(-elapsed * 8));
-		//var scaleP2 = FlxMath.lerp(1, iconP2.scale.x, Math.exp(-elapsed * 8));
-		//iconP1.scale.set(scaleP1, scaleP1);
-		//iconP2.scale.set(scaleP2, scaleP2);
+		// var scaleP1 = FlxMath.lerp(1, iconP1.scale.x, Math.exp(-elapsed * 8));
+		// var scaleP2 = FlxMath.lerp(1, iconP2.scale.x, Math.exp(-elapsed * 8));
+		// iconP1.scale.set(scaleP1, scaleP1);
+		// iconP2.scale.set(scaleP2, scaleP2);
 
 		var scoreTextText = "Score:"
 			+ songScore
@@ -296,8 +306,8 @@ class Playfield extends FlxGroup
 
 		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
 		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
-			iconP1.y = healthBar.y - (iconP1.height / 2);
-				iconP2.y = healthBar.y - (iconP2.height / 2);
+		iconP1.y = healthBar.y - (iconP1.height / 2);
+		iconP2.y = healthBar.y - (iconP2.height / 2);
 
 		if (health > 2)
 			health = 2;

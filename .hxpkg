@@ -70,6 +70,11 @@
 			{
 				"name": "thx.core",
 				"link": "https://github.com/fponticelli/thx.core"
+			},
+			{
+				"name": "funkin-modchart",
+				"link": "https://github.com/theoo-h/FunkinModchart",
+				"branch": "dev"
 			}
 		]
 	}
