@@ -376,6 +376,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		inst.onComplete = onEndSong;
 		playfield.progressBar.setRange(0, inst.length);
 		FlxTween.tween(playfield.progressBar, {alpha: 1}, Conductor.beatLength / 1000);
+		call('startSong');
 		for (shit in playerVocals.sounds.concat(enemyVocals.sounds))
 			shit.play();
 	}
@@ -383,8 +384,11 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 	public function startCountdown()
 	{
 		startedCountdown = true;
-		startTimer = new FlxTimer().start(Conductor.beatLength / 1000, (t) -> {}, 4);
+		startTimer = new FlxTimer().start(Conductor.beatLength / 1000, (t) -> {
+			call('tickCountdown',[t]);
+		}, 4);
 		startTimer.active = true;
+		call('startCountdown');
 	}
 
 	override public function update(elapsed:Float)

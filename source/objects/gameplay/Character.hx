@@ -121,8 +121,9 @@ class Character extends FlxAnimate
 			}
 		}
 
-		playAnim(animExists("danceRight") && animExists("danceLeft") ? 'danceRight' : 'idle');
+		
 		updateHitbox();
+		playAnim(animExists("danceRight") && animExists("danceLeft") ? 'danceRight' : 'idle');
 	}
 
 	public function playAnim(anim:String, ?force:Bool = true)
