@@ -12,6 +12,7 @@ import flixel.math.FlxRect;
 import lime.app.Application;
 import modchart.backend.standalone.Adapter;
 import states.menus.TitleState;
+import states.options.subs.ControlsSubstate;
 
 class InitState extends flixel.addons.transition.FlxTransitionableState
 {
@@ -23,6 +24,7 @@ class InitState extends flixel.addons.transition.FlxTransitionableState
 
 		PolymodHandler.init();
 		Controls.init();
+		ControlsSubstate.applyControlSchemeToKeyboard(SaveData.currentSettings.currentScheme);
 		Adapter.instance = new backend.graphics.ModchartBackend();
 		FlxG.cameras.useBufferLocking = true;
 		FlxG.signals.preStateCreate.add((s) ->

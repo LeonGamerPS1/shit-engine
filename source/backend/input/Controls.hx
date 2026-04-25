@@ -225,11 +225,11 @@ class Controls
 
 	function get_keyboardBinds():Map<String, Array<FlxKey>>
 	{
-		return KeyBinds.keyBinds;
+		return SaveData.currentSettings.keyBinds;
 	}
 
 	function get_gamepadBinds()
 	{
-		return KeyBinds.gamepadBinds;
+		return SaveData.currentSettings.gamepadBinds;
 	}
 }
