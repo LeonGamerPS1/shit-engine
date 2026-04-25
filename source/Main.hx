@@ -113,7 +113,7 @@ class Main extends Sprite
 {
 	public static var isDebug(default, null):Bool = #if debug true #else false #end;
 	// ReleaseName-Month-Year-releasecount
-	public static var version:String = "INDEV-03-2026-r2";
+	public static var version:String = "ALPHA-04-2026-r3";
 
 	public function new()
 	{
