@@ -35,7 +35,7 @@ class InitState extends flixel.addons.transition.FlxTransitionableState
 			var c = Conductor;
 			for (ass in [c.onBeat, c.onMeasure, c.onStep])
 				ass.removeAll();
-			Paths.clear();
+		
 		});
 	
 
@@ -57,13 +57,11 @@ class InitState extends flixel.addons.transition.FlxTransitionableState
 			asset: dia,
 			width: 32,
 			height: 32,
-			frameRate: 122
 		}, FlxRect.get(0, 0, FlxG.width, FlxG.height), TOP);
 		FlxTransitionableState.defaultTransOut = new TransitionData(FADE, FlxColor.BLACK, 0.5, FlxPoint.get(0, 1), {
 			asset: dia,
 			width: 32,
 			height: 32,
-			frameRate: 122
 		}, FlxRect.get(0, 0, FlxG.width, FlxG.height), TOP);
 		FlxG.switchState(new states.menus.TitleState());
 		FlxG.switchState(() -> new TitleState());
