@@ -9,6 +9,7 @@ import objects.gameplay.Character;
 class Strumline extends FlxGroup
 {
 	public var strums:FlxTypedSpriteGroup<Strum>;
+	public var covers:FlxTypedGroup<HoldCover>;
 	public var playfield:Playfield;
 	public var isBot:Bool = false;
 
@@ -32,22 +33,26 @@ class Strumline extends FlxGroup
 		notes.active = false;
 		add(notes);
 
+		covers = new FlxTypedGroup<HoldCover>();
+		add(covers);
+
 		genstrums(keys, skin);
 	}
 
-	public var covers = [];
 	function genstrums(keys:Int = 4, skin:String = "default")
 	{
 		this.skin = skin;
 		for (i in 0...keys)
 		{
 			var strum:Strum = new Strum(skin, i, keys);
-			strum.cover = new HoldCover(strum);
+			if (SaveData.currentSettings.holdCovers)
+				strum.cover = new HoldCover(strum);
 			strum.strumline = this;
 			strum.flipScroll = SaveData.currentSettings.downScroll;
 			strum.x = Note.swag * i;
 			strums.add(strum);
-			covers.push(strum.cover);
+			if (SaveData.currentSettings.holdCovers)
+				covers.add(strum.cover);
 		}
 	}
 
@@ -75,7 +80,7 @@ class Strumline extends FlxGroup
 				for (segmentID in 0...Math.floor(cock))
 				{
 					var sData = Reflect.copy(noteData);
-					sData.tms += (Conductor.stepLength * segmentID)  + 10;
+					sData.tms += (Conductor.stepLength * segmentID) + 10;
 					var isEnd = (segmentID) == Math.floor(cock) - 1;
 					var noteHold:Note = new Note(sData, this, true, isEnd);
 					note.children.push(noteHold);
@@ -204,10 +209,13 @@ class Strumline extends FlxGroup
 		{
 			strum.cover.visible = note.noteData.lms > 0 || note.isSustainNote;
 			if (note.noteData.lms > 0 && !note.isSustainNote)
+			{
 				strum.cover.playAnim('start');
+				strum.cover.revive();
+			}
 			if (note.isEndNote)
 			{
-				if (!isBot) 
+				if (!isBot)
 					strum.cover.playAnim('end');
 				else
 					strum.cover.visible = false;

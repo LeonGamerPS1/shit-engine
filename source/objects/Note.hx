@@ -32,7 +32,8 @@ class Note extends FunkinSprite
 
 	public static var noteShaders = [for (i in 0...4) new RGBSwap()];
 
-	public var type:String = "";
+	public var type:String = "unknown";
+	public var rating:String;
 
 	public function new(dir:SongNoteData, strumline:Strumline, isSusNote:Bool = false, isEndNote:Bool = false)
 	{

@@ -3,6 +3,8 @@ package states;
 import backend.data.SongChartData;
 import backend.data.SongStageData.StageJSON;
 import backend.data.SongStageData;
+import backend.gameplay.HighScore.SongHighScoreEntry;
+import backend.gameplay.HighScore;
 import backend.gameplay.SongLoader;
 import backend.scripting.NxScriptM;
 import flixel.math.FlxPoint;
@@ -21,6 +23,14 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 	public static var song:SongChartData;
 
 	public var inst:FlxSound;
+	public var invalidatedRun:Bool = false;
+	public var currentScoreEntry:SongHighScoreEntry = {
+		score: 0,
+		misses: 0,
+		accuracy: 0,
+		ratings: [],
+		name: ""
+	};
 
 	public var enemyVocals:FlxSoundGroup;
 	public var playerVocals:FlxSoundGroup;
@@ -66,6 +76,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		Conductor.timeChanges.resize(0);
 		super.create();
 		song ??= SongLoader.loadSong("bopeebo");
+		currentScoreEntry.name = HighScore.formatName(song.meta.data.songDisplayName);
 		stageJSON = SongStageData.getStageJSON(song.data.stage);
 		boyfriendPosition.set(stageJSON.bfPos[0], stageJSON.bfPos[1]);
 		dadPosition.set(stageJSON.dadPos[0], stageJSON.dadPos[1]);
@@ -235,8 +246,12 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		if (!n.strumline.isBot)
 		{
 			playerVolume = 1;
-			if (SaveData.currentSettings.hitSounds && !n.isSustainNote)
-				FlxG.sound.play(Paths.getSound('sounds/hitsound'),0.7);
+			if (!n.isSustainNote)
+			{
+				if (SaveData.currentSettings.hitSounds)
+					FlxG.sound.play(Paths.getSound('sounds/hitsound'), 0.7);
+				currentScoreEntry.ratings.push({rating: n.rating, time: Conductor.time});
+			}
 		}
 		else
 			enemyVolume = 1;
@@ -245,8 +260,10 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 	public function missNote(n:Note, ?dir:Int, strumline)
 	{
 		call('onNoteMiss', [n, dir, strumline]);
-		if (strumline.isBot)
+		if (!strumline.isBot)
 			playerVolume = 0;
+		else
+			enemyVolume = 0;
 	}
 
 	var autoFocus:Bool = true;
@@ -404,9 +421,16 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		call('startCountdown');
 	}
 
+
 	override public function update(elapsed:Float)
 	{
 		call('onUpdatePre', [elapsed]);
+		if (currentScoreEntry.score != playfield.songScore)
+			currentScoreEntry.score = playfield.songScore;
+		if (currentScoreEntry.misses != playfield.misses)
+			currentScoreEntry.misses = playfield.misses;
+		if (currentScoreEntry.accuracy != playfield.accuracy)
+			currentScoreEntry.accuracy = playfield.accuracy;
 		FlxG.camera.zoom = FlxMath.lerp(defaultZoomGame, FlxG.camera.zoom, 0.95);
 		camHUD.zoom = FlxMath.lerp(defaultZoomHUD, camHUD.zoom, 0.95);
 		camUnderlay.zoom = camHUD.zoom;
@@ -457,6 +481,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 	{
 		call('destroy');
 		call('endSong');
+		HighScore.postHighScore(currentScoreEntry.name, currentScoreEntry);
 		FlxG.switchState(new states.menus.FreeplayState());
 	}
 }

@@ -79,7 +79,7 @@ class TitleState extends flixel.addons.transition.FlxTransitionableState
 			Conductor.time = FlxG.sound.music.time;
 
 		// Smooth return to base scale
-		var m = FlxMath.lerp(1, logo.scale.x, elapsed * 9);
+		var m = FlxMath.lerp(1, logo.scale.x, Math.exp(-elapsed * 8));
 		logo.scale.set(m, m);
 
 		if (inputSystem.ACCEPT && !exiting)

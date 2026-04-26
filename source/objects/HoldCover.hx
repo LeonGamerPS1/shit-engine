@@ -31,6 +31,7 @@ class HoldCover extends FunkinSprite
 		updateHitbox();
 		playAnim("hold");
 		visible = false;
+		revive();
 		animation.onFinish.add((n) ->
 		{
 			if (n == "start")
@@ -38,6 +39,7 @@ class HoldCover extends FunkinSprite
 			if (n == "end")
 			{
 				visible = false;
+				kill();
 				playAnim("hold");
 			}
 		});

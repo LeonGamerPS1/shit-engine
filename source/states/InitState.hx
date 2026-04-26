@@ -18,6 +18,8 @@ class InitState extends flixel.addons.transition.FlxTransitionableState
 {
 	override function create()
 	{
+		modchart.Config.PREVENT_SCALED_HOLD_END = true;
+		modchart.Config.OPTIMIZE_HOLDS = true;
 		SaveData.init();
 		HighScore.init();
 
@@ -25,6 +27,7 @@ class InitState extends flixel.addons.transition.FlxTransitionableState
 		PolymodHandler.init();
 		Controls.init();
 		ControlsSubstate.applyControlSchemeToKeyboard(SaveData.currentSettings.currentScheme);
+
 		Adapter.instance = new backend.graphics.ModchartBackend();
 		FlxG.cameras.useBufferLocking = true;
 		FlxG.signals.preStateCreate.add((s) ->

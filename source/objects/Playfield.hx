@@ -144,9 +144,7 @@ class Playfield extends FlxGroup implements backend.graphics.ModchartBackend.IMo
 
 		noteSplashes = new FlxTypedGroup<NoteSplash>();
 		add(noteSplashes);
-		for(SL in [dadStrumline,bfStrumline])
-			for(cover in SL.covers)
-				add(cover);
+	
 	}
 
 	public function spawnSplashOnStrum(s:Strum)
@@ -156,7 +154,7 @@ class Playfield extends FlxGroup implements backend.graphics.ModchartBackend.IMo
 		s2.revive();
 	}
 
-	public var songScore:Float = 0;
+	public var songScore:Int = 0;
 	public var misses:Int = 0;
 	public var accuracy:Float = 0.000000000000000001;
 
@@ -227,7 +225,7 @@ class Playfield extends FlxGroup implements backend.graphics.ModchartBackend.IMo
 			totalNotesHit += 1;
 			spawnSplashOnStrum(n.strumline.strums.members[n.noteData.l % 4]);
 		}
-
+		n.rating = daRating;
 		songScore += score;
 	}
 

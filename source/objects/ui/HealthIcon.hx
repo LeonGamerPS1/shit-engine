@@ -15,6 +15,7 @@ class HealthIcon extends FunkinSprite
 	{
 		super();
 
+
 		this.char = char;
 		this.isPlayer = isPlayer;
 
@@ -49,7 +50,7 @@ class HealthIcon extends FunkinSprite
 		super.update(elapsed);
 
 		if (sprTracker != null)
-			setPosition(sprTracker.x + sprTracker.width + 10, sprTracker.y - 30);
+			setPosition(sprTracker.x + sprTracker.width + 30, sprTracker.y - 30);
 	}
 	
 }
