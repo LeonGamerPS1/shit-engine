@@ -144,6 +144,9 @@ class Playfield extends FlxGroup implements backend.graphics.ModchartBackend.IMo
 
 		noteSplashes = new FlxTypedGroup<NoteSplash>();
 		add(noteSplashes);
+		for(SL in [dadStrumline,bfStrumline])
+			for(cover in SL.covers)
+				add(cover);
 	}
 
 	public function spawnSplashOnStrum(s:Strum)

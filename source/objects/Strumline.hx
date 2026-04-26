@@ -35,6 +35,7 @@ class Strumline extends FlxGroup
 		genstrums(keys, skin);
 	}
 
+	public var covers = [];
 	function genstrums(keys:Int = 4, skin:String = "default")
 	{
 		this.skin = skin;
@@ -46,7 +47,7 @@ class Strumline extends FlxGroup
 			strum.flipScroll = SaveData.currentSettings.downScroll;
 			strum.x = Note.swag * i;
 			strums.add(strum);
-			add(strum.cover);
+			covers.push(strum.cover);
 		}
 	}
 

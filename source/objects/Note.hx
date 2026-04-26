@@ -2,17 +2,19 @@ package objects;
 
 import backend.NoteSkin;
 import backend.data.SongChartData.SongNoteData;
+import backend.scripting.NxScriptM;
 import flixel.input.keyboard.FlxKey;
 import shaders.RGBSwap;
 
 class Note extends FunkinSprite
 {
 	public var strumline:Strumline;
+	public var noteScript:NxScriptM;
 
 	public var rgbswap:RGBSwap;
 	public var noteData:SongNoteData;
 	public var multSpeed:Float = 1;
-	public var hit:Bool = false;
+	public var hit(default, set):Bool = false;
 	public var isSustainNote:Bool = false;
 	public var isEndNote:Bool = false;
 	public var parentNote:Note;
@@ -30,6 +32,8 @@ class Note extends FunkinSprite
 
 	public static var noteShaders = [for (i in 0...4) new RGBSwap()];
 
+	public var type:String = "";
+
 	public function new(dir:SongNoteData, strumline:Strumline, isSusNote:Bool = false, isEndNote:Bool = false)
 	{
 		super();
@@ -38,13 +42,27 @@ class Note extends FunkinSprite
 		this.isEndNote = isEndNote;
 		this.isSustainNote = isSusNote;
 		rgbswap = getSwapShaderForLane(lane);
-		//shader = rgbswap.shader;
+		// shader = rgbswap.shader;
 
 		reload(strumline != null ? strumline.skin : 'default');
 		if (!isSustainNote)
 			earlyHitMult *= 0.5;
 		else
 			earlyHitMult = 0;
+		initscript(dir.t ?? 'normal');
+	}
+
+	public function initscript(type:String = 'normal')
+	{
+		if (!OpenFLAssets.exists(Paths.getPath('data/noteTypes/$type.nx'), TEXT))
+			return;
+		noteScript = new NxScriptM(type, Paths.getPath('data/noteTypes/$type.nx'));
+		noteScript.setFunction('close', () ->
+		{
+			noteScript.call('destroy');
+			trace('ended notetype script for type ${noteScript.name} at strumtime ${noteData.tms}');
+			noteScript = null;
+		});
 	}
 
 	public var lastSkin = "";
@@ -86,7 +104,9 @@ class Note extends FunkinSprite
 
 	override function update(d:Float)
 	{
+		noteScript?.call('onUpdate', [d]);
 		super.update(d);
+		noteScript?.call('onUpdatePost', [d]);
 	}
 
 	public var dir:SongNoteData;
@@ -102,6 +122,7 @@ class Note extends FunkinSprite
 
 	override function destroy()
 	{
+		noteScript.call('close');
 		tempskin = null;
 		shader = null;
 		rgbswap = null;
@@ -125,5 +146,15 @@ class Note extends FunkinSprite
 		if (Note.noteShaders[lane] == null)
 			Note.noteShaders[lane] = new RGBSwap();
 		return Note.noteShaders[lane];
+	}
+
+	function set_hit(value:Bool):Bool
+	{
+		if (hit == value)
+			return hit;
+		hit = value;
+		if (value)
+			noteScript?.call('onNoteHit', [this]);
+		return hit;
 	}
 }

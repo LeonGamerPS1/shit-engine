@@ -13,7 +13,7 @@ class HoldCover extends FunkinSprite
 		playAnim('end');
 	}
 
-	var strum:Strum;
+	public var strum:Strum;
 
     var offsetx = 0;
     var offsety = 0;

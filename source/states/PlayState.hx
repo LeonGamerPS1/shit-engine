@@ -97,8 +97,9 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 			playerVocals.add(flxsound);
 		}
 		add(playfield = new Playfield(song, song.data.noteStyle));
+		set('modchart', playfield.modchartSystem);
 		playfield.cameras = playfield.modchartingCameras = [camHUD];
-		//playfield.modchartingCamera = camHUD;
+		// playfield.modchartingCamera = camHUD;
 		camGame.bgColor = 0xFF676767;
 		for (strumLines in [playfield.dadStrumline, playfield.bfStrumline])
 		{
@@ -170,6 +171,10 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 					note.cameras = [camUnderlay];
 		playfield.iconP1.changeIcon(bf.json.icon);
 		playfield.iconP2.changeIcon(dad.json.icon);
+
+		set('isPlayState', true);
+		set('playfield', playfield);
+
 		super.create();
 	}
 
@@ -211,6 +216,12 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		return value;
 	}
 
+	public function set(n:String, v:Dynamic)
+	{
+		for (script in scripts.keyValueIterator())
+			script.value.setVariable(n, v);
+	}
+
 	public var events:Array<SongEventData> = [];
 
 	public function get_camGame()
@@ -225,7 +236,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		{
 			playerVolume = 1;
 			if (SaveData.currentSettings.hitSounds && !n.isSustainNote)
-				FlxG.sound.play(Paths.getSound('sounds/hitsound'));
+				FlxG.sound.play(Paths.getSound('sounds/hitsound'),0.7);
 		}
 		else
 			enemyVolume = 1;
@@ -385,8 +396,9 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 	public function startCountdown()
 	{
 		startedCountdown = true;
-		startTimer = new FlxTimer().start(Conductor.beatLength / 1000, (t) -> {
-			call('tickCountdown',[t]);
+		startTimer = new FlxTimer().start(Conductor.beatLength / 1000, (t) ->
+		{
+			call('tickCountdown', [t]);
 		}, 4);
 		startTimer.active = true;
 		call('startCountdown');

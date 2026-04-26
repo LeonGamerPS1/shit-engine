@@ -134,6 +134,14 @@ class ModchartBackend implements IAdapter
 		{
 			return cast(sprite, Note).lane;
 		}
+		if (sprite is HoldCover)
+		{
+			return cast(sprite, HoldCover).strum.dir;
+		}
+		if (sprite is NoteSplash)
+		{
+			return cast(sprite, NoteSplash).strum.dir;
+		}
 		return 0;
 	}
 
@@ -148,6 +156,15 @@ class ModchartBackend implements IAdapter
 		{
 			return cast(sprite, Note).strumline == instance.dadStrumline ? 0 : 1;
 		}
+		if (sprite is HoldCover)
+		{
+			return cast(sprite, HoldCover).strum.strumline == instance.dadStrumline ? 0 : 1;
+		}
+		if (sprite is NoteSplash)
+		{
+			return cast(sprite, NoteSplash).strum.strumline == instance.dadStrumline ? 0 : 1;
+		}
+
 		return 0;
 	}
 
@@ -205,9 +222,18 @@ class ModchartBackend implements IAdapter
 		var bfStrums:Array<Array<FlxSprite>> = cast [bfStrumline.strums.members, [], [], []];
 		for (note in dadStrumline.notes)
 			dadStrums[isHoldNote(note) ? 2 : 1].push(note);
+		for (splash in dadStrumline.covers)
+			dadStrums[3].push(splash);
 
 		for (note in bfStrumline.notes)
 			bfStrums[isHoldNote(note) ? 2 : 1].push(note);
+		for (splash in bfStrumline.covers)
+			bfStrums[3].push(splash);
+        for(splash in instance.noteSplashes)
+        {
+            var sl = getPlayerFromArrow(splash) == 0 ? dadStrums : bfStrums;
+            sl[3].push(splash);
+        }
 
 		return [dadStrums, bfStrums];
 	}
@@ -229,4 +255,5 @@ interface IModchartInstance
 	var bfStrumline:Strumline;
 	var modchartingCameras:Array<FlxCamera>;
 	var speed:Float;
+    var noteSplashes:FlxTypedGroup<NoteSplash>;
 }

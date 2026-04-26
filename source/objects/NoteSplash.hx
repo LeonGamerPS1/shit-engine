@@ -15,8 +15,10 @@ class NoteSplash extends FlxSprite
 		// alpha = 0.75;
 	}
 
+	public var strum:Strum = null;
 	public function setupNoteSplash(strumNote:Strum)
 	{
+		strum = strumNote;
 		setPosition(strumNote.x, strumNote.y);
 		frames = Paths.getSparrowAtlas('noteskins/${strumNote.lastSkin}/${strumNote.tempskin.splashImage}');
 		if (frames == null)
@@ -40,8 +42,13 @@ class NoteSplash extends FlxSprite
 		centerOffsets();
 		centerOrigin();
 		setPosition(strumNote.x + (strumNote.width * 0.5 - width * 0.5), strumNote.y + (strumNote.height * 0.5 - height * 0.5));
+		alpha = 1;
 	}
 
+	override function kill() {
+		alpha = 0;
+		super.kill();
+	}
 	override function update(elapsed:Float)
 	{
 		if (animation.curAnim.finished)
