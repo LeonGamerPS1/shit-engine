@@ -122,7 +122,7 @@ class Note extends FunkinSprite
 
 	override function destroy()
 	{
-		noteScript.call('close');
+		noteScript?.call('close');
 		tempskin = null;
 		shader = null;
 		rgbswap = null;
