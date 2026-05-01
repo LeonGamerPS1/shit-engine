@@ -1,0 +1,5 @@
+--library moonchart
+--library zip
+-cp src
+--main Main
+--interp

@@ -34,14 +34,17 @@ class HealthIcon extends FunkinSprite
 		if (!OpenFLAssets.exists(Paths.getPath('images/icons/icon-' + char + '.png')))
 			char = 'face';
 
-		loadGraphic(Paths.getGraphic('icons/icon-' + char), true, 150, 150);
+		var graphic = Paths.getGraphic('icons/icon-' + char);
+		var w = graphic.height;
+		var h = graphic.height;
+		loadGraphic(Paths.getGraphic('icons/icon-' + char), true, w, h);
 
 		if (char.endsWith('-pixel') || char.startsWith('senpai') || char.startsWith('spirit'))
 			antialiasing = false;
 		else
 			antialiasing = true;
 
-		animation.add(char, [0, 1], 0, false, isPlayer);
+		animation.add(char, [for(i in 0...frames.frames.length) i], 0, false, isPlayer);
 		animation.play(char);
 	}
 
@@ -51,6 +54,12 @@ class HealthIcon extends FunkinSprite
 
 		if (sprTracker != null)
 			setPosition(sprTracker.x + sprTracker.width + 50, sprTracker.y + (sprTracker.height * .5 - height * .5));
+	}
+
+	override function updateHitbox() {
+		super.updateHitbox();
+		centerOffsets();
+		centerOrigin();
 	}
 	
 }

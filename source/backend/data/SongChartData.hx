@@ -1,9 +1,5 @@
 package backend.data;
 
-import backend.data.SongMetaData.SongMetaDataRAW;
-import haxe.Json;
-import shaders.RGBSwap;
-
 typedef SongTmPoint =
 {
 	var time:Float;
@@ -38,6 +34,7 @@ typedef SongChartDataR =
 	public var bpm:Float;
 	@:optional
 	public var events:Array<SongEventData>;
+	@:optional var timingPoints:Array<SongTmPoint>;
 }
 
 typedef SongNoteData =
@@ -59,11 +56,12 @@ typedef SwagSectionXMLBFXML =
 	var altAnim:Bool;
 }
 
-typedef SongEventData = {
+typedef SongEventData =
+{
 	var t:Int;
 	var v:Array<Dynamic>;
 	var n:String;
-} 
+}
 
 typedef SwagSongPsych042 =
 {
@@ -137,13 +135,13 @@ class SongChartData
 		var timelas = 0;
 		for (section in data.notes)
 		{
-			if(section.changeBPM && section.bpm != 0 && section.bpm > 0)
+			if (section.changeBPM && section.bpm != 0 && section.bpm > 0)
 				bpm4 = (60 / section.bpm) * 4000;
-			if(section.mustHitSection != lastDaddy) {
+			if (section.mustHitSection != lastDaddy)
+			{
 				lastDaddy = section.mustHitSection;
 				someSongChartIG.events ??= [];
-				someSongChartIG.events.push({t:timelas,n: "focus on character",v:[!lastDaddy ? 'dad' : 'bf']});
-		
+				someSongChartIG.events.push({t: timelas, n: "focus on character", v: [!lastDaddy ? 'dad' : 'bf']});
 			}
 			for (note in section.sectionNotes)
 			{
@@ -159,8 +157,8 @@ class SongChartData
 			}
 			timelas += Math.floor(bpm4);
 		}
-		#if (sys && saveConversion) 
-		if(!sys.FileSystem.exists('./conversions'))
+		#if (sys && saveConversion)
+		if (!sys.FileSystem.exists('./conversions'))
 			sys.FileSystem.createDirectory('./conversions');
 		sys.io.File.saveContent('./conversions/${data.song.toLowerCase()}-converted.json', Json.stringify(someSongChartIG, null, '\t'));
 		#end
