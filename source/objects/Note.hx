@@ -45,7 +45,7 @@ class Note extends FunkinSprite
 		rgbswap = getSwapShaderForLane(lane);
 		// shader = rgbswap.shader;
 
-		reload(strumline != null ? strumline.skin : 'default');
+		reload(strumline != null ? strumline.skin : 'funkin');
 		if (!isSustainNote)
 			earlyHitMult *= 0.5;
 		else

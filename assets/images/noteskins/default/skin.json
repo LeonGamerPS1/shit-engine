@@ -1,8 +1,0 @@
-{
-  "scale": 0.7,
-  "antialiasing": true,
-  "image": "default",
-  "splashImage": "noteSplashes",
-  "splashScale":2,
-  "fallback": "default"
-}

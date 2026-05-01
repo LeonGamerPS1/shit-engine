@@ -1,17 +1,19 @@
 {
-    "songDisplayName": "Bopeebo",
-    "previewBPM": 100,
-    "previewWindow": {
-      "startTime": 0,
-      "endTime": 6000.66
-    },
-    "volume": 1.0,
-    "icon": "dad",
-    "difficulties": [
-      "hard"
-    ],
-    "charter": "ninjamuffin99",
-    "artist": "Kawai Sprite",
-    "version": 9000,
-    "generatedBy": "edited by hand bitch"
-  }
+	"artist": "Kawai Sprite",
+	"charter": "ninjamuffin99 + MtH",
+	"songDisplayName": "Bopeebo",
+	"difficulties": [
+		"easy",
+		"normal",
+		"hard"
+	],
+	"previewWindow": {
+		"startTime": 0,
+		"endTime": -1
+	},
+	"previewBPM": 100,
+	"icon": "dad",
+	"generatedBy": "Vslice->SHITV1 Converter",
+	"volume": 1,
+	"version": 1
+}

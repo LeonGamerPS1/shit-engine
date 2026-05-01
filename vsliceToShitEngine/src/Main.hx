@@ -161,7 +161,7 @@ class Main
 			for (bpmChange in vSliceMeta.timeChanges)
 				diffJson.timingChanges.push({time: bpmChange.t, bpm: bpmChange.bpm});
 			for(note in vSliceData.notes.get(difficulty)) {
-				var noteNew:SongNoteData = {l: note.d,lms: note.l,tms: note.t};
+				var noteNew:SongNoteData = {l: note.d,lms: note.l ?? 0,tms: note.t};
 				if(note.k != null)
 					noteNew.t = note.k;
 				diffJson.notes.push(noteNew);
