@@ -1,5 +1,7 @@
 package;
 
+import ShitEngine.SongNoteData;
+import ShitEngine.SongChartDataR;
 import ShitEngine.SongMetaDataRAW;
 import haxe.Json;
 import moonchart.formats.fnf.FNFVSlice;
@@ -72,6 +74,7 @@ class Main
 		Sys.println('choose diffs, default are easy hard and normal but check the chart file for more for example type easy,hard,normal');
 		diffs = Sys.stdin().readLine().split('\n');
 
+		var rawmeta = Json.parse(File.getContent(_metaJsonPath));
 		var funkinVSlice = new FNFVSlice().fromJson(File.getContent(_chartJsonPath), File.getContent(_metaJsonPath), diffs);
 
 		// Access the converted FNF (V-Slice) format data using the following variables
@@ -99,16 +102,74 @@ class Main
 		for (songOggOrMP3 in songFiles)
 		{
 			var pathToPut = FileSystem.absolutePath(Path.addTrailingSlash(_inputSongFolder) + songOggOrMP3);
-			Sys.println('added song/$songOggOrMP3 to zip entry');
+			Sys.println('added audio/$songOggOrMP3 to zip entry');
 			var bytes = File.getBytes(pathToPut);
-			zip.addBytes(bytes, 'song/$songOggOrMP3');
+			zip.addBytes(bytes, 'audio/$songOggOrMP3');
 		}
 
-		for(difficulty in meta.difficulties) {
+		for (difficulty in meta.difficulties)
+		{
 			trace('attempting to convert difficulty $difficulty');
+			var vsliceDiff = vSliceMeta.playData;
+			var instNamePost = '';
+			if (vSliceMeta.playData.characters.instrumental != null)
+				instNamePost += '-${vSliceMeta.playData.characters.instrumental}';
 
+			var realOppVocals = [];
+			for (opp in vSliceMeta.playData.characters.opponentVocals)
+			{
+				var oppVocals = 'Voices';
+				var second = (opp ?? '');
+				if (second != '')
+					oppVocals += '-$second';
+				realOppVocals.push(oppVocals);
+			}
+
+			var realPlrVocals = [];
+			for (opp in vSliceMeta.playData.characters.playerVocals)
+			{
+				var plrButt = 'Voices';
+				var second = (opp ?? '');
+				if (second != '')
+					plrButt += '-$second';
+				if (plrButt.toLowerCase() == 'voices')
+					continue;
+				realPlrVocals.push(plrButt);
+			}
+
+			var diffJson:SongChartDataR = {
+				characters: {
+					dad: vSliceMeta.playData.characters.opponent,
+					boyfriend: vSliceMeta.playData.characters.player,
+					gf: vSliceMeta.playData.characters.girlfriend,
+					instPath: 'Inst' + instNamePost,
+					playerVocals: realPlrVocals,
+					enemyVocals: realOppVocals
+				},
+				stage: vSliceMeta.playData.stage,
+				speed: vSliceData.scrollSpeed.get(difficulty),
+				offset: vSliceMeta.offsets.instrumental,
+				timingChanges: [],
+				noteStyle: vSliceMeta.playData.noteStyle,
+				album: vSliceMeta.playData.album,
+				stickerPack: rawmeta.playData.stickerPack,
+				startPreview: 0,
+				endPreview: -1,
+				notes: [],
+				bpm: vSliceMeta.timeChanges[0].bpm
+			};
+			for (bpmChange in vSliceMeta.timeChanges)
+				diffJson.timingChanges.push({time: bpmChange.t, bpm: bpmChange.bpm});
+			for(note in vSliceData.notes.get(difficulty)) {
+				var noteNew:SongNoteData = {l: note.d,lms: note.l,tms: note.t};
+				if(note.k != null)
+					noteNew.t = note.k;
+				diffJson.notes.push(noteNew);
+			}
+			Sys.println('added chart charts/$difficulty.json');
+			zip.addString(Json.stringify(diffJson, '\t'), 'charts/$difficulty.json');
 		}
-		
+
 		if (!FileSystem.exists('output'))
 			FileSystem.createDirectory('output');
 		var bytes = zip.finalize();

@@ -34,7 +34,6 @@ typedef SongChartDataR =
 	public var bpm:Float;
 	@:optional
 	public var events:Array<SongEventData>;
-	@:optional var timingPoints:Array<SongTmPoint>;
 }
 
 typedef SongNoteData =
@@ -42,7 +41,7 @@ typedef SongNoteData =
 	var l:Int; // lane, dad: 0 1 2 3, BF: 4 5 6 7
 	var lms:Float; // length in MS
 	var tms:Float; //  time/songPos
-	var t:String; // type
+	@:optional var t:String; // type
 }
 
 typedef SwagSectionXMLBFXML =
