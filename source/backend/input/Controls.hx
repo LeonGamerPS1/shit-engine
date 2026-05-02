@@ -138,6 +138,8 @@ class Controls
 
 	public function justPressed(key:String)
 	{
+		
+
 		var result:Bool = (FlxG.keys.anyJustPressed(keyboardBinds[key]) == true);
 		if (result)
 			controllerMode = false;
@@ -147,6 +149,7 @@ class Controls
 
 	public function pressed(key:String)
 	{
+	
 		var result:Bool = (FlxG.keys.anyPressed(keyboardBinds[key]) == true);
 		if (result)
 			controllerMode = false;
@@ -156,6 +159,7 @@ class Controls
 
 	public function justReleased(key:String)
 	{
+		
 		var result:Bool = (FlxG.keys.anyJustReleased(keyboardBinds[key]) == true);
 		if (result)
 			controllerMode = false;

@@ -1,8 +1,5 @@
 package states.menus;
 
-
-
-
 class TitleState extends flixel.addons.transition.FlxTransitionableState
 {
 	var logo:FunkinSprite;
@@ -82,7 +79,17 @@ class TitleState extends flixel.addons.transition.FlxTransitionableState
 		var m = FlxMath.lerp(1, logo.scale.x, Math.exp(-elapsed * 8));
 		logo.scale.set(m, m);
 
-		if (inputSystem.ACCEPT && !exiting)
+		var accept = false;
+		#if (!FLX_NO_TOUCH)
+		for (touch in FlxG.touches.list)
+		{
+			if (touch.justPressed)
+			{
+				accept = true;
+			}
+		}
+		#end
+		if (inputSystem.ACCEPT || accept && !exiting)
 		{
 			exiting = true;
 			FlxG.camera.flash();
@@ -91,7 +98,6 @@ class TitleState extends flixel.addons.transition.FlxTransitionableState
 
 			startTimer = new FlxTimer().start(1.5, (t) -> exit());
 		}
-	
 	}
 
 	var startTimer:FlxTimer;

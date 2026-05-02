@@ -1,9 +1,0 @@
-
-
-func onEventTrigger(event) {
-     if(event.n == 'focus on character') {
-        var character = game.getCharFromString(event.v[0])
-        game.focusOnChar(character)
-     }
-     
-}

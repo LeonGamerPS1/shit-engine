@@ -1,0 +1,522 @@
+{
+	"stickerPack": "bonus-tutorial",
+	"offset": null,
+	"characters": {
+		"gf": "gf",
+		"playerVocals": [
+			"Voices-bf"
+		],
+		"instPath": "Inst",
+		"enemyVocals": [
+			"Voices-gf"
+		],
+		"boyfriend": "bf",
+		"dad": "gf"
+	},
+	"noteStyle": "funkin",
+	"album": "volume1",
+	"notes": [
+		{
+			"l": 0,
+			"tms": 9600,
+			"lms": 0
+		},
+		{
+			"l": 3,
+			"tms": 10800,
+			"lms": 0
+		},
+		{
+			"l": 0,
+			"tms": 12000,
+			"lms": 0
+		},
+		{
+			"l": 3,
+			"tms": 13200,
+			"lms": 0
+		},
+		{
+			"l": 4,
+			"tms": 14400,
+			"lms": 0
+		},
+		{
+			"l": 7,
+			"tms": 15600,
+			"lms": 0
+		},
+		{
+			"l": 4,
+			"tms": 16800,
+			"lms": 0
+		},
+		{
+			"l": 7,
+			"tms": 18000,
+			"lms": 0
+		},
+		{
+			"l": 2,
+			"tms": 19200,
+			"lms": 0
+		},
+		{
+			"l": 1,
+			"tms": 20400,
+			"lms": 0
+		},
+		{
+			"l": 2,
+			"tms": 21600,
+			"lms": 0
+		},
+		{
+			"l": 1,
+			"tms": 22800,
+			"lms": 0
+		},
+		{
+			"l": 6,
+			"tms": 24000,
+			"lms": 0
+		},
+		{
+			"l": 5,
+			"tms": 25200,
+			"lms": 0
+		},
+		{
+			"l": 6,
+			"tms": 26400,
+			"lms": 0
+		},
+		{
+			"l": 5,
+			"tms": 27600,
+			"lms": 0
+		},
+		{
+			"l": 0,
+			"tms": 28800,
+			"lms": 0
+		},
+		{
+			"l": 2,
+			"tms": 30000,
+			"lms": 0
+		},
+		{
+			"l": 1,
+			"tms": 31200,
+			"lms": 0
+		},
+		{
+			"l": 3,
+			"tms": 32400,
+			"lms": 0
+		},
+		{
+			"l": 4,
+			"tms": 33600,
+			"lms": 0
+		},
+		{
+			"l": 6,
+			"tms": 34800,
+			"lms": 0
+		},
+		{
+			"l": 5,
+			"tms": 36000,
+			"lms": 0
+		},
+		{
+			"l": 7,
+			"tms": 37200,
+			"lms": 0
+		},
+		{
+			"l": 1,
+			"tms": 38400,
+			"lms": 0
+		},
+		{
+			"l": 1,
+			"tms": 39000,
+			"lms": 0
+		},
+		{
+			"l": 2,
+			"tms": 39600,
+			"lms": 0
+		},
+		{
+			"l": 1,
+			"tms": 40800,
+			"lms": 0
+		},
+		{
+			"l": 1,
+			"tms": 41400,
+			"lms": 0
+		},
+		{
+			"l": 3,
+			"tms": 42000,
+			"lms": 0
+		},
+		{
+			"l": 5,
+			"tms": 43200,
+			"lms": 0
+		},
+		{
+			"l": 5,
+			"tms": 43800,
+			"lms": 0
+		},
+		{
+			"l": 6,
+			"tms": 44400,
+			"lms": 0
+		},
+		{
+			"l": 5,
+			"tms": 45600,
+			"lms": 0
+		},
+		{
+			"l": 5,
+			"tms": 46200,
+			"lms": 0
+		},
+		{
+			"l": 7,
+			"tms": 46800,
+			"lms": 0
+		},
+		{
+			"l": 1,
+			"tms": 48000,
+			"lms": 0
+		},
+		{
+			"l": 2,
+			"tms": 48300,
+			"lms": 0
+		},
+		{
+			"l": 3,
+			"tms": 48600,
+			"lms": 0
+		},
+		{
+			"l": 2,
+			"tms": 48900,
+			"lms": 0
+		},
+		{
+			"l": 3,
+			"tms": 49800,
+			"lms": 0
+		},
+		{
+			"l": 5,
+			"tms": 50400,
+			"lms": 0
+		},
+		{
+			"l": 6,
+			"tms": 50700,
+			"lms": 0
+		},
+		{
+			"l": 7,
+			"tms": 51000,
+			"lms": 0
+		},
+		{
+			"l": 6,
+			"tms": 51300,
+			"lms": 0
+		},
+		{
+			"l": 7,
+			"tms": 52200,
+			"lms": 0
+		},
+		{
+			"l": 7,
+			"tms": 52800,
+			"lms": 0
+		},
+		{
+			"l": 5,
+			"tms": 53400,
+			"lms": 0
+		},
+		{
+			"l": 4,
+			"tms": 54000,
+			"lms": 0
+		},
+		{
+			"l": 5,
+			"tms": 54600,
+			"lms": 0
+		},
+		{
+			"l": 6,
+			"tms": 55200,
+			"lms": 0
+		},
+		{
+			"l": 7,
+			"tms": 55800,
+			"lms": 0
+		},
+		{
+			"l": 4,
+			"tms": 56400,
+			"lms": 0
+		},
+		{
+			"l": 6,
+			"tms": 57000,
+			"lms": 0
+		},
+		{
+			"l": 5,
+			"tms": 57600,
+			"lms": 1087.5
+		}
+	],
+	"startPreview": 0,
+	"timingChanges": [
+		{
+			"time": 0,
+			"bpm": 100
+		}
+	],
+	"events": [
+		{
+			"v": [
+				0
+			],
+			"t": 0,
+			"n": "FocusCamera"
+		},
+		{
+			"v": [
+				1
+			],
+			"t": 9600,
+			"n": "FocusCamera"
+		},
+		{
+			"v": [
+				"elasticInOut",
+				4,
+				1.3
+			],
+			"t": 9600,
+			"n": "ZoomCamera"
+		},
+		{
+			"v": [
+				0
+			],
+			"t": 14400,
+			"n": "FocusCamera"
+		},
+		{
+			"v": [
+				"elasticInOut",
+				4,
+				1
+			],
+			"t": 14400,
+			"n": "ZoomCamera"
+		},
+		{
+			"v": [
+				"hey",
+				"boyfriend",
+				true
+			],
+			"t": 18600,
+			"n": "PlayAnimation"
+		},
+		{
+			"v": [
+				"cheer",
+				"dad",
+				false
+			],
+			"t": 18600,
+			"n": "PlayAnimation"
+		},
+		{
+			"v": [
+				1
+			],
+			"t": 19200,
+			"n": "FocusCamera"
+		},
+		{
+			"v": [
+				"elasticInOut",
+				4,
+				1.3
+			],
+			"t": 19200,
+			"n": "ZoomCamera"
+		},
+		{
+			"v": [
+				0
+			],
+			"t": 24000,
+			"n": "FocusCamera"
+		},
+		{
+			"v": [
+				"elasticInOut",
+				4,
+				1
+			],
+			"t": 24000,
+			"n": "ZoomCamera"
+		},
+		{
+			"v": [
+				"hey",
+				"boyfriend",
+				true
+			],
+			"t": 28200,
+			"n": "PlayAnimation"
+		},
+		{
+			"v": [
+				"cheer",
+				"dad",
+				false
+			],
+			"t": 28200,
+			"n": "PlayAnimation"
+		},
+		{
+			"v": [
+				1
+			],
+			"t": 28800,
+			"n": "FocusCamera"
+		},
+		{
+			"v": [
+				"elasticInOut",
+				4,
+				1.3
+			],
+			"t": 28800,
+			"n": "ZoomCamera"
+		},
+		{
+			"v": [
+				0
+			],
+			"t": 33600,
+			"n": "FocusCamera"
+		},
+		{
+			"v": [
+				"elasticInOut",
+				4,
+				1
+			],
+			"t": 33600,
+			"n": "ZoomCamera"
+		},
+		{
+			"v": [
+				1
+			],
+			"t": 38400,
+			"n": "FocusCamera"
+		},
+		{
+			"v": [
+				"elasticInOut",
+				4,
+				1.3
+			],
+			"t": 38400,
+			"n": "ZoomCamera"
+		},
+		{
+			"v": [
+				0
+			],
+			"t": 43200,
+			"n": "FocusCamera"
+		},
+		{
+			"v": [
+				"elasticInOut",
+				4,
+				1
+			],
+			"t": 43200,
+			"n": "ZoomCamera"
+		},
+		{
+			"v": [
+				1
+			],
+			"t": 48000,
+			"n": "FocusCamera"
+		},
+		{
+			"v": [
+				"elasticInOut",
+				4,
+				1.3
+			],
+			"t": 48000,
+			"n": "ZoomCamera"
+		},
+		{
+			"v": [
+				0
+			],
+			"t": 50400,
+			"n": "FocusCamera"
+		},
+		{
+			"v": [
+				"elasticInOut",
+				4,
+				1
+			],
+			"t": 50400,
+			"n": "ZoomCamera"
+		},
+		{
+			"v": [
+				"both",
+				"expoIn",
+				4,
+				false,
+				1.2
+			],
+			"t": 60000,
+			"n": "ScrollSpeed"
+		}
+	],
+	"endPreview": -1,
+	"stage": "mainStage",
+	"bpm": 100,
+	"speed": 1
+}

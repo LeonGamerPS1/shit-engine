@@ -25,13 +25,13 @@
 	<window if="desktop" orientation="landscape" fullscreen="false" resizable="true" />
 
 	<!--Mobile-specific-->
-	<window if="mobile" orientation="landscape" fullscreen="true" width="0" height="0" />
+	<window if="mobile" orientation="landscape" fullscreen="true" width="1280" height="720" />
 
 	<!-- _____________________________ Path Settings ____________________________ -->
 
 	<set name="buildFolder" value="release" unless="debug"/>
 	<set name="buildFolder" value="debug" if="debug"/>
-
+	
 	<set name="BUILD_DIR" value="export/${buildFolder}" />
 	<source path="source" />
 	<assets path="assets" />
@@ -48,6 +48,7 @@
 	<haxelib name="nxscript"/>
 	<haxelib name="polymod"/>
 	<haxedev set='webgl' />
+	<haxelib name="extensiontools-android" if="android"/>
 
 	<haxedef name="FM_ENGINE" value="shit"/>
 	<haxedef name="FM_ENGINE_VERSION" value="260425"/>

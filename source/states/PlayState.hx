@@ -9,12 +9,14 @@ import backend.gameplay.SongLoader;
 import backend.scripting.NxScriptM;
 import flixel.math.FlxPoint;
 import flixel.sound.FlxSoundGroup;
+import flixel.tweens.FlxEase;
 import haxe.Timer;
 import nx.script.NativeProxy;
 import objects.Note;
 import objects.Playfield;
 import objects.gameplay.Character;
 import states.menus.MainMenuState;
+import states.sub.PauseSubState;
 
 class PlayState extends flixel.addons.transition.FlxTransitionableState
 {
@@ -111,7 +113,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		set('modchart', playfield.modchartSystem);
 		playfield.cameras = playfield.modchartingCameras = [camHUD];
 		// playfield.modchartingCamera = camHUD;
-		camGame.bgColor = 0xFF676767;
+		camGame.bgColor = 0x0;
 		for (strumLines in [playfield.dadStrumline, playfield.bfStrumline])
 		{
 			strumLines.onHitNote.add(hitNote);
@@ -141,6 +143,11 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		add(dadLayer);
 		add(boyfriendLayer);
 
+		if (song.data.characters.dad == song.data.characters.gf)
+		{
+			dadPosition.copyFrom(gfPosition);
+			gfLayer.kill();
+		}
 		dad = new Character(0, 0, song.data.characters.dad);
 		dad.setPosition(dadPosition.x, dadPosition.y);
 		dad.setPosition(dad.x + dad.json.pos_offset[0], dad.y + dad.json.pos_offset[1]);
@@ -156,6 +163,8 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		gfLayer.add(gf);
 		dadLayer.add(dad);
 		boyfriendLayer.add(bf);
+
+		focusCharList = [bf, dad, gf];
 
 		playfield.dadStrumline.char = dad;
 		playfield.bfStrumline.char = bf;
@@ -205,6 +214,7 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		script?.dispose();
 		if (!OpenFLAssets.exists(hm))
 			return;
+		trace(hm);
 		script = new NxScriptM(hm, hm);
 		scripts.set(hm, script);
 		script.call('new');
@@ -271,35 +281,86 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 	public function onEventLoad(event:SongEventData)
 	{
 		call("onEventLoad", [event]);
-		if (event.n == 'change character')
+		switch (event.n)
 		{
-			var charname = event.v[1];
-			var chartoreplace = event.v[0];
-			var charOBJ = getCharFromString(chartoreplace);
-			var oldchar = charOBJ.curCharacter;
-			charOBJ.loadJson(charname ?? charOBJ.curCharacter);
-			charOBJ.loadJson(oldchar);
-			playfield.iconP1.changeIcon(bf.json.icon);
-			playfield.iconP2.changeIcon(dad.json.icon);
+			case 'change character':
+				var charname = event.v[1];
+				var chartoreplace = event.v[0];
+				var charOBJ = getCharFromString(chartoreplace);
+				var oldchar = charOBJ.curCharacter;
+				charOBJ.loadJson(charname ?? charOBJ.curCharacter);
+				charOBJ.loadJson(oldchar);
+				playfield.iconP1.changeIcon(bf.json.icon);
+				playfield.iconP2.changeIcon(dad.json.icon);
 		}
 	}
+
+	public var focusCharList:Array<Character> = [];
 
 	public function onEventTrigger(event:SongEventData)
 	{
 		call("onEventTrigger", [event]);
-		if (event.n == 'change character')
+		switch (event.n)
 		{
-			var charname = event.v[0];
-			var chartoreplace = event.v[1];
-			var charOBJ = getCharFromString(chartoreplace);
-			charOBJ.loadJson(charname ?? charOBJ.curCharacter);
-			var pos = charOBJ.player ? boyfriendPosition : dadPosition;
-			charOBJ.setPosition(pos.x + charOBJ.json.pos_offset[0], pos.y + charOBJ.json.pos_offset[1]);
+			case 'change character':
+				var charname = event.v[0];
+				var chartoreplace = event.v[1];
+				var charOBJ = getCharFromString(chartoreplace);
+				charOBJ.loadJson(charname ?? charOBJ.curCharacter);
+				var pos = charOBJ.player ? boyfriendPosition : dadPosition;
+				charOBJ.setPosition(pos.x + charOBJ.json.pos_offset[0], pos.y + charOBJ.json.pos_offset[1]);
+			case 'focus on character', 'FocusCamera':
+				var character = null;
+
+				switch (event.v.length)
+				{
+					default:
+						character = getCharFromString(event.v[0]);
+					case 5:
+						character = focusCharList[event.v[4]];
+				}
+				focusOnChar(character);
+			case 'PlayAnimation':
+				var anim = event.v[0];
+				var char = getCharFromString(event.v[1]);
+				char.playAnim(anim, event.v[2]);
+				if (char.animation.curAnim != null)
+					char.holdTimer = char.animation.numFrames / char.animation.curAnim.frameRate;
+			case 'ZoomCamera':
+				switch (event.v.length)
+				{
+					default:
+						var ease = Reflect.getProperty(FlxEase, event.v[0]);
+						var steeLength:Float = event.v[1] * Conductor.stepLength;
+						var direct:Bool = event.v[2] != 'stage';
+						var zoom:Float = event.v[3];
+						var zoomTarget = direct ? zoom : zoom * stageJSON.zoom;
+
+						FlxTween.num(camGame.zoom, zoomTarget, steeLength / 1000, {ease: ease}, (val) ->
+						{
+							defaultZoomGame = val;
+							camGame.zoom = val;
+						});
+
+					case 3:
+						var ease = Reflect.getProperty(FlxEase, event.v[0]);
+						var length = (Conductor.stepLength * event.v[1]) * 0.001;
+						var zoom = event.v[2];
+						FlxTween.num(camGame.zoom, zoom, length, {ease: ease}, (v:Float) ->
+						{
+							camGame.zoom = v * stageJSON.zoom;
+							defaultZoomGame = camGame.zoom;
+						});
+				}
+			case 'SetCameraBop':
+				sectionBops = event.v[0];
 		}
 	}
 
-	public function getCharFromString(charname:String):Character
+	public function getCharFromString(charname:Dynamic):Character
 	{
+		if (charname is Int)
+			return focusCharList[charname];
 		var customChar = null;
 		var char:Character = customChar;
 
@@ -307,16 +368,18 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		{
 			switch (charname)
 			{
-				case "gf":
+				case "gf", 'girlfirned':
 					char = gf;
-				case "dad":
+				case "dad", 'opponent':
 					char = dad;
-				case "bf":
+				case "bf", 'boyfriend':
 					char = bf;
 			}
 		}
 		return char;
 	}
+
+	public var canPause:Bool = true;
 
 	public function focusOnChar(char:Character)
 	{
@@ -376,16 +439,38 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 
 	public function sectionHit()
 	{
-		FlxG.camera.zoom += 0.015 * camBopMult;
-		camHUD.zoom += 0.03 * hudBopMult;
 		call('sectionHit', [Math.floor(Conductor.curSection)]);
+	}
+
+	var sectionBops = 4;
+
+	public override function destroy()
+	{
+		for (vocalSFX in playerVocals.sounds.concat(enemyVocals.sounds))
+		{
+			vocalSFX.destroy();
+			playerVocals.remove(vocalSFX);
+			enemyVocals.remove(vocalSFX);
+			vocalSFX = null;
+		}
+		playerVocals.sounds = null;
+		enemyVocals.sounds = null;
+		playerVocals = enemyVocals = null;
+		super.destroy();
 	}
 
 	public function beatHit()
 	{
 		call('beatHit', [Math.floor(Conductor.curBeat)]);
+		if (Math.floor(Conductor.curBeat) % sectionBops == 0)
+		{
+			FlxG.camera.zoom += 0.015 * camBopMult;
+			camHUD.zoom += 0.03 * hudBopMult;
+		}
 		for (vocalSFX in playerVocals.sounds.concat(enemyVocals.sounds))
 		{
+			if (paused)
+				break;
 			if (!vocalSFX.playing || !inst.playing || Math.floor(Conductor.curBeat) % 2 != 0)
 				continue;
 			if (Math.abs(inst.time - vocalSFX.time) > 200)
@@ -397,6 +482,8 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 	{
 		call('stepHit', [Math.floor(Conductor.curStep)]);
 	}
+
+	public var paused:Bool = false;
 
 	public function startSong()
 	{
@@ -421,7 +508,6 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		call('startCountdown');
 	}
 
-
 	override public function update(elapsed:Float)
 	{
 		call('onUpdatePre', [elapsed]);
@@ -431,25 +517,28 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 			currentScoreEntry.misses = playfield.misses;
 		if (currentScoreEntry.accuracy != playfield.accuracy)
 			currentScoreEntry.accuracy = playfield.accuracy;
-		FlxG.camera.zoom = FlxMath.lerp(defaultZoomGame, FlxG.camera.zoom, 0.95);
-		camHUD.zoom = FlxMath.lerp(defaultZoomHUD, camHUD.zoom, 0.95);
+		FlxG.camera.zoom = FlxMath.lerp(defaultZoomGame, FlxG.camera.zoom, Math.exp(-elapsed * 6));
+		camHUD.zoom = FlxMath.lerp(defaultZoomHUD, camHUD.zoom, Math.exp(-elapsed * 6));
 		camUnderlay.zoom = camHUD.zoom;
 		enemyVocals.volume = enemyVolume * inst.getActualVolume();
 		playerVocals.volume = playerVolume * inst.getActualVolume();
 		inst.volume = FlxG.sound.volume > 0 ? 1 : 0;
 
-		if (startedCountdown && !startedSong)
+		if (!paused)
 		{
-			Conductor.time += elapsed * 1000;
-			if (Conductor.time >= Conductor.offset)
+			if (startedCountdown && !startedSong)
 			{
-				startSong();
+				Conductor.time += elapsed * 1000;
+				if (Conductor.time >= Conductor.offset)
+				{
+					startSong();
+					Conductor.time = inst.time;
+				}
+			}
+			else
+			{
 				Conductor.time = inst.time;
 			}
-		}
-		else
-		{
-			Conductor.time = inst.time;
 		}
 
 		if (events.length > 0)
@@ -467,6 +556,32 @@ class PlayState extends flixel.addons.transition.FlxTransitionableState
 		call('onUpdate', [elapsed]);
 		super.update(elapsed);
 		call('onUpdatePost', [elapsed]);
+
+		if (inputSystem.ACCEPT)
+		{
+			pauseOrSmth();
+		}
+	}
+
+	function pauseOrSmth()
+	{
+		var subState = new PauseSubState();
+		subState.closeCallback = unPause;
+		openSubState(subState);
+		call('onPause');
+		paused = true;
+
+		inst.pause();
+		for (shit in playerVocals.sounds.concat(enemyVocals.sounds))
+			shit.pause();
+	}
+
+	public function unPause()
+	{
+		paused = false;
+		inst.resume();
+		for (shit in playerVocals.sounds.concat(enemyVocals.sounds))
+			shit.resume();
 	}
 
 	public function onEndSong()

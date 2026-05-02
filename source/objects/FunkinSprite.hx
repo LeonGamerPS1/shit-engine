@@ -3,10 +3,10 @@ package objects;
 import flixel.math.FlxRect;
 import flixel.system.FlxAssets.FlxGraphicAsset;
 
-enum AtlasType
+enum abstract AtlasType(String) from String to String
 {
-	SPARROW;
-	ANIMATE;
+	var SPARROW = 'sparrow';
+	var ANIMATE = 'animate';
 }
 
 class FunkinSprite extends OffsetSprite

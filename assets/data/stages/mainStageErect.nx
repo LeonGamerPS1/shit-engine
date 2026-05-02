@@ -1,0 +1,130 @@
+func onStageLoad(s,s2) {
+  
+       var solid = new FunkinSprite(-500,-1000)
+     
+    solid.makeGraphic(1,1,0xFF222026)
+   
+    solid.scale.set(2400,2000)
+    solid.updateHitbox()
+    solid.scrollFactor.set(0,0)
+    game.add(solid)
+ 
+    var crowd = new FunkinSprite(682,290)
+    crowd.loadAtlas('stages/stage/erect/crowd','sparrow')
+    crowd.updateHitbox()
+    crowd.scrollFactor.set(0.8,0.8)
+    crowd.addAnimPrefix('idle','idle0',12,true)
+    crowd.animation.play('idle')
+    crowd.updateHitbox()
+    game.add(crowd)
+    trace('manwoman')
+
+    var lightsmallor = new FunkinSprite(967,-103)
+    lightsmallor.loadImage("stages/stage/erect/brightLightSmall")
+    lightsmallor.scrollFactor.set(1.2,1.2)
+    lightsmallor.scale.set(1,1)
+    lightsmallor.blend = 1
+    lightsmallor.updateHitbox()
+    lightsmallor.active = false
+    lightsmallor.antialiasing = true
+    game.add(lightsmallor)
+
+    var bg = new FunkinSprite(-765,-247)
+    bg.loadImage("stages/stage/erect/bg")
+    bg.scrollFactor.set(1,1)
+    bg.scale.set(1,1)
+    bg.updateHitbox()
+    bg.active = false
+    bg.antialiasing = true
+    game.add(bg)
+
+    var server = new FunkinSprite(-991,205)
+    server.loadImage("stages/stage/erect/server")
+    server.scrollFactor.set(1,1)
+    server.scale.set(1,1)
+    server.updateHitbox()
+    server.active = false
+    server.antialiasing = true
+    game.add(server)
+
+    var green = new FunkinSprite(-171,242)
+    green.loadImage("stages/stage/erect/lightgreen")
+    green.scrollFactor.set(1,1)
+    green.scale.set(1,1)
+    green.updateHitbox()
+    green.active = false
+    green.blend = 1
+    green.antialiasing = true
+    game.add(green)
+
+    var red = new FunkinSprite(-101,560)
+    red.loadImage("stages/stage/erect/lightred")
+    red.scrollFactor.set(1,1)
+    red.scale.set(1,1)
+    red.updateHitbox()
+    red.active = false
+    red.blend = 1
+    red.antialiasing = true
+    game.add(red)
+   
+    var orange = new FunkinSprite(189,-500)
+    orange.loadImage("stages/stage/erect/orangeLight")
+    orange.blend = 1
+    orange.scrollFactor.set(1,1)
+    orange.scale.set(1,1700)
+    orange.updateHitbox()
+    orange.active = false
+    orange.antialiasing = true
+    game.add(orange) 
+
+    var likes = new FunkinSprite(-847,-245)
+    likes.loadImage("stages/stage/erect/lights")
+    likes.scrollFactor.set(1,1)
+    likes.scale.set(1.2,1.2)
+    likes.updateHitbox()
+    likes.active = false
+    likes.antialiasing = true
+    game.add(likes)   
+
+    var likes2 = new FunkinSprite(804,-117)
+    likes2.loadImage("stages/stage/erect/lightAbove")
+    likes2.scrollFactor.set(1,1)
+    likes2.scale.set(1,1)
+    likes2.updateHitbox()
+    likes2.blend = 1
+    likes2.active = false
+    likes2.antialiasing = true
+    game.add(likes2) 
+}
+
+var colorShaderBf;
+var colorShaderDad;
+var colorShaderGf;
+
+function onCreatePost() {
+    colorShaderGf = createShader('adjustColor')
+    colorShaderGf.setFloat('brightness',-30);
+    colorShaderGf.setFloat('hue',-9);
+    colorShaderGf.setFloat('contrast',-4);
+    colorShaderGf.setFloat('saturation',0);
+    game.gf.shader = colorShaderGf
+
+    colorShaderDad = createShader('adjustColor')
+    colorShaderDad.setFloat('brightness',-33);
+    colorShaderDad.setFloat('hue',-33);
+    colorShaderDad.setFloat('contrast',-23);
+    colorShaderDad.setFloat('saturation',0);
+    game.dad.shader = colorShaderDad
+
+    colorShaderBf = createShader('adjustColor')
+    colorShaderBf.setFloat('brightness',-23);
+    colorShaderBf.setFloat('hue',12);
+    colorShaderBf.setFloat('contrast',7);
+    colorShaderBf.setFloat('saturation',0);
+    game.bf.shader = colorShaderBf
+
+
+
+
+}
+

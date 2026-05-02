@@ -1,0 +1,18 @@
+{
+	"difficulties": [
+		"erect",
+		"nightmare"
+	],
+	"previewBPM": 123,
+	"icon": "dad",
+	"charter": "Jenny Crowe + fabs + Spazkid",
+	"version": 1,
+	"generatedBy": "Vslice->SHITV1 Converter",
+	"volume": 1,
+	"artist": "Kawai Sprite (feat. Saruky)",
+	"songDisplayName": "Bopeebo Erect",
+	"previewWindow": {
+		"endTime": -1,
+		"startTime": 0
+	}
+}

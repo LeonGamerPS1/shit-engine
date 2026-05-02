@@ -155,7 +155,7 @@ class FreeplayState extends FlxTransitionableState
 						catch (e:Dynamic)
 						{
 							FlxG.log.error(e);
-							Application.current.window.alert(e, 'error');
+							Application.current.window.alert(Std.string(e), 'error');
 						}
 					});
 				}

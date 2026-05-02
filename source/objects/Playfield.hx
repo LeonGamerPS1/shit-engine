@@ -60,6 +60,9 @@ class Playfield extends FlxGroup implements backend.graphics.ModchartBackend.IMo
 		bfStrumline.speed = dadStrumline.speed = song.data.speed;
 		currentSong = song;
 
+		if (!SaveData.currentSettings.opponentStrums)
+			dadStrumline.strums.x = -1000;
+
 		for (tm in song.data.timingChanges)
 			Conductor.addTimeChangeAt(tm.time, tm.bpm);
 
@@ -144,7 +147,6 @@ class Playfield extends FlxGroup implements backend.graphics.ModchartBackend.IMo
 
 		noteSplashes = new FlxTypedGroup<NoteSplash>();
 		add(noteSplashes);
-	
 	}
 
 	public function spawnSplashOnStrum(s:Strum)
@@ -254,7 +256,7 @@ class Playfield extends FlxGroup implements backend.graphics.ModchartBackend.IMo
 		for (icon in [iconP1, iconP2])
 		{
 			FlxTween.cancelTweensOf(icon.scale);
-			FlxTween.tween(icon.scale, {x: 1, y: 1}, 0.2);
+			FlxTween.tween(icon.scale, {x: 1, y: 1}, 0.05);
 		}
 	}
 
@@ -307,8 +309,6 @@ class Playfield extends FlxGroup implements backend.graphics.ModchartBackend.IMo
 
 		iconP1.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01) - iconOffset);
 		iconP2.x = healthBar.x + (healthBar.width * (FlxMath.remapToRange(healthBar.percent, 0, 100, 100, 0) * 0.01)) - (iconP2.width - iconOffset);
-		iconP1.y = healthBar.y - (iconP1.height / 2);
-		iconP2.y = healthBar.y - (iconP2.height / 2);
 
 		if (health > 2)
 			health = 2;

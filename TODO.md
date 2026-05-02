@@ -1,5 +1,6 @@
 ## Weeks
-- Week 1 - in progress
+- Tutorial - WIP (99%)
+- Week 1 - WIP (99%)
 - Week 2 - not started
 - Week 3 - not started
 - Week 4 - not started

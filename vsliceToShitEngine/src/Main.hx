@@ -1,15 +1,16 @@
 package;
 
-import ShitEngine.SongNoteData;
+import ShitEngine.*;
 import ShitEngine.SongChartDataR;
+import ShitEngine.SongEventData;
 import ShitEngine.SongMetaDataRAW;
+import ShitEngine.SongNoteData;
 import haxe.Json;
+import haxe.io.Path;
 import moonchart.formats.fnf.FNFVSlice;
+import sys.FileSystem;
 import sys.io.File;
 import zip.ZipWriter;
-import haxe.io.Path;
-import sys.FileSystem;
-import ShitEngine.*;
 
 using StringTools;
 
@@ -112,6 +113,7 @@ class Main
 			trace('attempting to convert difficulty $difficulty');
 			var vsliceDiff = vSliceMeta.playData;
 			var instNamePost = '';
+
 			if (vSliceMeta.playData.characters.instrumental != null)
 				instNamePost += '-${vSliceMeta.playData.characters.instrumental}';
 
@@ -160,11 +162,47 @@ class Main
 			};
 			for (bpmChange in vSliceMeta.timeChanges)
 				diffJson.timingChanges.push({time: bpmChange.t, bpm: bpmChange.bpm});
-			for(note in vSliceData.notes.get(difficulty)) {
-				var noteNew:SongNoteData = {l: note.d,lms: note.l ?? 0,tms: note.t};
-				if(note.k != null)
+			for (note in vSliceData.notes.get(difficulty))
+			{
+				var noteData = note.d % 4;
+				if (note.d < 4) // gosh do i hate vslices format
+					noteData += 4;
+				var noteNew:SongNoteData = {l: noteData, lms: note.l ?? 0, tms: note.t};
+				if (note.k != null)
 					noteNew.t = note.k;
 				diffJson.notes.push(noteNew);
+			}
+			for (event in vSliceData.events)
+			{
+				var newEvent:SongEventData = {t: Math.floor(event.t), v: [], n: event.e};
+
+				if (event.v != null)
+				{
+					var fields:Array<String> = [];
+					try
+					{
+						fields = Reflect.fields(event.v);
+					}
+					catch (e:Dynamic)
+					{
+						fields;
+					}
+					for (field in fields)
+					{
+						if (fields == null || fields.length < 0)
+							break;
+						newEvent.v.push(Reflect.field(event.v, field));
+					}
+					if (event.v is Array)
+					{
+						newEvent.v = event.v.copy();
+					}
+					if(fields.length < 1 && !(event.v is Array)) {
+						newEvent.v.push(event.v);
+					}
+				}
+				diffJson.events ??= [];
+				diffJson.events.push(newEvent);
 			}
 			Sys.println('added chart charts/$difficulty.json');
 			zip.addString(Json.stringify(diffJson, '\t'), 'charts/$difficulty.json');

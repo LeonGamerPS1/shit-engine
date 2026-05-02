@@ -1,5 +1,6 @@
 package states;
 
+#if android import extension.androidtools.*; #end
 import backend.gameplay.HighScore;
 import backend.input.Controls;
 import backend.modding.PolymodHandler;
@@ -16,13 +17,20 @@ import states.options.subs.ControlsSubstate;
 
 class InitState extends flixel.addons.transition.FlxTransitionableState
 {
+	#if android
+	static var defaultAndroidPermissions:Array<String> = [];
+	#end
 	override function create()
 	{
+		#if android
+		Permissions.requestPermissions(defaultAndroidPermissions);
+		#end
 		modchart.Config.PREVENT_SCALED_HOLD_END = true;
 		modchart.Config.OPTIMIZE_HOLDS = true;
+		
 		SaveData.init();
 		HighScore.init();
-
+		modchart.Config.HOLDS_BEHIND_STRUM = SaveData.currentSettings.sustainsBehind;
 
 		PolymodHandler.init();
 		Controls.init();

@@ -76,8 +76,9 @@ class CustomLogger
 
 	public static var colorTextInput:Bool = #if (!sys || web) false #else true #end;
 
-	static function log(str:String, posInfo:Null<PosInfos>, status:String)
+	static function log(str:Dynamic, posInfo:Null<PosInfos>, status:String)
 	{
+		str = Std.string(str);
 		var thingToBeLogged = '[$status] ${posInfo?.fileName}:${posInfo?.methodName}(${posInfo?.lineNumber}) $str';
 
 		#if sys

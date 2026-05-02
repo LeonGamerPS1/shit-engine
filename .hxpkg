@@ -75,6 +75,10 @@
 				"name": "funkin-modchart",
 				"link": "https://github.com/theoo-h/FunkinModchart",
 				"branch": "dev"
+			},
+			{
+				"name": "extensiontools-android",
+				"link": "https://github.com/LimeExtensions/extension-androidtools"
 			}
 		]
 	}

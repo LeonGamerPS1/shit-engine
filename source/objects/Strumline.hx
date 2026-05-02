@@ -223,7 +223,7 @@ class Strumline extends FlxGroup
 			}
 		}
 		if (isBot)
-			strum.rT = strum.animation.curAnim.numFrames / strum.animation.curAnim.frameRate;
+			strum.rT = Conductor.stepLength / 1000;
 		if (!note.isSustainNote)
 			killNote(note);
 	}

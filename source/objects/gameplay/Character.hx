@@ -1,6 +1,5 @@
 package objects.gameplay;
 
-
 import animate.FlxAnimate;
 import haxe.Json;
 
@@ -55,7 +54,7 @@ class Character extends FlxAnimate
 		loadJson(char);
 
 		useRenderTexture = true;
-        Conductor.onBeat.add(dance);
+		Conductor.onBeat.add(dance);
 	}
 
 	public function getAnimationName()
@@ -83,7 +82,7 @@ class Character extends FlxAnimate
 
 		flipX = (json.flipX != player);
 		antialiasing = json.antialiasing;
-	
+
 		scale.set(json.scale, json.scale);
 
 		var atlas = false;
@@ -121,22 +120,28 @@ class Character extends FlxAnimate
 			}
 		}
 
-		
 		updateHitbox();
 		playAnim(animExists("danceRight") && animExists("danceLeft") ? 'danceRight' : 'idle');
 	}
 
 	public function playAnim(anim:String, ?force:Bool = true)
 	{
+		if (animOffsets.exists('danceLeft') && animOffsets.exists('danceRight'))
+		{
+			if (anim == 'singLEFT')
+				isDancing = true;
+			else if (anim == 'singRIGHT')
+				isDancing = false;
 
-	
+			if (anim == 'singUP' || anim == 'singDOWN')
+				isDancing = !isDancing;
+		}
 		if (animExists(anim))
 		{
 			(isAnimate ? this.anim : animation).play(anim, force);
 			if (offset != null && animOffsets.exists(anim))
-				offset.set(animOffsets.get(anim)[0] , animOffsets.get(anim)[1]);
+				offset.set(animOffsets.get(anim)[0], animOffsets.get(anim)[1]);
 		}
-		
 	}
 
 	public function hitNote(note:Note)
@@ -146,20 +151,21 @@ class Character extends FlxAnimate
 			holdTimer = (Conductor.stepLength * json.time) / 1000;
 	}
 
+	var idleInterval = 1;
 	public function dance(beat:Float)
 	{
 		this.beat = Math.floor(beat);
-        var beat = Math.floor(beat);
+		var beat = Math.floor(beat);
 		if (holdTimer == 0)
 		{
 			// ✅ GF-style alternate dancing
 			if (animOffsets.exists('danceLeft') && animOffsets.exists('danceRight'))
 			{
-				isDancing = !isDancing;
 				playAnim(isDancing ? 'danceLeft' : 'danceRight');
+				isDancing = !isDancing;
 			}
 			// ✅ Idle dance fallback
-			else if (beat % 2 == 0 && (animation.finished && animation.name == 'idle' || animation.name != 'idle'))
+			else if (beat % idleInterval == 0 && (animation.name == 'idle' || animation.name != 'idle'))
 			{
 				playAnim('idle', true);
 			}

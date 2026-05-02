@@ -2,4 +2,4 @@
 --library zip
 -cp src
 --main Main
---cpp bin/cpp
+--interp
