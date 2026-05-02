@@ -1,6 +1,5 @@
 package states;
 
-#if android import extension.androidtools.*; #end
 import backend.gameplay.HighScore;
 import backend.input.Controls;
 import backend.modding.PolymodHandler;
@@ -10,24 +9,29 @@ import flixel.addons.transition.FlxTransitionableState;
 import flixel.addons.transition.TransitionData;
 import flixel.math.FlxPoint;
 import flixel.math.FlxRect;
+#if android import extension.androidtools.*; #end
+import haxe.io.Path;
 import lime.app.Application;
 import modchart.backend.standalone.Adapter;
 import states.menus.TitleState;
 import states.options.subs.ControlsSubstate;
 
+
 class InitState extends flixel.addons.transition.FlxTransitionableState
 {
 	#if android
-	static var defaultAndroidPermissions:Array<String> = [];
+	static var defaultAndroidPermissions:Array<String> = ['READ_EXTERNAL_STORAGE'];
 	#end
+
 	override function create()
 	{
 		#if android
 		Permissions.requestPermissions(defaultAndroidPermissions);
+		Sys.setCwd(Path.addTrailingSlash(extension.androidtools.content.Context.getExternalFilesDir()));
 		#end
 		modchart.Config.PREVENT_SCALED_HOLD_END = true;
 		modchart.Config.OPTIMIZE_HOLDS = true;
-		
+
 		SaveData.init();
 		HighScore.init();
 		modchart.Config.HOLDS_BEHIND_STRUM = SaveData.currentSettings.sustainsBehind;
@@ -43,9 +47,7 @@ class InitState extends flixel.addons.transition.FlxTransitionableState
 			var c = Conductor;
 			for (ass in [c.onBeat, c.onMeasure, c.onStep])
 				ass.removeAll();
-		
 		});
-	
 
 		#if sys
 		Application.current.onExit.add((i) ->
@@ -57,7 +59,7 @@ class InitState extends flixel.addons.transition.FlxTransitionableState
 			}
 			if (!sys.FileSystem.exists('./logs'))
 				sys.FileSystem.createDirectory("./logs");
-			sys.io.File.saveContent(("./logs/" + Date.now().toString()).replace(":",'-').replace(" ",'-'), txt);
+			sys.io.File.saveContent(("./logs/" + Date.now().toString()).replace(":", '-').replace(" ", '-'), txt);
 		}, false, 999);
 		#end
 		var dia = FlxGraphic.fromClass(GraphicTransTileCircle);

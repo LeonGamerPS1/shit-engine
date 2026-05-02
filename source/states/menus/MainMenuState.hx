@@ -12,6 +12,8 @@ class MainMenuState extends flixel.addons.transition.FlxTransitionableState
 	public var bg:FunkinSprite;
 	public var camTarget:FlxObject;
 
+	
+
 	public override function create()
 	{
 		super.create();
